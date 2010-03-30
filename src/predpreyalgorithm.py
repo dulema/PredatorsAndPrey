@@ -1,11 +1,18 @@
 #Does the work
 import random
+import map
+
+mapsize = 23
+plant = 0.5
+
+predcount = 3
+preycount = 10
 
 def createDefaultPredStatus():
-	return {"hunger":100, "sleepiness":100}
+    return {"hunger":100, "sleepiness":100, "isalive":true}
 
 def createDefaultPreyStatus():
-	return {"hunger":100, "sleepiness":100}
+    return {"hunger":100, "sleepiness":100, "isalive":true}
 
 best_pred = ({"hungervotes":1, "grouping":1, "fatigue":1}, createDefaultPredStatus())
 best_prey =({"hungervotes":1, "fearvotes":1, "grouping":1, "fatigue":1}, createDefaultPreyStatus()) 
@@ -28,7 +35,35 @@ def createPredatorMutation(predator, number):
 		yield (mutateBehavior(predator), createDefaultPredStatus())
 		
 def score(pred, prey):
-	return (sum([pred[0][key] for key in pred[0]]),sum([prey[0][key] for key in prey[0]])) 
+    	global mapsize, plant, predcount, preycount
+    	map = map.Map(mapsize, plant)
+
+	preds = []
+	for i in range(predcount):
+	    tpred = (pred[0], createDefaultPredStatus())
+	    map.setCritterAt(map.getRandomUntakenTile(), tpred) 
+	    preds.append(tpred)
+
+	preys = []
+	for i in range(preycount):
+	    tprey = (prey[0], createDefaultPreyStatus())
+	    map.setCritterAt(map.getRandomUntakenTile(),tprey) 
+	    preys.append(tprey)
+
+	#This is a totally horrible way to do this
+	days = 0
+	while len(preys) != 0 and len(preds) != 0:
+	    days = days + 1
+	    for p in preys:
+		map.moveCritter(p, ai.getPreyNextMove(map, p))
+
+	    for p in preds:
+		map.moveCritter(p, ai.getPredatorNextMove(map, p))
+	
+	    preys = filter(lambda x : x[1]["isalive"], preys)
+	    preds = filter(lambda x : x[1]["isalive"], preds)
+
+	return days 
 
 def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen): 
     global best_pred, best_prey
@@ -41,14 +76,14 @@ def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen):
      
 	    currentscore = 0
 	    for pred in preds:
-		    newscore = score(pred, best_prey)[0]
+		    newscore = score(pred, best_prey)
 		    if newscore > currentscore:
 			    currentscore = newscore
 			    tmpbestpred = pred
 
 	    currentscore = 0       
 	    for prey in preys:
-		    newscore = score(best_pred, prey)[1]
+		    newscore = score(best_pred, prey)
 		    if newscore > currentscore:
 			    currentscore = newscore
 			    tmpbestprey = prey
