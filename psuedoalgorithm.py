@@ -1,12 +1,15 @@
-generations = 10000
-num_of_preds_per_gen = 4
-num_of_prey_per_gen = 9
+#Does the work
+
+generations = input("How many generations would you like this to run for?")
+num_of_preds_per_gen = input("How many predators would you like generated per generation?")
+num_of_prey_per_gen =  input("How many prey would you like generated per generation?")
+
 
 def createFirstPred():
-	pass
+	return {}
  
 def createFirstPrey():
-	pass
+	return {}
 
 best_pred = createFirstPred()
 best_prey = createFirstPrey()
