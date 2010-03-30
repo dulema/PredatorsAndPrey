@@ -20,7 +20,7 @@ def createMutations(critter, number):
 def pred_score(pred, prey):
 	# Make board 
 	# Clone some prey
-	# Add pred and pey to the board
+	# Add pred and prey to the board
 	# FIGHT
 	# See who won
 	# return the score
