@@ -13,6 +13,35 @@ def validator(decision,max):
 	result = decision
 	return result
 
+#view the help file
+def helpfile():
+	f = open("help.txt", "r")
+	for line in f:
+        	print line,
+
+'''
+	str(blah)
+	write that to a file
+	open a file for reading
+	eval that string which happens to be a tuple of dictionaries
+'''
+#save the critter
+#1 = pred, 2 = prey
+def savecritter(type, name):
+	print("SAVING")
+	if type == 1:
+		f = open(name + ".predator",'w')
+		f.write("Hungry! VERY HUNGRY!\n")
+	if type == 2:
+		f = open(name + ".prey",'w')
+		f.write("SCARED OF THE WORLD!\n")
+
+#load a critter
+def loadcritter():
+	print("Loading")
+
+
+
 while True:
 	print("\nChoose an option below, type the corresponding number, then hit the return key.")
 	print("1.Run simulation")
@@ -27,24 +56,37 @@ while True:
 		print("1.Save")
 		print("2.Load")
 		print("3.Set Behavior")
-		print("4.Animate")
-		print("5.Help")
-		print("6.Main Menu")
+		print("4.Set World Size")
+		print("5.Animate")
+		print("6.Help")
+		print("7.Main Menu")
 		sub_choice_1 = raw_input("Your decision?\n")
-		sub_choice_1 = validator(sub_choice_1,"6")
+		sub_choice_1 = validator(sub_choice_1,"7")
 
 		sub_choice_1 = int(sub_choice_1)
 		if sub_choice_1 == 1:
-			print("SAVE Stuff")
+			print("You can save either...")
+			print("1.Predator")
+			print("2.Prey")
+			save_choice = raw_input("Which type of critter would you like to save.\n")
+			save_choice = validator(save_choice,"2")
+			save_choice = int(save_choice)
+			if save_choice == 1:
+				save_name = raw_input("Please name the predator.\n")
+			if save_choice == 2:
+				save_name = raw_input("Please name the prey.\n")
+			savecritter(save_choice, save_name)
 		if sub_choice_1 == 2:
 			print("Load Stuff")
 		if sub_choice_1 == 3:
 			print("Edit behaviors!")
 		if sub_choice_1 == 4:
-			print("Animate Stuff!")
+			print("Set World Size")
 		if sub_choice_1 == 5:
-			print("Help File")
+			print("Animate Stuff!")
 		if sub_choice_1 == 6:
+			print("Help File")
+		if sub_choice_1 == 7:
 			print("Returning to Main Menu...")
 			break;
 		
@@ -53,7 +95,7 @@ while True:
 		#num_of_prey_per_gen = input("How many prey would you like per generation?")
 		#wanna_set_behavior = input("Would you like to set predator behavior? (yes,no)")
 	if main_choice == 2:
-		print("Help File")
+		helpfile()
 	if main_choice == 3:
 		sys.exit("Come back soon.\n")
 
