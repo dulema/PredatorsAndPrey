@@ -9,10 +9,10 @@ predcount = 3
 preycount = 10
 
 def createDefaultPredStatus():
-    return {"hunger":100, "sleepiness":100, "isalive":true}
+    return {"hunger":100, "sleepiness":100, "isalive":True}
 
 def createDefaultPreyStatus():
-    return {"hunger":100, "sleepiness":100, "isalive":true}
+    return {"hunger":100, "sleepiness":100, "isalive":True}
 
 best_pred = ({"hungervotes":1, "grouping":1, "fatigue":1}, createDefaultPredStatus())
 best_prey =({"hungervotes":1, "fearvotes":1, "grouping":1, "fatigue":1}, createDefaultPreyStatus()) 
@@ -35,6 +35,9 @@ def createPredatorMutation(predator, number):
 		yield (mutateBehavior(predator), createDefaultPredStatus())
 		
 def score(pred, prey):
+	return sum([pred[1][i] for i in iter(pred[1])])
+
+'''
     	global mapsize, plant, predcount, preycount
     	map = map.Map(mapsize, plant)
 
@@ -65,6 +68,8 @@ def score(pred, prey):
 
 	return days 
 
+'''
+
 def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen): 
     global best_pred, best_prey
     for i in range(gens):
@@ -90,3 +95,11 @@ def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen):
 
 	    best_pred = tmpbestpred
 	    best_prey = tmpbestprey
+
+if __name__ == "__main__":
+	gens = input("How many generations?")	
+	preds = input("How many preds per generations?")	
+	preys = input("How many preys per generations?")	
+	mutate(gens, preds, preys)
+	print(best_pred)
+	print(best_prey)
