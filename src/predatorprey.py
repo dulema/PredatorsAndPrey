@@ -7,12 +7,10 @@ import sys	#used for... exiting
 while True:
 	print("Choose an option below, type the corresponding number, then hit the return key.")
 	print("1.Run simulation")
-	print("2.Animate!")
-	print("3.Load a critter")
-	print("4.Help!")
-	print("5.Exit")
+	print("2.Help!")
+	print("3.Exit")
 	main_choice = raw_input("Your decision?")
-	while re.match("^[1-5]$", main_choice) == None:
+	while re.match("^[1-3]$", main_choice) == None:
 		print("Please enter a valid choice. Try again.")
 		main_choice = raw_input("Your decision?")
 	main_choice = int(main_choice)
@@ -24,13 +22,10 @@ while True:
 		#wanna_set_behavior = input("Would you like to set predator behavior? (yes,no)")
 		#if wanna_set_behavior == yes:
 	if main_choice == 2:
-		print("Choice 2")
+		print("HELP")
 	if main_choice == 3:
 		print("Choice 3")
-	if main_choice == 4:
-		print("Choice 4")
-	if main_choice == 5:
-		sys.exit("Come back soon.");
+		sys.exit("Come back soon.")
 
 #	save_pred = input("Input the filename of the predator you'd like to save.")
 #	save_prey = input("Input the filename of the prey you'd like to save.")
