@@ -36,7 +36,9 @@ def createPredatorMutation(predator, number):
 	for i in range(number):
 		yield mutateBehavior(predator)
 		
-def score(pred, prey):
+def score( x):
+    pred = x[0]
+    prey = x[1]
     return sum( [pred[i] for i in iter(pred)] )
 
 
@@ -82,23 +84,20 @@ def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen):
 	preys.append(best_prey)
 
  
-#	Generate a Pool of processes to run all of the scoring for the predators
-#	predPool = Pool(processes=len(preds))
-#	predResult = predPool.map_async(score, zip(preds, [best_prey for _ in range(len(preds))]) )
+	#Generate a Pool of processes to run all of the scoring for the predators
+	predPool = Pool(processes=len(preds))
+	predResult = predPool.map_async(score, zip(preds, [best_prey for _ in range(num_of_preds_per_gen)]) ) 
 
 
-#	preyPool = Pool(processes=len(preys))
-#	preyResult = preyPool.map_async(score, zip([best_pred for _ in range(len(preys))], preys ))
+	preyPool = Pool(processes=len(preys))
+	preyResult = preyPool.map_async(score, zip([best_pred for _ in range(len(preys))], preys) )
 	
-
 	#Parse the results
-#	predscores = predResult.get(None) #Probably dangerous to not specify a timeout
-	predscores = map( score, preds, [best_prey for _ in range(num_of_preds_per_gen)])
+	predscores = predResult.get(None) #Probably dangerous to not specify a timeout
 	bestscore = max(predscores)
 	dindex = predscores.index(bestscore)
 
-#	preyscores = preyResult.get(None)
-	preyscores = map ( score, [best_pred for _ in range(len(preys))], preys )
+	preyscores = preyResult.get(None)
 	bestscore = max(preyscores)
 	pindex = preyscores.index(bestscore)
 
