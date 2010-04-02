@@ -85,7 +85,7 @@ while True:
 		if sub_choice_1 == 5:
 			print("Animate Stuff!")
 		if sub_choice_1 == 6:
-			print("Help File")
+			helpfile()
 		if sub_choice_1 == 7:
 			print("Returning to Main Menu...")
 			break;
