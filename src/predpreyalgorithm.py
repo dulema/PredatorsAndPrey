@@ -1,6 +1,7 @@
 #Does the work
 import random
 import map
+from multiprocessing import Pool
 
 mapsize = 23
 plant = 0.5
@@ -13,6 +14,14 @@ def createDefaultPredStatus():
 
 def createDefaultPreyStatus():
     return {"hunger":100, "sleepiness":100, "isalive":True}
+
+def getDefaultPreds(num):
+    for _ in range(num):
+	yield createDefaultPredStatus();
+
+def getDefaultPreys(num):
+    for _ in range(num):
+	yield createDefaultPreyStatus();
 
 best_pred = ({"hungervotes":1, "grouping":1, "fatigue":1}, createDefaultPredStatus())
 best_prey =({"hungervotes":1, "fearvotes":1, "grouping":1, "fatigue":1}, createDefaultPreyStatus()) 
@@ -34,7 +43,9 @@ def createPredatorMutation(predator, number):
 	for i in range(number):
 		yield (mutateBehavior(predator), createDefaultPredStatus())
 		
-def score(pred, prey):
+def score(x):
+    	pred = x[0]
+    	prey = x[1]
 	return sum([pred[1][i] for i in iter(pred[1])])
 
 '''
@@ -71,30 +82,34 @@ def score(pred, prey):
 '''
 
 def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen): 
-    global best_pred, best_prey
+    global best_pred, best_prey, score
     for i in range(gens):
-	    preds = [pred for pred in createPredatorMutation(best_pred, num_of_preds_per_gen - 1)]
-	    preds.append(best_pred)
-     
-	    preys = [prey for prey in createPreyMutation(best_prey, num_of_prey_per_gen - 1)]
-	    preys.append(best_prey)
-     
-	    currentscore = 0
-	    for pred in preds:
-		    newscore = score(pred, best_prey)
-		    if newscore > currentscore:
-			    currentscore = newscore
-			    tmpbestpred = pred
 
-	    currentscore = 0       
-	    for prey in preys:
-		    newscore = score(best_pred, prey)
-		    if newscore > currentscore:
-			    currentscore = newscore
-			    tmpbestprey = prey
+	#Generate a list of all of the preds
+	preds = [pred for pred in createPredatorMutation(best_pred, num_of_preds_per_gen - 1)]
+	preds.append(best_pred)
+ 
+ 	#Generate a Pool of processes to run all of the scoring for the predators
+	predPool = Pool(processes=len(preds))
+	predResult = predPool.map_async(score, zip(preds, [best_prey for _ in range(len(preds))]) )
 
-	    best_pred = tmpbestpred
-	    best_prey = tmpbestprey
+	#Generate a Pool of processes to run all of the scoring for the prey
+	preys =  [prey for prey in createPreyMutation(best_prey, num_of_prey_per_gen - 1)]
+	preys.append(best_prey)
+
+	preyPool = Pool(processes=len(preys))
+	preyResult = preyPool.map_async(score, zip([best_pred for _ in range(len(preys))], preys ))
+	
+	#Parse the results
+	predscores = predResult.get(None) #Probably dangerous to not specify a timeout
+	score = max(predscores)
+	index = predscores.index(score)
+	best_pred = predscores[index]
+
+	preyscores = preyResult.get(None)
+	score = max(preyscores)
+	index = preyscores.index(score)
+	best_prey = preyscores[index]
 
 if __name__ == "__main__":
 	gens = input("How many generations?")	
