@@ -7,7 +7,7 @@ class Critter:
 
     pdfmatrix = {}
     choices = 6
-    status = {"hunger":100}
+    status = {"hunger":0}
 
     #Returns the move to make.
     def getMove(self, senses):
@@ -41,11 +41,15 @@ class Critter:
 	    c.mutate()
 	    yield c
 
+    #BROKEN BROKEN BROKEN
     def mutate(self):
+	if not self.pdfmatrix: #just quit if we don't have any entries
+	    return
+
 	key = random.choice([k for k in iter(self.pdfmatrix)]) 
 	pdf = self.pdfmatrix[key]
 	index = random.randrange(len(pdf))
-	pdf[index] = pdf[index] + (random.random()-0.5)
+	pdf[index] = pdf[index] + random.random()-0.5
 	normalizer = sum(pdf)
 	self.pdfmatrix[key] = [float(i)/normalizer for i in pdf]
 
@@ -56,7 +60,7 @@ class Critter:
 	self.status[name] = value
 
     def resetStatus(self):
-        self.status["hunger"] = 100
+        self.status["hunger"] = 0
 
     # No pickling the files yet, nice to be able to read the data without the program
     def save(self, file):
