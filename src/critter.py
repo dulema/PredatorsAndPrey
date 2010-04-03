@@ -38,7 +38,13 @@ class Critter:
 	    yield c
 
     def mutate(self):
-	pass
+	key = random.choice([k for k in iter(self.pdfmatrix)]) 
+	pdf = self.pdfmatrix[key]
+	index = random.randrange(len(pdf))
+	pdf[index] = pdf[index] + (random.random()-0.5)
+	normalizer = sum(pdf)
+	self.pdfmatrix[key] = [float(i)/normalizer for i in pdf]
+
 
     # No pickling the files yet, nice to be able to read the data without the program
     def save(self, file):
@@ -64,6 +70,7 @@ if __name__ == "__main__":
     c.load(open("critters/sandrotest", "r"))
 
     print(c.getPDFMatrix())
+    for m in c.getMutations(2): print(m.pdfmatrix)
     results = [ 0 for _ in range(c.choices)]
     for _ in range(10000):
 	r = c.getMove(input)
