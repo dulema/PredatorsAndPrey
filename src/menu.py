@@ -5,9 +5,9 @@ import re	#used for regular expressions
 import sys	#used for... exiting
 
 #check validity of input
-def validator(decision,max):
+def validator(decision,min,max):
 	result = 0
-	while re.match("^[1-" + max + "]$", decision) == None:
+	while re.match("^[" + min + "-" + max + "]$", decision) == None:
 		print("Please enter a valid choice. Try again.\n")
 		decision = raw_input("Your decision?\n")
 	result = decision
@@ -16,8 +16,10 @@ def validator(decision,max):
 #view the help file
 def helpfile():
 	f = open("help.txt", "r")
+	print("")
 	for line in f:
         	print line,
+	print("")
 
 '''
 	str(blah)
@@ -28,85 +30,116 @@ def helpfile():
 #save the critter
 #1 = pred, 2 = prey
 def savecritter(type, name):
+	#critter.save(f)
 	print("SAVING")
 	if type == 1:
-		f = open("critters/" + name + ".predator",'w')
-		f.write("Hungry! VERY HUNGRY!\n")
+		try:
+			f = open("critters/" + name + ".predator",'w')
+			f.write("Hungry! VERY HUNGRY!\n")
+		except IOError:
+			print("Error saving " + name + ".predator!\n")
 	if type == 2:
-		f = open("critters" + name + ".prey",'w')
-		f.write("SCARED OF THE WORLD!\n")
+		try:
+			f = open("critters/" + name + ".prey",'w')
+			f.write("SCARED OF THE WORLD!\n")
+		except IOError:
+			print("Error saving " + name + ".prey!\n")
 
 #load a critter
 def loadcritter(type, name):
-	print("Loading")
+	#critter.load(f)
 	if type == 1:
-		f = open("critters/" + name + ".predator",'r')
-		print("here comes the predator info")
-	if type == 2:
-		f = open("critters/" + name + ".prey",'r')
-		print("here comes the prey info")
+		try:
+			f = open("critters/" + name + ".predator",'r')
+			print("here comes the predator info...")
+			for line in f:
+	        		print line,
+		except IOError:
+			print("Error opening " + name + ".predator!\n")
 
+	if type == 2:
+		try:
+			f = open("critters/" + name + ".prey",'r')
+			print("here comes the prey info...")
+			for line in f:
+	        		print line,
+		except IOError:
+			print("Error opening " + name + ".prey!\n")
+
+simulation_run_through = 0
 
 while True:
-	print("\nChoose an option below, type the corresponding number, then hit the return key.")
+	print("Choose an option below, type the corresponding number, then hit the return key.")
 	print("1.Run simulation")
 	print("2.Help!")
 	print("3.Exit")
 	main_choice = raw_input("Your decision?\n")
-	main_choice = validator(main_choice,"3")
+	main_choice = validator(main_choice,"1","3")
 	main_choice = int(main_choice)
 
 	while main_choice == 1:
-		print("generations?")
-		generations = raw_input("How many generations would you like this to run for?\n")
-		while re.match("^[0-9]+$",generations) == None:
-			print("Please input a valid number of generations.")
+		if simulation_run_through == 0:
 			generations = raw_input("How many generations would you like this to run for?\n")
-		print("World size Here")#square, so 10 = 100 tiles = 10*10
-		print("Behavior HERE")
-		print("\nStarting Simulation!")
-		predpreyalgorithm.mutate(int(generations), 5, 5)
-		print(predpreyalgorithm.best_pred)
-		print(predpreyalgorithm.best_prey)
+			while re.match("^[0-9]+$",generations) == None:
+				print("Please input a valid number of generations.")
+				generations = raw_input("How many generations would you like this to run for?\n")
+			generations = int(generations)
+			world_size = raw_input("Enter the size of the world.\n")#square,so input of 10=10*10=100 tiles
+			while re.match("^[0-9]+$",world_size) == None:
+				print("Please input a valid world size.")
+				world_size = raw_input("Enter the size of the world.\n")
+			print("Behavior HERE")
+			print("\nStarting Simulation!")
 
-		print("1.Save")
-		print("2.Load")
-		print("3.Animate")
-		print("4.Help")
-		print("5.Main Menu")
+		#predpreyalgorithm.mutate(generations, 5, 5)
+		#print(predpreyalgorithm.best_pred)
+		#print(predpreyalgorithm.best_prey)
+		
+		print("1.Edit Behaviors")
+		print("2.Save")
+		print("3.Load")
+		print("4.View animation")
+		print("5.Help")
+		print("6.Main Menu")
 		sub_choice_1 = raw_input("Your decision?\n")
-		sub_choice_1 = validator(sub_choice_1,"7")
+		sub_choice_1 = validator(sub_choice_1,"1","7")
 		sub_choice_1 = int(sub_choice_1)
-
+		
 		if sub_choice_1 == 1:
+			print("Set Behaviors!")
+		if sub_choice_1 == 2:
 			print("You can save either...")
 			print("1.Predator")
 			print("2.Prey")
-			save_choice = raw_input("Which type of critter would you like to save.\n")
-			save_choice = validator(save_choice,"2")
+			save_choice = raw_input("Which type of critter would you like to save?\n")
+			save_choice = validator(save_choice,"1","2")
 			save_choice = int(save_choice)
 			if save_choice == 1:
 				save_name = raw_input("Please name the predator.\n")
 			if save_choice == 2:
 				save_name = raw_input("Please name the prey.\n")
 			savecritter(save_choice, save_name)
-		if sub_choice_1 == 2:
-			print("Load Stuff")
 		if sub_choice_1 == 3:
-			print("Edit behaviors!")
+			print("You can load either...")
+			print("1.Predator")
+			print("2.Prey")
+			load_choice = raw_input("Which type of critter would you like to load?\n")
+			load_choice = validator(load_choice,"1","2")
+			load_choice = int(load_choice)
+			if load_choice == 1:
+				load_name = raw_input("Please enter the name of the predator.\n")
+			if load_choice == 2:
+				load_name = raw_input("Please enter the name of the prey.\n")
+			loadcritter(load_choice, load_name)
 		if sub_choice_1 == 4:
-			print("Set World Size")
+			print("Animate Stuffs!!")
 		if sub_choice_1 == 5:
-			print("Animate Stuff!")
-		if sub_choice_1 == 6:
 			helpfile()
-		if sub_choice_1 == 7:
+		if sub_choice_1 == 6:
 			print("Returning to Main Menu...")
-			break;
-		
-		#num_of_preds_per_gen = input("How many predators would you like per generation?")
-		#num_of_prey_per_gen = input("How many prey would you like per generation?")
-		#wanna_set_behavior = input("Would you like to set predator behavior? (yes,no)")
+			break
+		simulation_run_through = simulation_run_through + 1
+
 	if main_choice == 2:
 		helpfile()
 	if main_choice == 3:
