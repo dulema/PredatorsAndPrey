@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #Deniz put this crap in a loop
-#import predpreyalgorithm
+import predpreyalgorithm
 import re	#used for regular expressions
 import sys	#used for... exiting
 
@@ -64,8 +64,11 @@ while True:
 			generations = raw_input("How many generations would you like this to run for?\n")
 		print("World size Here")#square, so 10 = 100 tiles = 10*10
 		print("Behavior HERE")
-
 		print("\nStarting Simulation!")
+		predpreyalgorithm.mutate(int(generations), 5, 5)
+		print(predpreyalgorithm.best_pred)
+		print(predpreyalgorithm.best_prey)
+
 		print("1.Save")
 		print("2.Load")
 		print("3.Animate")
