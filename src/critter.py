@@ -58,10 +58,10 @@ if __name__ == "__main__":
     s = Critter()
     input = (3, 4, 5)
     s.getMove(input)
-    s.save(open("sandrotest", "w"))
+    s.save(open("critters/sandrotest", "w"))
 
     c = Critter()
-    c.load(open("sandrotest", "r"))
+    c.load(open("critters/sandrotest", "r"))
 
     print(c.getPDFMatrix())
     results = [ 0 for _ in range(c.choices)]
