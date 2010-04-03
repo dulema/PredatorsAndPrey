@@ -1,3 +1,7 @@
-Predators and Prey Simulation Help File
+The Predators and Prey Simulation Help File!
+----
 
 There will be much info inside of here. Soon...
+PREDS EAT PREY
+PREY EAT PLANTS
+YUM

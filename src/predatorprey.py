@@ -49,21 +49,27 @@ while True:
 	print("3.Exit")
 	main_choice = raw_input("Your decision?\n")
 	main_choice = validator(main_choice,"3")
-
 	main_choice = int(main_choice)
+
 	while main_choice == 1:
+		print("generations?")
+		generations = raw_input("How many generations would you like this to run for?\n")
+		while re.match("^[0-9]+$",generations) == None:
+			print("Please input a valid number of generations.")
+			generations = raw_input("How many generations would you like this to run for?\n")
+		print("World size Here")
+		print("Behavior HERE")
+
 		print("\nStarting Simulation!")
 		print("1.Save")
 		print("2.Load")
-		print("3.Set Behavior screw you deniz")
-		print("4.Set World Size")
-		print("5.Animate")
-		print("6.Help")
-		print("7.Main Menu")
+		print("3.Animate")
+		print("4.Help")
+		print("5.Main Menu")
 		sub_choice_1 = raw_input("Your decision?\n")
 		sub_choice_1 = validator(sub_choice_1,"7")
-
 		sub_choice_1 = int(sub_choice_1)
+
 		if sub_choice_1 == 1:
 			print("You can save either...")
 			print("1.Predator")
@@ -85,12 +91,11 @@ while True:
 		if sub_choice_1 == 5:
 			print("Animate Stuff!")
 		if sub_choice_1 == 6:
-			print("Help File")
+			helpfile()
 		if sub_choice_1 == 7:
 			print("Returning to Main Menu...")
 			break;
 		
-		#generations = input("How many generations would you like this to run for?")
 		#num_of_preds_per_gen = input("How many predators would you like per generation?")
 		#num_of_prey_per_gen = input("How many prey would you like per generation?")
 		#wanna_set_behavior = input("Would you like to set predator behavior? (yes,no)")
