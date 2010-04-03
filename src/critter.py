@@ -7,10 +7,14 @@ class Critter:
 
     pdfmatrix = {}
     choices = 6
+    status = {"hunger":100}
 
     #Returns the move to make.
-    def getMove(self, input):
-	if not input in self.pdfmatrix:
+    def getMove(self, senses):
+	s = [x for x in senses]
+	for x in self.status.itervalues(): s.append(x)
+	input = tuple(s)
+	if input not in self.pdfmatrix:
 	    self.pdfmatrix[input] = self.generatePDF() 
 	    
 	r = random.random()
@@ -45,6 +49,14 @@ class Critter:
 	normalizer = sum(pdf)
 	self.pdfmatrix[key] = [float(i)/normalizer for i in pdf]
 
+    def getStatus(self, name):
+	return self.status[name]
+
+    def setStatus(self, name, value):
+	self.status[name] = value
+
+    def resetStatus(self):
+        self.status["hunger"] = 100
 
     # No pickling the files yet, nice to be able to read the data without the program
     def save(self, file):
@@ -68,6 +80,9 @@ if __name__ == "__main__":
 
     c = Critter()
     c.load(open("critters/sandrotest", "r"))
+
+    c.setStatus("hunger", c.getStatus("hunger")/2)
+    c.getMove((3, 4, 5))
 
     print(c.getPDFMatrix())
     for m in c.getMutations(2): print(m.pdfmatrix)
