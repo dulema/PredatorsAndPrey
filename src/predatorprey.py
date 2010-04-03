@@ -55,7 +55,7 @@ while True:
 		print("\nStarting Simulation!")
 		print("1.Save")
 		print("2.Load")
-		print("3.Set Behavior")
+		print("3.Set Behavior screw you deniz")
 		print("4.Set World Size")
 		print("5.Animate")
 		print("6.Help")
