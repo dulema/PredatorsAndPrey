@@ -30,16 +30,21 @@ def helpfile():
 def savecritter(type, name):
 	print("SAVING")
 	if type == 1:
-		f = open(name + ".predator",'w')
+		f = open("critters/" + name + ".predator",'w')
 		f.write("Hungry! VERY HUNGRY!\n")
 	if type == 2:
-		f = open(name + ".prey",'w')
+		f = open("critters" + name + ".prey",'w')
 		f.write("SCARED OF THE WORLD!\n")
 
 #load a critter
-def loadcritter():
+def loadcritter(type, name):
 	print("Loading")
-
+	if type == 1:
+		f = open("critters/" + name + ".predator",'r')
+		print("here comes the predator info")
+	if type == 2:
+		f = open("critters/" + name + ".prey",'r')
+		print("here comes the prey info")
 
 
 while True:
@@ -57,7 +62,7 @@ while True:
 		while re.match("^[0-9]+$",generations) == None:
 			print("Please input a valid number of generations.")
 			generations = raw_input("How many generations would you like this to run for?\n")
-		print("World size Here")
+		print("World size Here")#square, so 10 = 100 tiles = 10*10
 		print("Behavior HERE")
 		print("\nStarting Simulation!")
 		predpreyalgorithm.mutate(int(generations), 5, 5)
