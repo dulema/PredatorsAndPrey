@@ -1,3 +1,3 @@
 
 def animate(predator, prey):
-    print("Animate")
+    print("Animated")
