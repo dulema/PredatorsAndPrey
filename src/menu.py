@@ -1,8 +1,7 @@
 #!/usr/bin/python
-#Deniz put this crap in a loop
 import predpreyalgorithm
-import re	#used for regular expressions
-import sys	#used for... exiting
+import re			#used for regular expressions
+import sys			#used for... exiting
 
 #check validity of input
 def validator(decision,min,max):
@@ -48,6 +47,7 @@ def savecritter(type, name):
 #load a critter
 def loadcritter(type, name):
 	#critter.load(f)
+	print("LOADING")
 	if type == 1:
 		try:
 			f = open("critters/" + name + ".predator",'r')
@@ -79,16 +79,22 @@ while True:
 
 	while main_choice == 1:
 		if simulation_run_through == 0:
+			print("Please set the initial parameters as follows...")
 			generations = raw_input("How many generations would you like this to run for?\n")
 			while re.match("^[0-9]+$",generations) == None:
 				print("Please input a valid number of generations.")
 				generations = raw_input("How many generations would you like this to run for?\n")
 			generations = int(generations)
+
 			world_size = raw_input("Enter the size of the world.\n")#square,so input of 10=10*10=100 tiles
 			while re.match("^[0-9]+$",world_size) == None:
 				print("Please input a valid world size.")
 				world_size = raw_input("Enter the size of the world.\n")
-			print("Behavior HERE")
+			world_size = int(world_size)
+			tile_num = (world_size * world_size)
+			print("There will be " + str(tile_num) + " tiles in the world.")
+
+			print("Behavior HERE??")
 			print("\nStarting Simulation!")
 
 		#predpreyalgorithm.mutate(generations, 5, 5)
@@ -138,19 +144,13 @@ while True:
 		if sub_choice_1 == 6:
 			print("Returning to Main Menu...")
 			break
+
 		simulation_run_through = simulation_run_through + 1
 
 	if main_choice == 2:
 		helpfile()
 	if main_choice == 3:
-		sys.exit("Come back soon.\n")
-
-#	save_pred = input("Input the filename of the predator you'd like to save.")
-#	save_prey = input("Input the filename of the prey you'd like to save.")
-#
-#	load_pred = input("Input the filename of the predator you'd like to load.")
-#	load_prey = input("Input the filename of the prey you'd like to loada.")
-
+		sys.exit("Come back soon!\n")
 
 
 	#predpreyalgorithm.mutate(generations, num_of_preds_per_gen, num_of_prey_per_gen)
