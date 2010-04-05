@@ -16,11 +16,32 @@ best_prey = Critter()
 def score(x):
     return (3, 4)
 
+def __printProgress(num, total):
+    width = 40
+    s = "%d/%d [" % (num, total)
+    completecount = (float(num)/total)*40
+    for i in range(40):
+	if i < completecount:
+	    s = s + "="
+	else:
+	    s = s + "-"
+    s = s + "]\r"
+    print s,
+    import sys
+    sys.stdout.flush()
+
+def __clearProgress():
+    print "                                                                         \n",
+    import sys
+    sys.stdout.flush()
+
 def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen): 
     global best_pred, best_prey, score
     pool = Pool()
 
-    for _ in range(gens):
+    for i in range(gens):
+	__printProgress(i, gens)
+
 	preds = [pred for pred in best_pred.getMutations(num_of_preds_per_gen - 1)]
 	preds.append(best_pred)
 
@@ -44,6 +65,7 @@ def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen):
 
 	best_prey = preys[pindex]
 	best_pred = preds[dindex]
+    __clearProgress() 
 	
 if __name__ == "__main__":
     gens = input("How many generations?")	
