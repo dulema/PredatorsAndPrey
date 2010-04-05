@@ -6,6 +6,24 @@ bottomleft = 5
 bottomright = 6
 max = 4
 
+def preyscan(preyx, preyy, radius):
+        horscan1 = preyx - radius
+        horscan2 = preyx + radius
+        verscan1 = prey - radius
+        verscan2 = prey + radius
+
+        for i in range (horscan1, horscan2)
+
+                if i < 0
+                        checkx = mapsize + i
+                if i > (mapsize-1)
+                        checkx = i - mapsizek  
+                
+                for j in range (verscan1, verscan2)
+
+                        if 
+                        
+
 def getTile(x, y, wheretogo):
 	if wheretogo == topleft:
 		if y == 0:
