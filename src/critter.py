@@ -11,24 +11,26 @@ class Critter:
 
     #Returns the move to make.
     def getMove(self, senses):
-	s = [x for x in senses]
-	for x in self.status.itervalues(): s.append(x)
-	input = tuple(s)
-	if input not in self.pdfmatrix:
-	    self.pdfmatrix[input] = self.generatePDF() 
-	    
+	pdf = self.getHistogram(senses)
 	r = random.random()
-	pdf = self.pdfmatrix[input]
 	sum = 0
 	for i in range(len(pdf)):
 	    sum = sum + pdf[i]
 	    if r < sum:
 		return i
-   
+
     def generatePDF(self):
 	pdf = [ random.randint(1, 10) for _ in range(self.choices) ]
 	total = sum(pdf)
 	return [float(i)/total for i in pdf]
+ 
+    def getHistogram(self, senses):
+	s = [x for x in senses]
+	for x in self.status.itervalues(): s.append(x)
+	input = tuple(s)
+	if input not in self.pdfmatrix:
+	    self.pdfmatrix[input] = self.generatePDF()
+	return self.pdfmatrix[input]
 
     def getPDFMatrix(self):
 	return self.pdfmatrix
@@ -87,6 +89,7 @@ if __name__ == "__main__":
 
     c.setStatus("hunger", c.getStatus("hunger")/2)
     c.getMove((3, 4, 5))
+    print("Histogram: %s" % c.getHistogram((3,4,5)))
 
     print(c.getPDFMatrix())
     for m in c.getMutations(2): print(m.pdfmatrix)
