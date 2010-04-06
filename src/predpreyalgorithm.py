@@ -16,6 +16,8 @@ best_prey = Critter()
 def score(x):
     return (3, 4)
 
+
+
 def __printProgress(num, total):
     width = 40
     s = "%d/%d [" % (num, total)
@@ -35,12 +37,12 @@ def __clearProgress():
     import sys
     sys.stdout.flush()
 
-def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen): 
+def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, progress=__printProgress): 
     global best_pred, best_prey, score
     pool = Pool()
 
     for i in range(gens):
-	__printProgress(i, gens)
+	progress(i, gens)
 
 	preds = [pred for pred in best_pred.getMutations(num_of_preds_per_gen - 1)]
 	preds.append(best_pred)
@@ -65,12 +67,12 @@ def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen):
 
 	best_prey = preys[pindex]
 	best_pred = preds[dindex]
-    __clearProgress() 
 	
 if __name__ == "__main__":
     gens = input("How many generations?")	
     preds = input("How many preds per generations?")	
     preys = input("How many preys per generations?")	
     mutate(gens, preds, preys)
+    __clearProgress()
     print(best_pred.pdfmatrix)
     print(best_prey.pdfmatrix)
