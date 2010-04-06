@@ -56,15 +56,18 @@ for i in range(16):
     if (i % 2 == 1):
         x = 13
         for j in range(15):       
-            playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="red")
+            playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="black")
             x = x + 24
     else:
         x = 1
         for j in range(16):       
-            playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="red")
+            playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="black")
             x = x + 24
     y = y + 29
 
+playing_field.create_text(12,21, text="V", fill="green")
+playing_field.create_text(192,282, text="Y", fill="red")
+playing_field.create_text(372,427, text="D", fill="blue")
 
 
 
