@@ -4,40 +4,76 @@ right = 3
 left = 4
 bottomleft = 5
 bottomright = 6
+donothing = 0
 max = 4
 
 def getCritterAt(x,y):
 
         p = 0
 
+def getClosestPred(x,y):
+
+        checkers = getTilesInRadius(x,y)
+        closest = 1000
+        checkx = -1
+        checky = -1
+
+        for j in range(0,checkers.length):
+                if count % 3 != 0:
+                        continue
+                if getCritterAt(checkers[j],checkers[j+1]) == 'D':
+                       if checkers[j+2] < closest:
+                               closest = checkers[j+2]
+                               checkx = checkers[j]
+                               checky = checkers[j+1]
+
+        return (checkx,checky,closest)
+
 def checkPath(x,y,q,w,e,r,t):
 
         currentx = x
         currenty = y
+        zerocount = [q,w,e,r,t]
+        count = 0
+        for f in range(0,6):
+             if zerocount[f] != 0:
+                     count = count + 1
+        
         currentx,currenty = getTile(currentx,currenty,q)
         currentx,currenty = getTile(currentx,currenty,w)
         currentx,currenty = getTile(currentx,currenty,e)
         currentx,currenty = getTile(currentx,currenty,r)
         currentx,currenty = getTile(currentx,currenty,t)
-        return (currentx,currenty)
+        
+        return (currentx,currenty,count)
 
-def getClosestPred(x,y):
+def getTilesInRadius(x,y):
 
-        closest = 100
-        closex = -1
-        closey = -1
-        for q in range(1,7):
-                for w in range(1,7):
-                        for e in range(1,7):
-                                for r in range(1,7):
-                                        for t in range(1,7):
-                                                checkx,checky = checkPath(x,y,q,w,e,r,t)
-                                                if getCritterAt(checkx,checky) == 'D':
-                                                        if (abs(checkx-x) + abs(checky-y)) < closest:
-                                                                   closest = (abs(checkx-preyx) + abs(checky-preyy))
-                                                                   closex = checkx
-                                                                   closey = checky
-        return(closex,closey)
+        # Radius Of 5 Desired, Goes Through All Possible 5 Moves
+        # Does Them And If The Tile Is Not In The List Adds It
+        # I Want To Say Zero Checked First
+        goodscan = []
+        flag = -1
+        distance = -1
+        for q in range(0,7):
+                for w in range(0,7):
+                        for e in range(0,7):
+                                for r in range(0,7):
+                                        for t in range(0,7):
+                                                checkx,checky,distance = checkPath(x,y,q,w,e,r,t)
+                                                flag = -1
+                                                distance = -1
+                                                for count in range(0,goodmove.length):
+                                                        if count % 3 != 0:
+                                                                continue
+                                                        if goodmove[count] == checkx and goodmove[count+1] == checky:
+                                                             flag = 1
+                                                if flag == -1:
+                                                        goodmove.add(checkx)
+                                                        goodmove.add(checky)
+                                                        goodmove.add(distance)
+
+        return goodscan
                                                                    
 #Gay, Not Right SqaureScan
 def gaygetClosestPred(preyx, preyy, radius):
@@ -75,6 +111,9 @@ def gaygetClosestPred(preyx, preyy, radius):
 
 
 def getTile(x, y, wheretogo):
+
+        if wheretogo == donothing:
+                return (x,y)
 	if wheretogo == topleft:
 		if y == 0:
 			return (-1, -1)
