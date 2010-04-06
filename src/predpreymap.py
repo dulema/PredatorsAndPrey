@@ -167,6 +167,7 @@ def getTile(x, y, wheretogo):
 
 #Only run this code if this one file is being run a python program
 if __name__ == "__main__":
+    print(getTile(3, 4, donothing) == (3, 4))
     print(getTile(1, 1, topleft) == (1,0))
     print(getTile(1, 2, topright) == (1,1))
     print(getTile(1, 2, right) == (2,2))
