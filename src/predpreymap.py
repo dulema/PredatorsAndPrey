@@ -10,8 +10,37 @@ def getCritterAt(x,y):
 
         p = 0
 
-# Gay, Not Right
-def getClosestPred(preyx, preyy, radius):
+def checkPath(x,y,q,w,e,r,t):
+
+        currentx = x
+        currenty = y
+        currentx,currenty = getTile(currentx,currenty,q)
+        currentx,currenty = getTile(currentx,currenty,w)
+        currentx,currenty = getTile(currentx,currenty,e)
+        currentx,currenty = getTile(currentx,currenty,r)
+        currentx,currenty = getTile(currentx,currenty,t)
+        return (currentx,currenty)
+
+def getClosestPred(x,y):
+
+        closest = 100
+        closex = -1
+        closey = -1
+        for q in range(1,7):
+                for w in range(1,7):
+                        for e in range(1,7):
+                                for r in range(1,7):
+                                        for t in range(1,7):
+                                                checkx,checky = checkPath(x,y,q,w,e,r,t)
+                                                if getCritterAt(checkx,checky) == 'D':
+                                                        if (abs(checkx-x) + abs(checky-y)) < closest:
+                                                                   closest = (abs(checkx-preyx) + abs(checky-preyy))
+                                                                   closex = checkx
+                                                                   closey = checky
+        return(closex,closey)
+                                                                   
+#Gay, Not Right SqaureScan
+def gaygetClosestPred(preyx, preyy, radius):
         horscan1 = preyx - radius
         horscan2 = preyx + radius
         verscan1 = preyy - radius
