@@ -5,7 +5,7 @@ left = 4
 bottomleft = 5
 bottomright = 6
 donothing = 0
-max = 4
+max = 100
 directions = []
 gooddirections = []
 
@@ -40,16 +40,21 @@ def doWork(work,radius,animal,x,y):
         # Tile Is Then Tested For Critter
         checkx = x
         checky = y
+        ugh = []
 
         for x in range(0,radius):
                 checkx,checky = getTile(checkx,checky,work[x])
-                
+
         if checkx != x and checky != y: 
                 if getCritter(checkx,checky,animal) == 1:
-                        return (checkx,checky)
+                        ugh.append(checkx)
+                        ugh.append(checky)
+                        #print(ugh)
+                        return ugh
 
         else:
-                return (-1,-1)
+                ugh.append(-1)
+                return ugh
                 
 
 def getClosestAnimal(x,y,radius,animal):
@@ -65,6 +70,8 @@ def getClosestAnimal(x,y,radius,animal):
         closey = -1
         maybex = -1
         maybey = -1
+        disx = -1
+        disy = -1
         closest = 1000
         distance = 1000
         length = checkPath(radius)
@@ -77,17 +84,40 @@ def getClosestAnimal(x,y,radius,animal):
                         work.insert(k, gooddirections[j+k])
                         k = k + 1
                 distance = countDistance(work,radius)
-                maybex, maybey = doWork(work,radius,animal,x,y)
-                if maybex != -1 and maybey != -1:
+
+                # Uses Each Path And Does The Move To
+                # Get New Tile
+                # Tile Is Then Tested For Critter
+                maybex = x
+                maybey = y
+
+                for p in range(0,radius):
+                        maybex,maybey = getTile(maybex,maybey,work[p])
+
+                #print(work)
+                #print(x,y,maybex,maybey,distance)
+
+                if maybex != x and maybey != y and maybex != -1 and maybex != -1: 
+                        if getCritter(maybex,maybey,animal) == 1:
+                             closex = maybex
+                             closey = maybey
+
+                else:
+                        closex = -1
+                        closey = -1
+  
+                if closex != -1:
                         if distance < closest:
+                                print(work)
+                                print(x,y,maybex,maybey,distance)
                                 closest = distance
-                                closex = maybex
-                                closey = maybey
+                                disx = closex
+                                disy = closey
 
                 del work
 
-        print(closex,closey,distance)
-        return closex,closey,distance
+        print(disx,disy,closest)
+        return disx, disy, closest
 
 def checkPath(radius):
 
@@ -186,24 +216,9 @@ def getTile(x, y, wheretogo):
 
 #Only run this code if this one file is being run a python program
 if __name__ == "__main__":
-    print(getTile(3, 4, donothing) == (3, 4))
-    print(getTile(1, 1, topleft) == (1,0))
-    print(getTile(1, 2, topright) == (1,1))
-    print(getTile(1, 2, right) == (2,2))
-    print(getTile(1, 2, left) == (0,2))
-    print(getTile(1, 2, bottomleft) == (0,3))
-    print(getTile(1, 2, bottomright) == (1,3))
-    print(getTile(0, 0, topleft) == (-1, -1))
-    print(getTile(0, 0, topright) == (-1, -1))
-    print(getTile(2, 0, topright) == (-1, -1))
-    print(getTile(2, 0, topleft) == (-1, -1))
-    print(getTile(3, 3, bottomleft) == (-1, -1))
-    print(getTile(3, 3, bottomright) == (-1, -1))
-    print(getTile(3, 3, topright) == (0, 2))
-    print(getTile(0, 2, topleft) == (3, 1))
-    print(getTile(0, 0, bottomleft) == (3, 1))
-    print(getTile(3, 1, bottomright) == (0, 2))
-    getClosestAnimal(6,7,3,0)
+
+    print(getClosestAnimal(6, 7, 3,0) == (5, 5,2))
+    print(getClosestAnimal(32, 35, 3,0) == (33, 33,2))
    
 
 
