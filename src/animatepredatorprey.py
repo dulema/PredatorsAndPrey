@@ -2,13 +2,13 @@ from Tkinter import *
 
 #Reads in the number of generations user wished to run.
 #Prints it at the moment. Will pass into another function.
-def receive_gen():
-	print gen_num.get()
+def receive_gen_and_speed():
+	print gen_num.get(), speed_slider.get()
 
 #Command for the animate button which will get the ball rolling
 #for the whole program
 def animate():
-	print "Number of generations ", gen_num.get(), " Speed ", speed_slider.get()
+	print "Go Go Go"
 
 #Create a Tk window and edit its title and size
 root = Tk()
@@ -43,6 +43,7 @@ gen_num = StringVar()
 gen_num_label = Label(root, text="Number of Generations")
 gen_num_input = Entry(root, textvariable=gen_num)
 gen_num.set("10")
+set_gen_and_speed_button = Button(root, text="Set Parameters", command=receive_gen_and_speed)
 animate_button = Button(root, text="Animate", command=animate)
 key_title_label = Label(root, text="Map Icon Key")
 key_pred_label = Label(root, text="Predator = D")
@@ -76,6 +77,7 @@ gen_num_label.grid(row=0, column=0, sticky=S)
 gen_num_input.grid(row=1, column=0, sticky=N)
 speed_slider_label.grid(row=2, column=0, sticky=S)
 speed_slider.grid(row=3, column=0, sticky=N)
+set_gen_and_speed_button.grid(row=4, column=0, sticky=N)
 animate_button.grid(row=10, column=0, sticky=S)
 key_title_label.grid(row=5, column=0)
 key_pred_label.grid(row=6, column=0, sticky=S)
