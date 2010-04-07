@@ -77,7 +77,7 @@ def getClosestAnimal(x,y,radius,animal):
                         work.insert(k, gooddirections[j+k])
                         k = k + 1
                 distance = countDistance(work,radius)
-                maybex,maybey = doWork(work,radius,animal,x,y)
+                maybex, maybey = doWork(work,radius,animal,x,y)
                 if maybex != -1 and maybey != -1:
                         if distance < closest:
                                 closest = distance
