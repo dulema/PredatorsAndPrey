@@ -6,14 +6,24 @@ import multiprocessing
 from multiprocessing import Pool
 from critter import Critter
 
-
-mapsize = 23
-plant = 0.5
-
 best_pred = Critter()
 best_prey = Critter()
 
 def score(x):
+    pred = x[0]
+    prey = x[1]
+    map = Map(23, 0.5)
+    
+    preds = pred.clone(3)
+    preys = prey.clone(10)
+
+    for p in preds: map.setCritterAt(map.getRandomUntakenTile(), p)
+    for p in preys: map.setCritterAt(map.getRandomUntakenTile(), p)
+
+    while len(preds) > 0 and len(preys) > 0:
+	for critter in map.getCritters():
+		input = map.getInput(critter)
+		map.moveCritter(p, p.getMove(input))
     return (3, 4)
 
 
