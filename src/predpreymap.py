@@ -6,10 +6,14 @@ bottomleft = 5
 bottomright = 6
 donothing = 0
 max = 4
+critters = []
 
 def getCritterAt(x,y):
 
         p = 0
+
+def setCritterAt((x, y), critter):
+	
 
 def getClosestPred(x,y):
 
