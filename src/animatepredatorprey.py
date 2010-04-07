@@ -1,4 +1,5 @@
 from Tkinter import *
+import webbrowser
 
 #Reads in the number of generations user wished to run.
 #Prints it at the moment. Will pass into another function.
@@ -9,6 +10,12 @@ def receive_gen_and_speed():
 #for the whole program
 def animate():
 	print "Go Go Go"
+
+def README_display():
+	webbrowser.open("help.html")
+
+def About_display():
+	webbrowser.open("about.html")
 
 #Create a Tk window and edit its title and size
 root = Tk()
@@ -29,8 +36,8 @@ file_menu.add_separator()
 file_menu.add_command(label="Close", command=playing_field.quit)
 help_menu = Menu(menu)
 menu.add_cascade(label="Help", menu=help_menu)
-help_menu.add_command(label="README")
-help_menu.add_command(label="About...")
+help_menu.add_command(label="README", command=README_display)
+help_menu.add_command(label="About...", command=About_display)
 
 
 #Create slider for speed of animation
