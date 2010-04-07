@@ -9,17 +9,80 @@ max = 4
 directions = []
 gooddirections = []
 
+# 0 For Predator
+# 1 For Prey
+
+def getCritter(x,y,animal):
+
+        p = 0
+
+def countDistance(work,radius):
+
+        count = 0;
+        for x in range(0,radius):
+                if work[x] != 0:
+                        count = count + 1
+        return count
+
+def doWork(work,radius,animal,x,y):
+
+        checkx = x
+        checky = y
+        print("Ufa")
+        print(work[0])
+        for x in range(0,radius):
+                checkx,checky = getTile(checkx,checky,work[x])
+                
+        if checkx != x and checky != y: 
+                if getCritter(checkx,checky,animal) == 1:
+                        return (checkx,checky)
+
+        else:
+                return (-1,-1)
+                
+
+def getClosestAnimal(x,y,radius,animal):
+
+        closex = -1
+        closey = -1
+        maybex = -1
+        maybey = -1
+        closest = 1000
+        distance = 1000
+        length = checkPath(radius)
+        #length = pow(7,radius)
+        print (length)
+        for j in range(0,(radius*length),radius):
+                k = 0
+                work = []
+                while k < radius:
+                        work.insert(k, gooddirections[j+k])
+                        k = k + 1
+                distance = countDistance(work,radius)
+                maybex,maybey = doWork(work,radius,animal,x,y)
+                if maybex != -1 and maybey != -1:
+                        if distance < closest:
+                                closest = distance
+                                closex = maybex
+                                closey = maybey
+                print(work)
+                print(" ")
+                print(distance)
+                print("\n")
+                del work
+
 def checkPath(radius):
 
-        getAllDirections(radius)
-        length = pow(7,radius)
-
+        length = getAllDirections(radius)
+        #length = pow(7,radius)
+        
         for x in range(0,length):
                 for y in range(0,radius):
                     gooddirections.append(directions[(length*y) + x])
+                   
+        #print (gooddirections)
+        return length
                     
-        print (gooddirections)
-        
 def getAllDirections(radius):
 
         j = radius - 1
@@ -39,6 +102,8 @@ def getAllDirections(radius):
                 choser = pow(7,j)
                 if j < 0:
                         break
+
+        return length
 
 def getTile(x, y, wheretogo):
 
@@ -114,7 +179,7 @@ if __name__ == "__main__":
     print(getTile(0, 2, topleft) == (3, 1))
     print(getTile(0, 0, bottomleft) == (3, 1))
     print(getTile(3, 1, bottomright) == (0, 2))
-    checkPath(2)
+    getClosestAnimal(6,7,3,0)
    
 
 
