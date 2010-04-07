@@ -67,6 +67,8 @@ def loadcritter(type, name):
 			print("Error opening " + name + ".prey!\n")
 
 simulation_run_through = 0
+generations = 0
+world_size = 0
 
 while True:
 	print("Choose an option below, type the corresponding number, then hit the return key.")
@@ -93,27 +95,22 @@ while True:
 			world_size = int(world_size)
 			tile_num = (world_size * world_size)
 			print("There will be " + str(tile_num) + " tiles in the world.")
-
-			print("Behavior HERE??")
 			print("\nStarting Simulation!")
 
 		#predpreyalgorithm.mutate(generations, 5, 5)
 		#print(predpreyalgorithm.best_pred)
 		#print(predpreyalgorithm.best_prey)
 		
-		print("1.Edit Behaviors")
-		print("2.Save")
-		print("3.Load")
-		print("4.View animation")
-		print("5.Help")
-		print("6.Main Menu")
+		print("1.Save")
+		print("2.Load")
+		print("3.View animation")
+		print("4.Help")
+		print("5.Main Menu")
 		sub_choice_1 = raw_input("Your decision?\n")
-		sub_choice_1 = validator(sub_choice_1,"1","7")
+		sub_choice_1 = validator(sub_choice_1,"1","5")
 		sub_choice_1 = int(sub_choice_1)
 		
 		if sub_choice_1 == 1:
-			print("Set Behaviors!")
-		if sub_choice_1 == 2:
 			print("You can save either...")
 			print("1.Predator")
 			print("2.Prey")
@@ -125,7 +122,7 @@ while True:
 			if save_choice == 2:
 				save_name = raw_input("Please name the prey.\n")
 			savecritter(save_choice, save_name)
-		if sub_choice_1 == 3:
+		if sub_choice_1 == 2:
 			print("You can load either...")
 			print("1.Predator")
 			print("2.Prey")
@@ -137,11 +134,11 @@ while True:
 			if load_choice == 2:
 				load_name = raw_input("Please enter the name of the prey.\n")
 			loadcritter(load_choice, load_name)
-		if sub_choice_1 == 4:
+		if sub_choice_1 == 3:
 			print("Animate Stuffs!!")
-		if sub_choice_1 == 5:
+		if sub_choice_1 == 4:
 			helpfile()
-		if sub_choice_1 == 6:
+		if sub_choice_1 == 5:
 			print("Returning to Main Menu...")
 			break
 
