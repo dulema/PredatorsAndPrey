@@ -14,10 +14,19 @@ gooddirections = []
 
 def getCritter(x,y,animal):
 
+        # Bullshit Plese Define
+        # Takes In X,Y,And Animal
+        # Lets Use This Function For Testing To
+        # See If Predator Or Prey Is There
+        # Returns 1 If True And Zero If False
         p = 0
+        if x == y:
+                return 1
 
 def countDistance(work,radius):
 
+        # Counts Amount Of Steps In A Path
+        # A Zero Is No Steps 
         count = 0;
         for x in range(0,radius):
                 if work[x] != 0:
@@ -26,10 +35,12 @@ def countDistance(work,radius):
 
 def doWork(work,radius,animal,x,y):
 
+        # Uses Each Path And Does The Move To
+        # Get New Tile
+        # Tile Is Then Tested For Critter
         checkx = x
         checky = y
-        print("Ufa")
-        print(work[0])
+
         for x in range(0,radius):
                 checkx,checky = getTile(checkx,checky,work[x])
                 
@@ -43,6 +54,13 @@ def doWork(work,radius,animal,x,y):
 
 def getClosestAnimal(x,y,radius,animal):
 
+        # Goes Through The Good Array
+        # And Pulls Out Paths One At A Time
+        # Each Path Is Tested To See If There Is A Critter
+        # At That Tile After The Path Is Taken
+        # If There Is A Critter If It Is Closest
+        # OverWrites Previous Closest
+        
         closex = -1
         closey = -1
         maybex = -1
@@ -51,7 +69,7 @@ def getClosestAnimal(x,y,radius,animal):
         distance = 1000
         length = checkPath(radius)
         #length = pow(7,radius)
-        print (length)
+    
         for j in range(0,(radius*length),radius):
                 k = 0
                 work = []
@@ -65,14 +83,15 @@ def getClosestAnimal(x,y,radius,animal):
                                 closest = distance
                                 closex = maybex
                                 closey = maybey
-                print(work)
-                print(" ")
-                print(distance)
-                print("\n")
+
                 del work
+
+        print(closex,closey,distance)
+        return closex,closey,distance
 
 def checkPath(radius):
 
+        #Gets 1D Python Array And Puts Elements In Good Order
         length = getAllDirections(radius)
         #length = pow(7,radius)
         
@@ -85,6 +104,11 @@ def checkPath(radius):
                     
 def getAllDirections(radius):
 
+        # Uses Super DiFiore Logic To Dynamically
+        # Generate All Steps One Can Take From A
+        # Spot Using A Given Amount Of Steps
+        # Loades C++ 2D Array Into Python 1D Array Called Direction
+        
         j = radius - 1
         choser = pow(7,j)
         length = pow(7,radius)
