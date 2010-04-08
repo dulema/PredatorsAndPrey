@@ -76,55 +76,55 @@ def draw_map():
 
 	
 
+if __name__ == "__main__":
+	root = Tk()
+	root.wm_title("Pred/Prey Animator")
+	#root.geometry("%dx%d%+d%+d" % (800, 500, 0, 0))
+	yscrollbar = Scrollbar(root, orient=VERTICAL)
+	yscrollbar.grid(row=0, column=2, sticky=N+S+W+E, rowspan=17)
 
-root = Tk()
-root.wm_title("Pred/Prey Animator")
-#root.geometry("%dx%d%+d%+d" % (800, 500, 0, 0))
-yscrollbar = Scrollbar(root, orient=VERTICAL)
-yscrollbar.grid(row=0, column=2, sticky=N+S+W+E, rowspan=17)
-
-playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.set, scrollregion=(0, 0, 1000, 1000))
-yscrollbar.config(command=playing_field.yview)
-
-
-menu = Menu(root)
-root.config(menu=menu)
-file_menu = Menu(menu)
-menu.add_cascade(label="File", menu=file_menu)
-file_menu.add_command(label="Reset", command=reset)
-file_menu.add_separator()
-file_menu.add_command(label="Open Predators", command=open_pred)
-file_menu.add_command(label="Open Prey", command=open_prey)
-file_menu.add_separator()
-file_menu.add_command(label="Save Predators", command=save_pred)
-file_menu.add_command(label="Save Prey", command=save_pred)
-file_menu.add_separator()
-file_menu.add_command(label="Close", command=playing_field.quit)
-help_menu = Menu(menu)
-menu.add_cascade(label="Help", menu=help_menu)
-help_menu.add_command(label="README", command=README_display)
-help_menu.add_command(label="About...", command=About_display)
+	playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.set, scrollregion=(0, 0, 1000, 1000))
+	yscrollbar.config(command=playing_field.yview)
 
 
-
-speed_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
-speed_slider_label = Label(root, text="Speed of Animation")
+	menu = Menu(root)
+	root.config(menu=menu)
+	file_menu = Menu(menu)
+	menu.add_cascade(label="File", menu=file_menu)
+	file_menu.add_command(label="Reset", command=reset)
+	file_menu.add_separator()
+	file_menu.add_command(label="Open Predators", command=open_pred)
+	file_menu.add_command(label="Open Prey", command=open_prey)
+	file_menu.add_separator()
+	file_menu.add_command(label="Save Predators", command=save_pred)
+	file_menu.add_command(label="Save Prey", command=save_prey)
+	file_menu.add_separator()
+	file_menu.add_command(label="Close", command=playing_field.quit)
+	help_menu = Menu(menu)
+	menu.add_cascade(label="Help", menu=help_menu)
+	help_menu.add_command(label="README", command=README_display)
+	help_menu.add_command(label="About...", command=About_display)
 
 
 
-gen_num = StringVar()
-gen_num_label = Label(root, text="Number of Generations")
-gen_num_input = Entry(root, textvariable=gen_num)
-gen_num.set("10")
-mutate_button = Button(root, text="Mutate", command=receive_gen_and_speed)
-animate_button = Button(root, text="Animate", command=animate)
-key_title_label = Label(root, text="Map Icon Key")
-key_pred_label = Label(root, text="Predator = D")
-key_prey_label = Label(root, text="Prey = Y")
-key_veg_label = Label(root, text="Vegetation = V")
+	speed_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
+	speed_slider_label = Label(root, text="Speed of Animation")
 
 
 
-draw_map()
-draw_root()
-root.mainloop()
+	gen_num = StringVar()
+	gen_num_label = Label(root, text="Number of Generations")
+	gen_num_input = Entry(root, textvariable=gen_num)
+	gen_num.set("10")
+	mutate_button = Button(root, text="Mutate", command=receive_gen_and_speed)
+	animate_button = Button(root, text="Animate", command=animate)
+	key_title_label = Label(root, text="Map Icon Key")
+	key_pred_label = Label(root, text="Predator = D")
+	key_prey_label = Label(root, text="Prey = Y")
+	key_veg_label = Label(root, text="Vegetation = V")
+
+
+
+	draw_map()
+	draw_root()
+	root.mainloop()
