@@ -21,13 +21,23 @@ def README_display():
 def About_display():
 	webbrowser.open("about.html")
 
-def open_critters():
-	open_critter_file = askopenfilename()
-	print open_critter_file
+def open_pred():
+	open_pred_file = askopenfilename()
+	print open_pred_file
 
-def save_critters():
-	save_critter_file = asksaveasfilename()
-	print save_critter_file
+def save_pred():
+	save_pred_file = asksaveasfilename()
+	print save_pred_file
+
+def open_prey():
+	open_prey_file = askopenfilename()
+	print open_prey_file
+
+def save_prey():
+	save_prey_file = asksaveasfilename()
+	print save_prey_file
+
+
 
 def reset():
 	playing_field.delete(ALL)
@@ -41,7 +51,7 @@ def draw_root():
 	gen_num_input.grid(row=1, column=0, sticky=N)
 	speed_slider_label.grid(row=2, column=0, sticky=S)
 	speed_slider.grid(row=3, column=0, sticky=N)
-	set_gen_and_speed_button.grid(row=4, column=0, sticky=N)
+	mutate_button.grid(row=4, column=0, sticky=N)
 	animate_button.grid(row=10, column=0, sticky=S)
 	key_title_label.grid(row=5, column=0)
 	key_pred_label.grid(row=6, column=0, sticky=S)
@@ -77,16 +87,17 @@ playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.se
 yscrollbar.config(command=playing_field.yview)
 
 
-
-
-
 menu = Menu(root)
 root.config(menu=menu)
 file_menu = Menu(menu)
 menu.add_cascade(label="File", menu=file_menu)
 file_menu.add_command(label="Reset", command=reset)
-file_menu.add_command(label="Open", command=open_critters)
-file_menu.add_command(label="Save", command=save_critters)
+file_menu.add_separator()
+file_menu.add_command(label="Open Predators", command=open_pred)
+file_menu.add_command(label="Open Prey", command=open_prey)
+file_menu.add_separator()
+file_menu.add_command(label="Save Predators", command=save_pred)
+file_menu.add_command(label="Save Prey", command=save_pred)
 file_menu.add_separator()
 file_menu.add_command(label="Close", command=playing_field.quit)
 help_menu = Menu(menu)
@@ -105,7 +116,7 @@ gen_num = StringVar()
 gen_num_label = Label(root, text="Number of Generations")
 gen_num_input = Entry(root, textvariable=gen_num)
 gen_num.set("10")
-set_gen_and_speed_button = Button(root, text="Set Parameters", command=receive_gen_and_speed)
+mutate_button = Button(root, text="Mutate", command=receive_gen_and_speed)
 animate_button = Button(root, text="Animate", command=animate)
 key_title_label = Label(root, text="Map Icon Key")
 key_pred_label = Label(root, text="Predator = D")
