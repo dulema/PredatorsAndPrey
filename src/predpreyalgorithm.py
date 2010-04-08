@@ -51,8 +51,8 @@ def score(x):
 	hooker = x[2]
 
     world = Map(23, 0.5)
-    preds = pred.clone(4)
-    preys = prey.clone(15)
+    preds = [p for p in pred.clone(4)]
+    preys = [p for p in prey.clone(15)]
 
     for c in preds: world.setCritterAt(world.getRandomUntakenTile(), c)
     for c in preys: world.setCritterAt(world.getRandomUntakenTile(), c)

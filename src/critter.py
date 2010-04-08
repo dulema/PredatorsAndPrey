@@ -43,13 +43,15 @@ class Critter:
     def getPDFMatrix(self):
 	return self.pdfmatrix
 
-    def getMutations(self, howmany):
+    def clone(self, howmany):
 	for _ in range(howmany):
-	    c = Critter()
-	    #Can't use pdfmatrix.copy() because that only creates a shallow copy.
-	    c.pdfmatrix = copy.deepcopy(self.pdfmatrix) 
+	    yield copy.deepcopy(self)
+    
+    def getMutations(self, howmany):
+	for c in self.clone(howmany):
 	    c.mutate()
 	    yield c
+
 
     #BROKEN BROKEN BROKEN
     def mutate(self):
