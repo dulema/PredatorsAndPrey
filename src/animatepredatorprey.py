@@ -64,7 +64,7 @@ def draw_map():
 	for i in range(23):
     		if (i % 2 == 1):
         		x = 13
-        		for j in range(22):       
+        		for j in range(23):       
             			playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="black")
             			x = x + 24
     		else:
