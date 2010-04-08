@@ -92,13 +92,13 @@ class Critter:
 	self.choices = eval(choices)
 
 if __name__ == "__main__":
-    s = Critter("SandyCritter")
+    s = Critter("Predator")
     input = (3, 4, 5)
     s.getMove(input)
-    s.save(open("critters/sandrotest", "w"))
+    s.save(open("critters/deniz.predator", "w"))
 
     c = Critter()
-    c.load(open("critters/sandrotest", "r"))
+    c.load(open("critters/deniz.predator", "r"))
 
     c.setStatus("hunger", c.getStatus("hunger")/2)
     c.getMove((3, 4, 5))
