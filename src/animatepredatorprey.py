@@ -1,15 +1,18 @@
 from Tkinter import *
 from tkFileDialog import *
 import webbrowser
+import menu
+import predpreyalgorithm
 
 
 def receive_gen_and_speed():
 	print gen_num.get(), speed_slider.get()
 
+def updatePlayingField(world):
+	pass
+
 def animate():
-	playing_field.create_text(12,21, text="V", fill="green")
-	playing_field.create_text(192,282, text="Y", fill="red")
-	playing_field.create_text(372,427, text="D", fill="blue")
+	predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
 	draw_root()
 
 def README_display():
@@ -44,19 +47,19 @@ def draw_root():
 	key_pred_label.grid(row=6, column=0, sticky=S)
 	key_prey_label.grid(row=7, column=0)
 	key_veg_label.grid(row=8, column=0, sticky=N)
-	playing_field.grid(row=0, column=1, rowspan=17, padx=10, pady=10)
+	playing_field.grid(row=0, column=1, rowspan=17)
 
 def draw_map():
 	y = 0
-	for i in range(16):
+	for i in range(23):
     		if (i % 2 == 1):
         		x = 13
-        		for j in range(15):       
+        		for j in range(22):       
             			playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="black")
             			x = x + 24
     		else:
         		x = 1
-        		for j in range(16):       
+        		for j in range(23):       
             			playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="black")
             			x = x + 24
     		y = y + 29
@@ -66,8 +69,14 @@ def draw_map():
 
 root = Tk()
 root.wm_title("Pred/Prey Animator")
-root.geometry("%dx%d%+d%+d" % (600, 500, 0, 0))
-playing_field = Canvas(root, width=400, height=500)
+root.geometry("%dx%d%+d%+d" % (800, 500, 0, 0))
+yscrollbar = Scrollbar(root, orient=HORIZONTAL)
+yscrollbar.grid(row=0, column=2)
+
+playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.set)
+yscrollbar.config(command=playing_field.yview)
+
+
 
 
 
