@@ -47,6 +47,9 @@ def directionConverter(sensorydata, move):
 def score(x):
     pred = x[0]
     prey = x[1]
+    hooker = None
+    if len(x) > 2:
+	hooker = x[2]
 
     world = Map(23, 0.5)
     preds = pred.clone(4)
@@ -88,6 +91,7 @@ def score(x):
 	    if c.getStatus("hunger") == 20:
 		world.removeCritter(c)
 		preds.remove(c)
+	    hooker(world)
 
 	for c in preys:
 	    current_tile = world.getCritterXY(c)
@@ -123,6 +127,7 @@ def score(x):
 	    if c.getStatus("hunger") == 20:
 		world.removeCritter(c)
 		preys.remove(c)
+	    hooker(world)
 
     return score
 
