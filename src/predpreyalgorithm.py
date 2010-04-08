@@ -36,8 +36,7 @@ def directionConverter(sensorydata, move):
     toPrey = sensorydata[3]
     toPlant = sensorydata[5]
 
-    allpossiblemoves = 
-    [toPred,  toPrey,  toPlant,
+    allpossiblemoves = [toPred,  toPrey,  toPlant,
      reverse(toPred), reverse(toPrey), reverse(toPlant),
      left(toPred),    left(toPrey),    left(toPlant),
      right(toPred),   right(toPrey),   right(toPlant), 0  ]
