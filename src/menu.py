@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import predpreyalgorithm
+import animatepredatorprey
 import re			#used for regular expressions
 import sys			#used for exiting
 
@@ -27,14 +28,18 @@ def savecritter(type, name):
 		print("SAVING " + name + ".predator")
 		try:
 			f = open("critters/" + name + ".predator",'w')
-			f.write("Hungry! VERY HUNGRY!\n")
+			f.write("Predator\n")
+			f.write("{(3, 4, 5, 0): [0.044117647058823532, 0.10294117647058823, 0.14705882352941177, 0.10294117647058823, 0.058823529411764705, 0.10294117647058823, 0.014705882352941176, 0.14705882352941177, 0.058823529411764705, 0.029411764705882353, 0.014705882352941176, 0.044117647058823532, 0.13235294117647059]}\n")
+			f.write("13")
 		except IOError:
 			print("Error saving " + name + ".predator!\n")
 	if type == 2:
 		print("SAVING " + name + ".prey")
 		try:
 			f = open("critters/" + name + ".prey",'w')
-			f.write("SCARED OF THE WORLD!\n")
+			f.write("Prey\n")
+			f.write("{(2, 6, 5, 1): [0.044117647058823532, 0.10294117647058823, 0.14705882352941177, 0.10294117647058823, 0.058823529411764705, 0.10294117647058823, 0.014705882352941176, 0.14705882352941177, 0.058823529411764705, 0.029411764705882353, 0.014705882352941176, 0.044117647058823532 , 0.13235294117647059]}\n")
+			f.write("13")
 		except IOError:
 			print("Error saving " + name + ".prey!\n")
 
@@ -42,23 +47,27 @@ def loadcritter(type, name):
 	#critter.load(f)
 	if type == 1:
 		print("LOADING " + name + ".predator")
+		location = animatepredatorprey.open_pred()
+		location = str(location)
+		print(location)
 		try:
-			f = open("critters/" + name + ".predator",'r')
+			f = open(location,'r')#HERE
 			print("here comes the predator info...")
 			for line in f:
-	        		print line,
-				print(eval(line))#needs work
+		        	print line,
+				#print(eval(line))#needs work
 		except IOError:
 			print("Error opening " + name + ".predator!\n")
 
 	if type == 2:
-		print("LOADING" + name + ".prey")
+		print("LOADING " + name + ".prey")
 		try:
-			f = open("critters/" + name + ".prey",'r')
+			#f = open("critters/" + name + ".prey",'r')
+			f = open(animatepredatorprey.open_prey(),'r')#HERE
 			print("here comes the prey info...")
 			for line in f:
 	        		print line,
-				print(eval(line))#needs work
+				#print(eval(line))#needs work
 		except IOError:
 			print("Error opening " + name + ".prey!\n")
 
@@ -98,7 +107,7 @@ if __name__ == "__main__":
 			#print(predpreyalgorithm.best_pred)
 			#print(predpreyalgorithm.best_prey)
 		
-			print("1.Save")
+			print("\n1.Save")
 			print("2.Load")
 			print("3.View animation")
 			print("4.Start simulation again?")

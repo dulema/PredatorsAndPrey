@@ -23,19 +23,19 @@ def About_display():
 
 def open_pred():
 	open_pred_file = askopenfilename()
-	print open_pred_file
+	return open_pred_file
 
 def save_pred():
 	save_pred_file = asksaveasfilename()
-	print save_pred_file
+	return save_pred_file
 
 def open_prey():
 	open_prey_file = askopenfilename()
-	print open_prey_file
+	return open_prey_file
 
 def save_prey():
 	save_prey_file = asksaveasfilename()
-	print save_prey_file
+	return save_prey_file
 
 
 
