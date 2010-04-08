@@ -14,9 +14,14 @@ critters = {}
 
 # 0 For Predator
 # 1 For Prey
+# 2 For Plant
 
-def getCritterAt(x,y,animal):
+def getCritterAt(x,y,organ):
 
+        # If organ is 0 look for predator
+        # If organ is 1 look for prey
+        # If organ is 2 look for plant
+ 
         # Bullshit Plese Define
         # Takes In X,Y,And Animal
         # Lets Use This Function For Testing To
@@ -26,7 +31,7 @@ def getCritterAt(x,y,animal):
         if x == y:
                 return 1
 
-def setCritter((x,y), critter):
+def setCritter(x, y, critter):
         critters[critter] = (x,y)
 
 def removeCritter(critter):
@@ -45,29 +50,70 @@ def countDistance(work,radius):
                         count = count + 1
         return count
 
-def doWork(work,radius,animal,x,y):
+def getDirection(x,y,disx,disy,radius):
 
-        # Uses Each Path And Does The Move To
-        # Get New Tile
-        # Tile Is Then Tested For Critter
-        checkx = x
-        checky = y
-        ugh = []
+        test1 = -1
+        test2 = -1
 
-        for x in range(0,radius):
-                checkx,checky = getTile(checkx,checky,work[x])
+        if abs(disy-y) < (radius / 3):
+                test1 = 0
 
-        if checkx != x and checky != y: 
-                if getCritter(checkx,checky,animal) == 1:
-                        ugh.append(checkx)
-                        ugh.append(checky)
-                        #print(ugh)
-                        return ugh
+        elif disy > y:
+                test1 = 1
+
+        elif disy < y:
+                test1 = 2
+
+        if disx > x:
+                test2 = 1
+
+        elif disx < x:
+                test2 = 2
+
         else:
-                ugh.append(-1)
-                return ugh
+                test2 = 0
 
-def getClosestAnimal(x,y,radius,animal):
+        # No Switch ... Ufa
+
+        if test1 == 0:
+                if test2 == 0:
+                        if disy > y:
+                                return topright
+
+                        else:
+                                return bottomleft
+
+                elif test2 == 1:
+                        return right
+                
+                else:
+                        return left
+
+        elif test1 == 1:
+                if test2 == 1:
+                        return bottomright
+                else:
+                        return bottomleft
+
+        elif test1 == 2:
+                if test2 == 1:
+                        return topright
+                else:
+                        return topleft
+
+def getClosestPlant(x, y, radius):
+
+        getClosestOrganism(x, y, radius, 2)
+
+def getClosestPred(x, y, radius):
+
+        getClosestOrganism(x, y, radius, 0)
+
+def getClosestPrey(x, y, radius):
+
+        getClosestOrganism(x, y, radius, 1)
+
+def getClosestOrganism(x,y,radius,organ):
 
         # Goes Through The Good Array
         # And Pulls Out Paths One At A Time
@@ -82,6 +128,7 @@ def getClosestAnimal(x,y,radius,animal):
         maybey = -1
         disx = -1
         disy = -1
+        direction = -1
         closest = 1000
         distance = 1000
         length = checkPath(radius)
@@ -108,7 +155,7 @@ def getClosestAnimal(x,y,radius,animal):
                 #print(x,y,maybex,maybey,distance)
 
                 if maybex != x and maybey != y and maybex != -1 and maybex != -1: 
-                        if getCritter(maybex,maybey,animal) == 1:
+                        if getCritterAt(maybex,maybey,organ) == 1:
                              closex = maybex
                              closey = maybey
 
@@ -118,16 +165,21 @@ def getClosestAnimal(x,y,radius,animal):
   
                 if closex != -1:
                         if distance < closest:
-                                print(work)
-                                print(x,y,maybex,maybey,distance)
+                                #print(work)
+                                #print(x,y,maybex,maybey,distance)
                                 closest = distance
                                 disx = closex
                                 disy = closey
 
                 del work
 
-        print(disx,disy,closest)
-        return disx, disy, closest
+        if disx != -1 and disy != -1 and closest != 1000:
+                direction = getDirection(x,y,disx,disy,radius)
+                return closest, direction, disx, disy
+        else:
+                return -1, -1, -1, -1
+        #print(disx,disy,closest)
+        #return disx, disy, closest
 
 def checkPath(radius):
 
@@ -169,7 +221,7 @@ def getAllDirections(radius):
 
         return length
 
-def getTile((x,y), wheretogo):
+def getTile(x, y, wheretogo):
 
         if wheretogo == donothing:
                 return (x,y)
@@ -227,8 +279,8 @@ def getTile((x,y), wheretogo):
 #Only run this code if this one file is being run a python program
 if __name__ == "__main__":
 
-    print(getClosestAnimal(6, 7, 3,0) == (5, 5,2))
-    print(getClosestAnimal(32, 35, 3,0) == (33, 33,2))
-   
+    print(getClosestOrganism(6, 7, 3,0) == (2, 1, 5, 5))
+    print(getClosestOrganism(32, 35, 3,0) == (2, 2, 33, 33))
+    print(getClosestOrganism(32, 40, 3,0) == (-1, -1, -1, -1))
 
 
