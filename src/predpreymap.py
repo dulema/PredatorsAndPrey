@@ -16,20 +16,39 @@ critters = {}
 # 1 For Prey
 # 2 For Plant
 
+def getCritterXY(critter):
+
+        # placeholder, implement when ready
+        if critter == 0:
+                x = 41
+                y = 49
+                
+        return x,y
+
 def getCritterAt(x,y,organ):
 
         # If organ is 0 look for predator
         # If organ is 1 look for prey
         # If organ is 2 look for plant
- 
+        # Returns 1 If True And Zero If False
+        
         # Bullshit Plese Define
         # Takes In X,Y,And Animal
-        # Lets Use This Function For Testing To
+        # Anthony Used Function For Testing To
         # See If Predator Or Prey Is There
         # Returns 1 If True And Zero If False
-        p = 0
-        if x == y:
-                return 1
+        
+        if organ == 0:
+                if x == y:
+                        return 1
+        
+        elif organ == 1:
+                if x == y:
+                        return 1
+        
+        elif organ == 2:
+                if x == y:
+                        return 1
 
 def setCritter(x, y, critter):
         critters[critter] = (x,y)
@@ -43,7 +62,10 @@ def getCritters():
 def countDistance(work,radius):
 
         # Counts Amount Of Steps In A Path
-        # A Zero Is No Steps 
+        # A Zero Is No Steps
+        # Work Is A List Of Directional Steps
+        # Radius Is Max Amount Of Steps
+        
         count = 0;
         for x in range(0,radius):
                 if work[x] != 0:
@@ -55,6 +77,12 @@ def getDirection(x,y,disx,disy,radius):
         test1 = -1
         test2 = -1
 
+        # Tests To See If Organy Is Much Different Than
+        # Self Y, If Not That Much, Basically Only
+        # Left And Right
+        # Test1 Is Y Difference
+        # Test2 Is X Difference
+        
         if abs(disy-y) < (radius / 3):
                 test1 = 0
 
@@ -74,7 +102,12 @@ def getDirection(x,y,disx,disy,radius):
                 test2 = 0
 
         # No Switch ... Ufa
+        # Choosing Scanner Direction To Organ
 
+        # If Both 0 Then Only Small Y Apart
+        # I Bullshit Say Right Ness If Higher And LeftNess If Lower
+        # No Top And Bottom Exist
+        
         if test1 == 0:
                 if test2 == 0:
                         if disy > y:
@@ -83,17 +116,27 @@ def getDirection(x,y,disx,disy,radius):
                         else:
                                 return bottomleft
 
+                # Small Vertical Difference Organ Is Right Of Scanner
                 elif test2 == 1:
                         return right
                 
+                # Small Vertical Difference Organ Is Left Of Scanner
                 else:
                         return left
 
+        # Big Vertical Difference Organ Under Scanner
+        # Uses Horizontal Difference For Bottom (Right Or Left)
+        # If Horizontal Even Also Bullshit Say BottomLeft
+        
         elif test1 == 1:
                 if test2 == 1:
                         return bottomright
                 else:
                         return bottomleft
+
+        # Big Vertical Difference Organ Over Scanner
+        # Uses Horizontal Difference For Top (Right Or Left)
+        # If Horizontal Even Also Bullshit Say TopLeft
 
         elif test1 == 2:
                 if test2 == 1:
@@ -103,19 +146,25 @@ def getDirection(x,y,disx,disy,radius):
 
 def getClosestPlant(x, y, radius):
 
-        getClosestOrganism(x, y, radius, 2)
+        # Returns Closest Plant Distance, Direction, LocationX, LocationY
+        plantdistance,plantdirection,plantx,planty = getClosestOrganism(x, y, radius, 2)
+        return plantdistance,plantdirection,plantx,planty
 
 def getClosestPred(x, y, radius):
 
-        getClosestOrganism(x, y, radius, 0)
+        # Returns Closest Pred Distance, Direction, LocationX, LocationY
+        preddistance,preddirection,predx,predy = getClosestOrganism(x, y, radius, 0)
+        return preddistance,preddirection,predx,predy
 
 def getClosestPrey(x, y, radius):
 
-        getClosestOrganism(x, y, radius, 1)
+        # Returns Closest Prey Distance, Direction, LocationX, LocationY
+        preydistance,preydirection,preyx,preyy = getClosestOrganism(x, y, radius, 1)
+        return preydistance,preydirection,preyx,preyy
 
 def getClosestOrganism(x,y,radius,organ):
 
-        # Goes Through The Good Array
+        # Goes Through The Good Array (One That Stores All Possible Paths)
         # And Pulls Out Paths One At A Time
         # Each Path Is Tested To See If There Is A Critter
         # At That Tile After The Path Is Taken
@@ -145,6 +194,7 @@ def getClosestOrganism(x,y,radius,organ):
                 # Uses Each Path And Does The Move To
                 # Get New Tile
                 # Tile Is Then Tested For Critter
+                # If Title Has Critter And Is Closer Than Stored, Change Stored
                 maybex = x
                 maybey = y
 
@@ -175,11 +225,11 @@ def getClosestOrganism(x,y,radius,organ):
 
         if disx != -1 and disy != -1 and closest != 1000:
                 direction = getDirection(x,y,disx,disy,radius)
+                #print(closest, direction, disx, disy)
                 return closest, direction, disx, disy
         else:
+                #print(closest, direction, disx, disy)
                 return -1, -1, -1, -1
-        #print(disx,disy,closest)
-        #return disx, disy, closest
 
 def checkPath(radius):
 
@@ -276,11 +326,21 @@ def getTile(x, y, wheretogo):
                 else:
                         return (x, y+1)
 
+def getSensoryData(critter, radius):
+
+        x, y = getCritterXY(critter)
+        preddistance,preddirection,predplacex,predplacey = getClosestPred(x, y, radius)
+        preydistance,preydirection,preyplacex,preyplacey = getClosestPrey(x, y, radius)
+        plantdistance,plantdirection,plantplacex,plantplacey = getClosestPlant(x, y, radius)
+
+        return preddistance, preddirection, preydistance, preydirection, plantdistance, plantdirection
+        
 #Only run this code if this one file is being run a python program
 if __name__ == "__main__":
 
     print(getClosestOrganism(6, 7, 3,0) == (2, 1, 5, 5))
     print(getClosestOrganism(32, 35, 3,0) == (2, 2, 33, 33))
     print(getClosestOrganism(32, 40, 3,0) == (-1, -1, -1, -1))
-
-
+    print(getClosestOrganism(38, 52, 5,0) == (-1, -1, -1, -1))
+    print(getClosestOrganism(41, 49, 5,0) == (4, 2, 44, 44))
+    print(getSensoryData(0,5) == (4, 2, 4, 2, 4, 2))
