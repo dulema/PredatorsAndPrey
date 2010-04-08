@@ -10,11 +10,12 @@ donothing = 0
 max = 100
 directions = []
 gooddirections = []
+critters = {}
 
 # 0 For Predator
 # 1 For Prey
 
-def getCritter(x,y,animal):
+def getCritterAt(x,y,animal):
 
         # Bullshit Plese Define
         # Takes In X,Y,And Animal
@@ -24,6 +25,15 @@ def getCritter(x,y,animal):
         p = 0
         if x == y:
                 return 1
+
+def setCritter((x,y), critter):
+        critters[critter] = (x,y)
+
+def removeCritter(critter):
+        del critters[critter]
+
+def getCritters():
+        return critters
 
 def countDistance(work,radius):
 
@@ -53,11 +63,9 @@ def doWork(work,radius,animal,x,y):
                         ugh.append(checky)
                         #print(ugh)
                         return ugh
-
         else:
                 ugh.append(-1)
                 return ugh
-                
 
 def getClosestAnimal(x,y,radius,animal):
 
@@ -161,7 +169,7 @@ def getAllDirections(radius):
 
         return length
 
-def getTile(x, y, wheretogo):
+def getTile((x,y), wheretogo):
 
         if wheretogo == donothing:
                 return (x,y)
