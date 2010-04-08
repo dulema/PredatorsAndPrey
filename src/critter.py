@@ -1,13 +1,21 @@
 import random
 import copy
 
+PREDATOR = "predator"
+PREY = "prey"
+
 #Give it a set of input sensory data, it outputs a move.
 #Naive implementation that currently just runs on python
 class Critter:
 
     pdfmatrix = {}
-    choices = 6
+    choices = 13
     status = {"hunger":0}
+    type = ""
+
+    def __init__(self, type="No type defined", choices = 13):
+	self.type = type
+	self.choices = choices
 
     #Returns the move to make.
     def getMove(self, senses):
@@ -61,25 +69,30 @@ class Critter:
     def setStatus(self, name, value):
 	self.status[name] = value
 
+    def incrementStatus(self, name, value):
+	self.status[name] = self.status[name] + value
+
     def resetStatus(self):
         self.status["hunger"] = 0
 
     # No pickling the files yet, nice to be able to read the data without the program
     def save(self, file):
+	file.write(self.type + "\n") 
 	file.write(str(self.pdfmatrix) + "\n")
 	file.write(str(self.choices))
 	file.close()
 
     def load(self, file):
+	type = file.readline()
 	stringmatrix = file.readline()
 	choices = file.readline()
 	file.close()
+	self.pdfmatrix = type
 	self.pdfmatrix = eval(stringmatrix)
 	self.choices = eval(choices)
 
-
 if __name__ == "__main__":
-    s = Critter()
+    s = Critter("SandyCritter")
     input = (3, 4, 5)
     s.getMove(input)
     s.save(open("critters/sandrotest", "w"))
@@ -98,3 +111,4 @@ if __name__ == "__main__":
 	r = c.getMove(input)
 	results[r] = results[r] + 1
     for x in results: print(x/100.0) 
+

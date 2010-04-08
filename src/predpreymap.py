@@ -1,9 +1,11 @@
+#If you change this please let Sandro know
 topleft = 1
 topright = 2
 right = 3
-left = 4
+bottomright = 4
 bottomleft = 5
-bottomright = 6
+left = 6
+
 donothing = 0
 max = 100
 directions = []
