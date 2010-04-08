@@ -90,7 +90,7 @@ def score(x):
 	    if c.getStatus("hunger") == 20:
 		world.removeCritter(c)
 		preds.remove(c)
-	    if hooker != None
+	    if hooker != None:
 		    hooker(world)
 
 	for c in preys:
@@ -127,7 +127,7 @@ def score(x):
 	    if c.getStatus("hunger") == 20:
 		world.removeCritter(c)
 		preys.remove(c)
-            if hooker != None
+            if hooker != None:
 		    hooker(world)
 
     return score

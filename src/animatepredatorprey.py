@@ -69,11 +69,11 @@ def draw_map():
 
 root = Tk()
 root.wm_title("Pred/Prey Animator")
-root.geometry("%dx%d%+d%+d" % (800, 500, 0, 0))
-yscrollbar = Scrollbar(root, orient=HORIZONTAL)
-yscrollbar.grid(row=0, column=2)
+#root.geometry("%dx%d%+d%+d" % (800, 500, 0, 0))
+yscrollbar = Scrollbar(root, orient=VERTICAL)
+yscrollbar.grid(row=0, column=2, sticky=N+S+W+E, rowspan=17)
 
-playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.set)
+playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.set, scrollregion=(0, 0, 1000, 1000))
 yscrollbar.config(command=playing_field.yview)
 
 
