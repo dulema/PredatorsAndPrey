@@ -1,18 +1,24 @@
+import menu
+import predpreyalgorithm
 from Tkinter import *
 from tkFileDialog import *
 import webbrowser
-import menu
-import predpreyalgorithm
 
 
-def receive_gen_and_speed():
-	print gen_num.get(), speed_slider.get()
+#Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
+def receive_mutate_parameters():
+	#Use gen_num.get(), pred_num.get(), prey_num.get()
+	pass
 
+#Will call predpreyalgo to grock state of map through score function
 def updatePlayingField(world):
 	pass
 
+#Will display successive turns on map
 def animate():
-	predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
+	#predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
+	playing_field.delete(ALL)
+	draw_map()
 	draw_root()
 
 def README_display():
@@ -21,55 +27,70 @@ def README_display():
 def About_display():
 	webbrowser.open("about.html")
 
+#Open pre-saved set of Predators
 def open_pred():
 	open_pred_file = askopenfilename()
 	return open_pred_file
 
+#Save a set of Predators
 def save_pred():
-	save_pred_file = asksaveasfilename()
+	save_pred_file = asksaveasfilename(defaultextension=".pred")
 	return save_pred_file
 
+#Open a re-saved set of prey
 def open_prey():
 	open_prey_file = askopenfilename()
 	return open_prey_file
 
+#Save a set of Prey
 def save_prey():
-	save_prey_file = asksaveasfilename()
+	save_prey_file = asksaveasfilename(defaultextension=".prey")
 	return save_prey_file
 
-
-
+#Reset all values to default and clear the Playing Field
 def reset():
 	playing_field.delete(ALL)
 	gen_num.set("10")
 	speed_slider.set(0)
+	pred_num.set("1")
+	prey_num.set("20")
 	draw_map()
 	draw_root()
 
+#Draw(place) all the widgets on the root
 def draw_root():
 	gen_num_label.grid(row=0, column=0, sticky=S)
 	gen_num_input.grid(row=1, column=0, sticky=N)
-	speed_slider_label.grid(row=2, column=0, sticky=S)
-	speed_slider.grid(row=3, column=0, sticky=N)
-	mutate_button.grid(row=4, column=0, sticky=N)
-	animate_button.grid(row=10, column=0, sticky=S)
-	key_title_label.grid(row=5, column=0)
-	key_pred_label.grid(row=6, column=0, sticky=S)
-	key_prey_label.grid(row=7, column=0)
-	key_veg_label.grid(row=8, column=0, sticky=N)
-	playing_field.grid(row=0, column=1, rowspan=17)
+	pred_num_label.grid(row=2, column=0, sticky=S)
+	pred_num_input.grid(row=3, column=0, sticky=N)
+	prey_num_label.grid(row=4, column=0, sticky=S)
+	prey_num_input.grid(row=5, column=0, sticky=N)
+	mutate_button.grid(row=6, column=0, sticky=N)
+	key_title_label.grid(row=8, column=0)
+	key_pred_label.grid(row=9, column=0, sticky=S)
+	key_prey_label.grid(row=10, column=0)
+	key_veg_label.grid(row=11, column=0, sticky=N)
+	speed_slider_label.grid(row=13, column=0, sticky=S)
+	speed_slider.grid(row=14, column=0, sticky=N)
+	map_size_label.grid(row=15, column=0, sticky=S)
+	map_size_input.grid(row=16, column=0, sticky=N)
+	animate_button.grid(row=17, column=0, sticky=N)
+	playing_field.grid(row=0, column=1, rowspan=17, padx=5)
 
+#Draw the map of hexagons
 def draw_map():
+	size = map_size.get()
+	size = int(size)
 	y = 0
-	for i in range(23):
+	for i in range(size):
     		if (i % 2 == 1):
         		x = 13
-        		for j in range(23):       
+        		for j in range(size):       
             			playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="black")
             			x = x + 24
     		else:
         		x = 1
-        		for j in range(23):       
+        		for j in range(size):       
             			playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="black")
             			x = x + 24
     		y = y + 29
@@ -79,13 +100,13 @@ def draw_map():
 if __name__ == "__main__":
 	root = Tk()
 	root.wm_title("Pred/Prey Animator")
-	#root.geometry("%dx%d%+d%+d" % (800, 500, 0, 0))
 	yscrollbar = Scrollbar(root, orient=VERTICAL)
 	yscrollbar.grid(row=0, column=2, sticky=N+S+W+E, rowspan=17)
-
-	playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.set, scrollregion=(0, 0, 1000, 1000))
+	xscrollbar = Scrollbar(root, orient=HORIZONTAL)
+	xscrollbar.grid(row=18, column=0, sticky=N+S+W+E, columnspan=3)
+	playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.set, xscrollcommand=xscrollbar.set, scrollregion=(0, 0, 3000, 3000))
 	yscrollbar.config(command=playing_field.yview)
-
+	xscrollbar.config(command=playing_field.xview)
 
 	menu = Menu(root)
 	root.config(menu=menu)
@@ -113,16 +134,28 @@ if __name__ == "__main__":
 
 
 	gen_num = StringVar()
+	pred_num = StringVar()
+	prey_num = StringVar()
+	map_size = StringVar()
 	gen_num_label = Label(root, text="Number of Generations")
 	gen_num_input = Entry(root, textvariable=gen_num)
 	gen_num.set("10")
-	mutate_button = Button(root, text="Mutate", command=receive_gen_and_speed)
-	animate_button = Button(root, text="Animate", command=animate)
+	pred_num_label = Label(root, text="Number of Predators")
+	pred_num_input = Entry(root, textvariable=pred_num)
+	pred_num.set("1")
+	prey_num_label = Label(root, text="Number of Prey")
+	prey_num_input = Entry(root, textvariable=prey_num)
+	prey_num.set("20")
+	mutate_button = Button(root, text="Mutate", command=receive_mutate_parameters)
+	
+	map_size_label = Label(root, text="Size of Map")
+	map_size_input = Entry(root, textvariable=map_size)
+	map_size.set("23")
 	key_title_label = Label(root, text="Map Icon Key")
 	key_pred_label = Label(root, text="Predator = D")
 	key_prey_label = Label(root, text="Prey = Y")
 	key_veg_label = Label(root, text="Vegetation = V")
-
+	animate_button = Button(root, text="Animate", command=animate)
 
 
 	draw_map()
