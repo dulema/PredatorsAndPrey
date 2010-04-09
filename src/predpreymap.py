@@ -11,19 +11,22 @@ max = 100
 directions = []
 gooddirections = []
 critters = {}
+worldmap = {}
 
 # 0 For Predator
 # 1 For Prey
 # 2 For Plant
 
+def buildWorld(size):
+        
+        #Should be in the INIT when made a Class
+        
+        for i in range(size):
+                for j in range(size):
+                        worldmap[(j,i)] = ' '
+                        
 def getCritterXY(critter):
-
-        # placeholder, implement when ready
-        if critter == 0:
-                x = 41
-                y = 49
-                
-        return x,y
+        return critters[critter]
 
 def getCritterAt(x,y,organ):
 
@@ -50,14 +53,34 @@ def getCritterAt(x,y,organ):
                 if x == y:
                         return 1
 
-def setCritter(x, y, critter):
+def setCritter((x,y), critter):
         critters[critter] = (x,y)
+        worldmap[(x,y)] = critter
+
+def moveCritter(critter, move):
+        if (critter in critters) == True:
+                #Gets Old Critter Location and deletes it from
+                #World Map
+                (oldx, oldy) = critters[critter]
+                worldmap[(oldx, oldy)] = ' '
+
+                #Gets New X,Y updates critter location
+                #Updates World Map
+                (x,y) = getTile((oldx, oldy), move)
+                critters[critter] = (x,y)
+                worldmap[(x,y)] = critter
+        else:
+                #Should Throw exception
+                #Trying to move critter that doesn't exist
+                print 'false'
 
 def removeCritter(critter):
+        (x,y) = critters[critter]
         del critters[critter]
+        worldmap[(x,y)] = ' '
 
 def getCritters():
-        return critters
+        return critters.keys()
 
 def countDistance(work,radius):
 
@@ -271,7 +294,7 @@ def getAllDirections(radius):
 
         return length
 
-def getTile(x, y, wheretogo):
+def getTile((x, y), wheretogo):
 
         if wheretogo == donothing:
                 return (x,y)
