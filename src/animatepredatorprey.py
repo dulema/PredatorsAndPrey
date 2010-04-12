@@ -29,22 +29,22 @@ def About_display():
 
 #Open pre-saved set of Predators
 def open_pred():
-	open_pred_file = askopenfilename()
+	open_pred_file = askopenfilename(initialdir="critters/")	
 	return open_pred_file
 
 #Save a set of Predators
 def save_pred():
-	save_pred_file = asksaveasfilename(defaultextension=".pred")
+	save_pred_file = asksaveasfilename(defaultextension=".pred",initialdir="critters/")
 	return save_pred_file
 
 #Open a re-saved set of prey
 def open_prey():
-	open_prey_file = askopenfilename()
+	open_prey_file = askopenfilename(initialdir="critters/")
 	return open_prey_file
 
 #Save a set of Prey
 def save_prey():
-	save_prey_file = asksaveasfilename(defaultextension=".prey")
+	save_prey_file = asksaveasfilename(defaultextension=".prey",initialdir="critters/")
 	return save_prey_file
 
 #Reset all values to default and clear the Playing Field
