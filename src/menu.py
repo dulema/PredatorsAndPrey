@@ -15,7 +15,7 @@ def validator(decision,min,max):
 
 #view the help file
 def helpfile():
-	f = open("help.txt", "r")
+	f = open("../docs/help.html", "r")
 	print("")
 	for line in f:
         	print line,

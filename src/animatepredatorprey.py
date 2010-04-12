@@ -22,10 +22,10 @@ def animate():
 	draw_root()
 
 def README_display():
-	webbrowser.open("help.html")
+	webbrowser.open("../docs/help.html")
 
 def About_display():
-	webbrowser.open("about.html")
+	webbrowser.open("../docs/about.html")
 
 #Open pre-saved set of Predators
 def open_pred():
