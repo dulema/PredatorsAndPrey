@@ -88,7 +88,7 @@ class Map:
                 del self.critters[critter]
                 self.worldmap[(x,y)] = ' '
 
-        def getCritters():
+        def getCritters(self):
                 return critters.keys()
 
         def countDistance(self,work,radius):
@@ -176,25 +176,25 @@ class Map:
                         else:
                                 return self.topleft
 
-        def getClosestPlant(x, y, radius):
+        def getClosestPlant(self, x, y, radius):
 
                 # Returns Closest Plant Distance, Direction, LocationX, LocationY
                 plantdistance,plantdirection,plantx,planty = self.getClosestOrganism(x, y, radius, 2)
                 return plantdistance,plantdirection,plantx,planty
 
-        def getClosestPred(x, y, radius):
+        def getClosestPred(self, x, y, radius):
 
                 # Returns Closest Pred Distance, Direction, LocationX, LocationY
                 preddistance,preddirection,predx,predy = self.getClosestOrganism(x, y, radius, 0)
                 return preddistance,preddirection,predx,predy
 
-        def getClosestPrey(x, y, radius):
+        def getClosestPrey(self, x, y, radius):
 
                 # Returns Closest Prey Distance, Direction, LocationX, LocationY
                 preydistance,preydirection,preyx,preyy = self.getClosestOrganism(x, y, radius, 1)
                 return preydistance,preydirection,preyx,preyy
 
-        def getClosestOrganism(self,x,y,radius,organ):
+        def getClosestOrganism(self, x, y, radius, organ):
 
                 # Goes Through The Good Array (One That Stores All Possible Paths)
                 # And Pulls Out Paths One At A Time
@@ -360,7 +360,7 @@ class Map:
 
         def getSensoryData(self,critter, radius):
 
-                x, y = self.getCritterXY(critter)
+                (x,y) = self.getCritterXY(critter)
                 preddistance,preddirection,predplacex,predplacey = self.getClosestPred(x, y, radius)
                 preydistance,preydirection,preyplacex,preyplacey = self.getClosestPrey(x, y, radius)
                 plantdistance,plantdirection,plantplacex,plantplacey = self.getClosestPlant(x, y, radius)
