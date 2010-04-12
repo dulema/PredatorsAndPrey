@@ -19,7 +19,6 @@ def animate():
 	#predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
 	playing_field.delete(ALL)
 	draw_map()
-	draw_root()
 
 def README_display():
 	webbrowser.open("../docs/help.html")
@@ -55,28 +54,14 @@ def reset():
 	pred_num.set("1")
 	prey_num.set("20")
 	map_size.set("23")
+	pct_pred_slider.set("10")
+	pct_prey_slider.set("30")
+	prey_num.set("20")
+	pct_veg_slider.set("20")
 	draw_map()
-	draw_root()
 
-#Draw(place) all the widgets on the root
-def draw_root():
-	gen_num_label.grid(row=0, column=0, sticky=S)
-	gen_num_input.grid(row=1, column=0, sticky=N)
-	pred_num_label.grid(row=2, column=0, sticky=S)
-	pred_num_input.grid(row=3, column=0, sticky=N)
-	prey_num_label.grid(row=4, column=0, sticky=S)
-	prey_num_input.grid(row=5, column=0, sticky=N)
-	mutate_button.grid(row=6, column=0, sticky=N)
-	key_title_label.grid(row=8, column=0)
-	key_pred_label.grid(row=9, column=0, sticky=S)
-	key_prey_label.grid(row=10, column=0)
-	key_veg_label.grid(row=11, column=0, sticky=N)
-	speed_slider_label.grid(row=13, column=0, sticky=S)
-	speed_slider.grid(row=14, column=0, sticky=N)
-	map_size_label.grid(row=15, column=0, sticky=S)
-	map_size_input.grid(row=16, column=0, sticky=N)
-	animate_button.grid(row=17, column=0, sticky=N)
-	playing_field.grid(row=0, column=1, rowspan=17, padx=5)
+
+
 
 #Draw the map of hexagons
 def draw_map():
@@ -104,7 +89,7 @@ if __name__ == "__main__":
 	yscrollbar = Scrollbar(root, orient=VERTICAL)
 	yscrollbar.grid(row=0, column=2, sticky=N+S+W+E, rowspan=17)
 	xscrollbar = Scrollbar(root, orient=HORIZONTAL)
-	xscrollbar.grid(row=18, column=0, sticky=N+S+W+E, columnspan=3)
+	xscrollbar.grid(row=18, column=1, sticky=N+S+W+E)
 	playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.set, xscrollcommand=xscrollbar.set, scrollregion=(0, 0, 3000, 3000))
 	yscrollbar.config(command=playing_field.yview)
 	xscrollbar.config(command=playing_field.xview)
@@ -131,8 +116,15 @@ if __name__ == "__main__":
 
 	speed_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
 	speed_slider_label = Label(root, text="Speed of Animation")
-
-
+	pct_pred_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
+	pct_pred_slider_label = Label(root, text="Percentage of Map with Predators")
+	pct_pred_slider.set("10")
+	pct_prey_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
+	pct_prey_slider_label = Label(root, text="Percentage of Map with Prey")
+	pct_prey_slider.set("30")
+	pct_veg_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
+	pct_veg_slider_label = Label(root, text="Percentage of Map with Vegetation")
+	pct_veg_slider.set("20")
 
 	gen_num = StringVar()
 	pred_num = StringVar()
@@ -147,6 +139,10 @@ if __name__ == "__main__":
 	prey_num_label = Label(root, text="Number of Prey")
 	prey_num_input = Entry(root, textvariable=prey_num)
 	prey_num.set("20")
+
+	
+	
+
 	mutate_button = Button(root, text="Mutate", command=receive_mutate_parameters)
 	
 	map_size_label = Label(root, text="Size of Map")
@@ -159,6 +155,32 @@ if __name__ == "__main__":
 	animate_button = Button(root, text="Animate", command=animate)
 
 
+
+
+	gen_num_label.grid(row=0, column=0, sticky=S)
+	gen_num_input.grid(row=1, column=0, sticky=N)
+	pred_num_label.grid(row=2, column=0, sticky=S)
+	pred_num_input.grid(row=3, column=0, sticky=N)
+	prey_num_label.grid(row=4, column=0, sticky=S)
+	prey_num_input.grid(row=5, column=0, sticky=N)
+	pct_pred_slider_label.grid(row=6, column=0, sticky=S)
+	pct_pred_slider.grid(row=7, column=0, sticky=N)
+	pct_prey_slider_label.grid(row=8, column=0, sticky=S)
+	pct_prey_slider.grid(row=9, column=0, sticky=N)
+	pct_veg_slider_label.grid(row=10, column=0, sticky=S)
+	pct_veg_slider.grid(row=11, column=0, sticky=N)
+	mutate_button.grid(row=17, column=0, sticky=N)
+	key_title_label.grid(row=0, column=4)
+	key_pred_label.grid(row=1, column=4, sticky=S)
+	key_prey_label.grid(row=2, column=4)
+	key_veg_label.grid(row=3, column=4, sticky=N)
+	speed_slider_label.grid(row=13, column=4, sticky=S)
+	speed_slider.grid(row=14, column=4, sticky=N)
+	map_size_label.grid(row=15, column=4, sticky=S)
+	map_size_input.grid(row=16, column=4, sticky=N)
+	animate_button.grid(row=17, column=4, sticky=N)
+	playing_field.grid(row=0, column=1, rowspan=17, padx=5)
+
+
 	draw_map()
-	draw_root()
 	root.mainloop()
