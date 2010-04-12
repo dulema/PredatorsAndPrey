@@ -74,13 +74,13 @@ if __name__ == "__main__":
 				print("There will be " + str(tile_num) + " tiles in the world.")
 				print("\nStarting Simulation!")
 
-			#predpreyalgorithm.mutate(generations, 5, 5)
+			#predpreyalgorithm.mutate(generations, 5, 5)#gens, predspergen, preyspergen
 			#print(predpreyalgorithm.best_pred)
 			#print(predpreyalgorithm.best_prey)
 		
 			print("\n1.Save")
 			print("2.Load")
-			print("3.View animation")
+			print("3.View animation GUI")
 			print("4.Start simulation again?")
 			print("5.Help")
 			print("6.Main Menu")
@@ -114,6 +114,7 @@ if __name__ == "__main__":
 				loadcritter(load_choice, load_name)
 			if sub_choice_1 == 3:
 				print("Animate Stuffs!!")
+				#call chris's animate file
 			if sub_choice_1 == 4:
 				simulation_run_through = -1
 			if sub_choice_1 == 5:
