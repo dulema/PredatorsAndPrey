@@ -54,6 +54,7 @@ def reset():
 	speed_slider.set(0)
 	pred_num.set("1")
 	prey_num.set("20")
+	map_size.set("23")
 	draw_map()
 	draw_root()
 
