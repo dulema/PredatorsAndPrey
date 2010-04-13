@@ -41,10 +41,10 @@ class Map:
                 return self.critters[critter]
 
         def getCritterAt(self,location):
-		if location not in self.critters:
-		    return None
-		else:
-		    return self.critters[location]
+		for critter in self.critters:
+			if location == self.critters[critter]:
+				return critter
+		return None
 
         def setCritterAt(self, location, critter):
                 self.critters[critter] = location

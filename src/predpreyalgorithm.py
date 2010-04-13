@@ -5,6 +5,7 @@ import copy
 import multiprocessing
 from multiprocessing import Pool
 from critter import Critter
+import critter
 
 best_pred = Critter("Predator")
 best_prey = Critter("Prey")
@@ -69,9 +70,11 @@ def score(x):
 	    c.incrementStatus("hunger", 1)
 	    while True:
 		while location in (None, (-1, -1)):
-		    move = directionConverter(sensorydata, c.getMove(sensorydata)) 
+		    temp = c.getMove(sensorydata)
+		    #print(temp)
+		    move = directionConverter(sensorydata, temp) 
 		    location = world.getCritterDest(c,move)
-			
+		#print(move)
 		crit = world.getCritterAt(location)
 
 		if crit == c: #If it doesn't wanna move
@@ -152,8 +155,8 @@ def __clearProgress():
 
 
 def roundprogress(map, score):
-    pass
-    #	print("Progress at %s" % score)
+	pass
+    	#print("Progress at %s" % score)
     #	for critter in map.critters: print("%s at %s hunger:%s" % (critter.type, map.critters[critter], critter.getStatus("hunger")))
 
 def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, progress=__printProgress): 
