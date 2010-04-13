@@ -19,6 +19,7 @@ def animate():
 	#predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
 	playing_field.delete(ALL)
 	draw_map()
+	fill_map()
 
 def README_display():
 	webbrowser.open("../docs/help.html")
@@ -81,6 +82,15 @@ def draw_map():
             			x = x + 24
     		y = y + 29
 
+
+#Given an x and y coordinate and text, this can draw the text on the map
+def fill_map():
+	x=4
+	y=1
+	if(y%2 == 1):
+		playing_field.create_text(13+12+x*24,20+y*29, text="V")
+	else:
+		playing_field.create_text(1+12+x*24,20+y*29, text="V")
 	
 
 if __name__ == "__main__":
