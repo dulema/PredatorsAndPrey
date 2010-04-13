@@ -1,3 +1,4 @@
+import random
 #If you change this please let Sandro know
 
 class Map:
@@ -14,79 +15,120 @@ class Map:
         directions = []
         gooddirections = []
         critters = {}
-        worldmap = {}
+	plants = []
 
         # 0 For Predator
         # 1 For Prey
         # 2 For Plant
 
-        def __init__(self, size):
-                
-                #Should be in the INIT when made a Class
-                self.size = size
-                for i in range(size):
-                        for j in range(size):
-                                self.worldmap[(j,i)] = ' '
+        def __init__(self, size, plantpercent):
+	    #TODO: Make sure to have plant percent actually generate a percent
+	    #of plants
+	    #Should be in the INIT when made a Class
+	    self.size = size
+	    print("stuck")
+
+	    #Fill the map with plants
+	    for _ in range(int(plantpercent*size)):
+		loc = (random.randint(0, size-1), random.randint(0, size-1))
+		while loc in self.plants:
+		    loc = (random.randint(0, size-1), random.randint(0, size-1))
+		self.plants.append(loc)
+
+	def isPlant(self, location):
+		return location in self.plants
                                 
         def getCritterXY(self, critter):
                 return self.critters[critter]
 
-        def getCritterAt(self,x,y,organ):
+        def getCritterAt(self,location):
+		if location not in self.critters:
+		    return None
+		else:
+		    return self.critters[location]
 
-                # If organ is 0 look for predator
-                # If organ is 1 look for prey
-                # If organ is 2 look for plant
-                # Returns 1 If True And Zero If False
-                
-                # Bullshit Plese Define
-                # Takes In X,Y,And Animal
-                # Anthony Used Function For Testing To
-                # See If Predator Or Prey Is There
-                # Returns 1 If True And Zero If False
-                
-                if organ == 0:
-                        #if self.worldmap[(x,y)] == "predator":
-                        return 1
-                        #else:
-                                #return 0
-                
-                elif organ == 1:
-                        #if self.worldmap[(x,y)] == "prey":
-                        return 1
-                        #else:
-                                #return 0
-                
-                elif organ == 2:
-                        #if self.worldmap[(x,y)] == "plant":
-                        return 1
-                        #else:
-                                #return 0
+        def setCritterAt(self, location, critter):
+                self.critters[critter] = location
 
-        def setCritter(self, x, y, critter):
-                self.critters[critter] = (x,y)
-                self.worldmap[(x,y)] = critter
+	def getCritterDest(self, critter, move):
+	    if critter not in self.critters:
+		raise "This critter was never added to the map"
+	    return self.getTile( self.critters[critter], move)
+
+        def getTile(self, location, wheretogo):
+                (x, y) = location
+                if wheretogo == self.donothing:
+                        return (x,y)
+                if wheretogo == self.topleft:
+                        if y == 0:
+                                return (-1, -1)
+                        if x == 0 and y%2 == 0:
+                                return (self.size-1, y-1)
+                        if y % 2 == 1:
+                                return (x, y-1)
+                        else:
+                                return (x-1, y-1)
+                if wheretogo == self.topright:
+                        if y == 0:
+                                return (-1, -1)
+                        if x == self.size-1 and y%2 == 1:
+                                return (0,y-1)
+                        if y % 2 == 1:
+                                return (x+1, y-1)
+                        else:
+                                return (x, y-1)
+
+                if wheretogo == self.right:
+                        if x == self.size - 1:
+                                return (0, y)
+                        else:
+                                return (x+1, y)
+
+                if wheretogo == self.left:
+                        if x == 0:
+                                return (self.size-1, y)
+                        else:
+                                return (x-1, y)
+
+                if wheretogo == self.bottomleft:
+                        if y == self.size - 1:
+                                return (-1, -1)
+                        if x == 0 and y%2 == 0:
+                                return (self.size-1, y+1)
+                        if y % 2 == 1:
+                                return (x, y+1)
+                        else:
+                                return (x-1, y+1)
+
+                if wheretogo == self.bottomright:
+                        if y == self.size -1:
+                                return (-1, -1)
+                        if x == self.size-1 and y % 2 == 1:
+                                return (0, y+1)
+                        if y % 2 == 1:
+                                return (x+1, y+1)
+                        else:
+                                return (x, y+1)
 
         def moveCritter(self, critter, move):
-                if (critter in self.critters) == True:
-                        #Gets Old Critter Location and deletes it from
-                        #World Map
-                        (oldx, oldy) = self.critters[critter]
-                        self.worldmap[(oldx, oldy)] = ' '
+	    	if critter not in self.critters:
+		    raise Exception("Critter not on map")
+		    return
 
-                        #Gets New X,Y updates critter location
-                        #Updates World Map
-                        (x,y) = getTile((oldx, oldy), move)
-                        self.critters[critter] = (x,y)
-                        self.worldmap[(x,y)] = critter
-                else:
-                        #Should Throw exception
-                        #Trying to move critter that doesn't exist
-                        print ("false")
+
+		oldloc = self.critters[critter]
+		newloc = self.getTile(oldloc, move)
+
+		if newloc == None or newloc == (-1, -1):
+		    raise Exception("Can't move in that direction: ")
+		    return
+
+		#made it this far, do the move
+		self.removeCritter(critter)
+		self.setCritterAt(newloc, critter)
                         
         def removeCritter(self, critter):
-                (x,y) = self.critters[critter]
                 del self.critters[critter]
-                self.worldmap[(x,y)] = ' '
 
         def getCritters(self):
                 return critters.keys()
@@ -231,13 +273,13 @@ class Map:
                         maybey = y
 
                         for p in range(0,radius):
-                                maybex,maybey = self.getTile(maybex,maybey,work[p])
+                                maybex,maybey = self.getTile((maybex,maybey),work[p])
 
                         #print(work)
                         #print(x,y,maybex,maybey,distance)
 
                         if maybex != x and maybey != y and maybex != -1 and maybex != -1: 
-                                if self.getCritterAt(maybex,maybey,organ) == 1:
+                                if self.getCritterAt( (maybex,maybey) ) != None:
                                      closex = maybex
                                      closey = maybey
 
@@ -303,61 +345,6 @@ class Map:
 
                 return length
 
-        def getTile(self, x, y, wheretogo):
-
-                if wheretogo == self.donothing:
-                        return (x,y)
-                if wheretogo == self.topleft:
-                        if y == 0:
-                                return (-1, -1)
-                        if x == 0 and y%2 == 0:
-                                return (self.size-1, y-1)
-                        if y % 2 == 1:
-                                return (x, y-1)
-                        else:
-                                return (x-1, y-1)
-                if wheretogo == self.topright:
-                        if y == 0:
-                                return (-1, -1)
-                        if x == self.size-1 and y%2 == 1:
-                                return (0,y-1)
-                        if y % 2 == 1:
-                                return (x+1, y-1)
-                        else:
-                                return (x, y-1)
-
-                if wheretogo == self.right:
-                        if x == self.size - 1:
-                                return (0, y)
-                        else:
-                                return (x+1, y)
-
-                if wheretogo == self.left:
-                        if x == 0:
-                                return (self.size-1, y)
-                        else:
-                                return (x-1, y)
-
-                if wheretogo == self.bottomleft:
-                        if y == self.size - 1:
-                                return (-1, -1)
-                        if x == 0 and y%2 == 0:
-                                return (self.size-1, y+1)
-                        if y % 2 == 1:
-                                return (x, y+1)
-                        else:
-                                return (x-1, y+1)
-
-                if wheretogo == self.bottomright:
-                        if y == self.size -1:
-                                return (-1, -1)
-                        if x == self.size-1 and y % 2 == 1:
-                                return (0, y+1)
-                        if y % 2 == 1:
-                                return (x+1, y+1)
-                        else:
-                                return (x, y+1)
-
         def getSensoryData(self,critter, radius):
 
                 (x,y) = self.getCritterXY(critter)
@@ -366,7 +353,18 @@ class Map:
                 plantdistance,plantdirection,plantplacex,plantplacey = self.getClosestPlant(x, y, radius)
 
                 return preddistance, preddirection, preydistance, preydirection, plantdistance, plantdirection
-                
+
+
+        def getRandomUntakenTile(self):
+	    if len(self.critters) >= self.size**2:
+		raise Exception("No more untaken tiles exist")
+	    loc = (random.randint(0, self.size-1), random.randint(0, self.size-1))
+	    while loc in self.critters.values():
+		loc = (random.randint(0, self.size-1), random.randint(0, self.size-1))
+	    return loc
+		
+
+
 #Only run this code if this one file is being run a python program
 if __name__ == "__main__":
 

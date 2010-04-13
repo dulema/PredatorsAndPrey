@@ -1,6 +1,6 @@
 #Does the work
 import random
-import predpreymap
+from predpreymap import Map
 import copy
 import multiprocessing
 from multiprocessing import Pool
@@ -63,25 +63,26 @@ def score(x):
 	#For preds
 	for c in preds:
 	    current_tile = world.getCritterXY(c)
-	    sensorydata = world.getSensoryData(c, 5)
+	    sensorydata = world.getSensoryData(c, 3)
 	    location = None
-	    while location == None:
-                move = directionConverter(sensorydata, c.getMove(sensorydata))
-		location = world.getXY(current_tile, move)
-		if location == None: continue
-		crit = world.getCritter(location)
+	    move = None
+	    c.incrementStatus("hunger", 1)
+	    while True:
+		while location in (None, (-1, -1)):
+		    move = directionConverter(sensorydata, c.getMove(sensorydata)) 
+		    location = world.getCritterDest(c,move)
+			
+		crit = world.getCritterAt(location)
 
 		if crit == c: #If it doesn't wanna move
-		    c.incrementStatus("hunger", 1)
 		    break
 		elif crit == None:
-		    world.moveCritter(c, location)
-		    c.incrementStatus("hunger", 1)
+		    world.moveCritter(c, move)
 		    break
 		elif crit.type == critter.PREY:
 		    preys.remove(crit)
 		    world.remove(crit)
-		    world.moveCritter(c, location)
+		    world.moveCritter(c, move)
 		    c.setStatus("hunger", 0)
 		    break
 		elif crit.type == critter.PREDATOR:
@@ -91,30 +92,28 @@ def score(x):
 		world.removeCritter(c)
 		preds.remove(c)
 	    if hooker != None:
-		    hooker(world)
+		    hooker(world, score)
 
 	for c in preys:
 	    current_tile = world.getCritterXY(c)
-	    sensorydata = world.getSensoryData(c, 5)
+	    sensorydata = world.getSensoryData(c, 3)
 	    location = None
-	    while location == None:
-                move = directionConverter(sensorydata, c.getMove(sensorydata))
-		location = world.getXY(current_tile, move)
-		if location == None: continue
-		crit = world.getCritter(location)
+	    c.incrementStatus("hunger", 1)
+	    while True:
+		while location in (None, (-1, -1) ): 
+		    move = directionConverter(sensorydata, c.getMove(sensorydata))
+		    location = world.getCritterDest(c, move)
+
+		crit = world.getCritterAt(location)
 
 		if crit == c: #if the prey decides not to move
 		    if world.isPlant(location):
 			c.setStatus("hunger", 0)
-		    else:
-                        c.incrementStatus("hunger", 1)
 	            break
 		elif crit == None:
-		    world.moveCritter(c, location)
+		    world.moveCritter(c, move)
 		    if world.isPlant(location):
 			c.setStatus("hunger", 0)
-		    else:
-                        c.incrementStatus("hunger", 1)
 		    break
 		elif crit.type == critter.PREY:
 		    location = None
@@ -125,10 +124,11 @@ def score(x):
 		    break
 
 	    if c.getStatus("hunger") == 20:
+		print("DIE DIE DIE")
 		world.removeCritter(c)
 		preys.remove(c)
             if hooker != None:
-		    hooker(world)
+		    hooker(world, score)
 
     return score
 
@@ -151,6 +151,12 @@ def __clearProgress():
     import sys
     sys.stdout.flush()
 
+
+def roundprogress(map, score):
+    	print("Progress at %s" % score)
+	for critter in map.critters:
+	    print("%s at %s" % (critter.type, map.critters[critter]))
+
 def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, progress=__printProgress): 
     global best_pred, best_prey, score
     pool = Pool()
@@ -165,17 +171,17 @@ def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, progress=__printProg
 	preys.append(best_prey)
 
 	#Generate a Pool of processes to run all of the scoring for the predators
-	predResult = pool.map_async(score, zip(preds, [copy.deepcopy(best_prey) for _ in range(num_of_preds_per_gen)]) ) 
-	preyResult = pool.map_async(score, zip([copy.deepcopy(best_pred) for _ in range(len(preys))], preys) )
+	#predResult = pool.map_async(score, zip(preds, [copy.deepcopy(best_prey) for _ in range(num_of_preds_per_gen)]) ) 
+	#preyResult = pool.map_async(score, zip([copy.deepcopy(best_pred) for _ in range(len(preys))], preys) )
 	
 	#Parse the results
-	predscores = predResult.get(None) #Probably dangerous to not specify a timeout
-        #predscores = map(score, zip(preds, [copy.deepcopy(best_prey) for _ in range(num_of_preds_per_gen)]))  
+	#predscores = predResult.get(None) #Probably dangerous to not specify a timeout
+        predscores = map(score, zip(preds, [copy.deepcopy(best_prey) for _ in range(num_of_preds_per_gen)], [roundprogress for _ in range(len(preds))] )   )
 	bestscore = max(predscores)
 	dindex = predscores.index(bestscore)
 
 	preyscores = preyResult.get(None)
-	#preyscores = map(score, zip([copy.deepcopy(best_pred) for _ in range(len(preys))], preys) )
+	preyscores = map(score, zip([copy.deepcopy(best_pred) for _ in range(len(preys))], preys) )
 	bestscore = max(preyscores)
 	yindex = preyscores.index(bestscore)
 
