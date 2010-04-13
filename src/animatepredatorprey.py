@@ -3,6 +3,7 @@ import predpreyalgorithm
 from Tkinter import *
 from tkFileDialog import *
 import webbrowser
+import time
 
 
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
@@ -11,15 +12,22 @@ def receive_mutate_parameters():
 	pass
 
 #Will call predpreyalgo to grock state of map through score function
-def updatePlayingField(world):
-	pass
+def updatePlayingField(world, round_score):
+	playing_field.delete(ALL)
+	for critter, location in world.critters.iteritems():
+		fill_map(critter.type, location)
+	for i in world.plants:
+		print i
+		fill_map("V", i)
+	draw_map()
+	root.update()
+	time.sleep(.1)
+
 
 #Will display successive turns on map
-def animate():
-	#predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
-	playing_field.delete(ALL)
+def animate():	
+	predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
 	draw_map()
-	fill_map()
 
 def README_display():
 	webbrowser.open("../docs/help.html")
@@ -83,14 +91,21 @@ def draw_map():
     		y = y + 29
 
 
-#Given an x and y coordinate and text, this can draw the text on the map
-def fill_map():
-	x=4
-	y=1
+#Given an x and y coordixnate and text, this can draw the text on the map
+def fill_map(thing, location):
+	x=location[0]
+	x=int(x)
+	y=location[1]
+	y=int(y)
+	critter="V"
+	if(thing=="Predator"):
+		critter="D"
+	elif(thing=="Prey"):
+		critter="Y"
 	if(y%2 == 1):
-		playing_field.create_text(13+12+x*24,20+y*29, text="V")
+		playing_field.create_text(13+12+x*24,20+y*29, text=critter)
 	else:
-		playing_field.create_text(1+12+x*24,20+y*29, text="V")
+		playing_field.create_text(1+12+x*24,20+y*29, text=critter)
 	
 
 if __name__ == "__main__":
