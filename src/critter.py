@@ -72,9 +72,11 @@ class Critter:
 	self.status[name] = value
 
     def incrementStatus(self, name, value):
-	self.status[name] = self.status[name] + value
+	self.status[name] += value
 
     def resetStatus(self):
+	for key in self.status:
+	    self.status[key] = 0
         self.status["hunger"] = 0
 
     # No pickling the files yet, nice to be able to read the data without the program

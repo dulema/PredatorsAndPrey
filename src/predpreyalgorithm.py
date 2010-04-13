@@ -88,7 +88,7 @@ def score(x):
 		elif crit.type == critter.PREDATOR:
 		    location = None
 
-	    if c.getStatus("hunger") == 20:
+	    if c.getStatus("hunger") >= 20:
 		world.removeCritter(c)
 		preds.remove(c)
 	    if hooker != None:
@@ -123,8 +123,7 @@ def score(x):
 		    crit.setStatus("hunger", 0)
 		    break
 
-	    if c.getStatus("hunger") == 20:
-		print("DIE DIE DIE")
+	    if c.getStatus("hunger") >= 20:
 		world.removeCritter(c)
 		preys.remove(c)
             if hooker != None:
@@ -153,9 +152,9 @@ def __clearProgress():
 
 
 def roundprogress(map, score):
-    	print("Progress at %s" % score)
-	for critter in map.critters:
-	    print("%s at %s" % (critter.type, map.critters[critter]))
+    pass
+    #	print("Progress at %s" % score)
+    #	for critter in map.critters: print("%s at %s hunger:%s" % (critter.type, map.critters[critter], critter.getStatus("hunger")))
 
 def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, progress=__printProgress): 
     global best_pred, best_prey, score
@@ -180,7 +179,7 @@ def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, progress=__printProg
 	bestscore = max(predscores)
 	dindex = predscores.index(bestscore)
 
-	preyscores = preyResult.get(None)
+	#preyscores = preyResult.get(None)
 	preyscores = map(score, zip([copy.deepcopy(best_pred) for _ in range(len(preys))], preys) )
 	bestscore = max(preyscores)
 	yindex = preyscores.index(bestscore)

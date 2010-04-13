@@ -26,7 +26,6 @@ class Map:
 	    #of plants
 	    #Should be in the INIT when made a Class
 	    self.size = size
-	    print("stuck")
 
 	    #Fill the map with plants
 	    for _ in range(int(plantpercent*size)):
