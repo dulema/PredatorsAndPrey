@@ -17,11 +17,10 @@ def updatePlayingField(world, round_score):
 	for critter, location in world.critters.iteritems():
 		fill_map(critter.type, location)
 	for i in world.plants:
-		print i
 		fill_map("V", i)
 	draw_map()
 	root.update()
-	time.sleep(.1)
+	time.sleep(0.1)
 
 
 #Will display successive turns on map
@@ -139,7 +138,7 @@ if __name__ == "__main__":
 
 
 
-	speed_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
+	speed_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	speed_slider_label = Label(root, text="Speed of Animation")
 	pct_pred_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
 	pct_pred_slider_label = Label(root, text="Percentage of Map with Predators")
