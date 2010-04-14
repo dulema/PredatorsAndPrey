@@ -11,7 +11,9 @@ def receive_mutate_parameters():
 	#Use gen_num.get(), pred_num.get(), prey_num.get()
 	pass
 
-#Will call predpreyalgo to grock state of map through score function
+#Erases playing_field and then loops through critter dictionary and plant
+#array and calls fill+map to place appropriate letter in appropriate
+#hexagon
 def updatePlayingField(world, round_score):
 	playing_field.delete(ALL)
 	for critter, location in world.critters.iteritems():
@@ -23,7 +25,8 @@ def updatePlayingField(world, round_score):
 	time.sleep(0.1)
 
 
-#Will display successive turns on map
+#Command intiated by clicking the Animate button. Calls score in PredPreyAlgo
+#update the playing_field.
 def animate():	
 	predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
 	draw_map()
@@ -71,7 +74,7 @@ def reset():
 
 
 
-#Draw the map of hexagons
+#Draw the map of hexagons on the playing_field
 def draw_map():
 	size = map_size.get()
 	size = int(size)
@@ -93,20 +96,26 @@ def draw_map():
 #Given an x and y coordixnate and text, this can draw the text on the map
 def fill_map(thing, location):
 	x=location[0]
-	x=int(x)
 	y=location[1]
-	y=int(y)
-	critter="V"
-	if(thing=="Predator"):
-		critter="D"
-	elif(thing=="Prey"):
-		critter="Y"
+		
+	if(thing == "V"):
+		critter = thing
+		color = "SeaGreen"
+	elif(thing == "Predator"):
+		critter = "D"
+		color = "Red"
+	elif(thing == "Prey"):
+		critter = "Y"
+		color = "Blue"	
+
 	if(y%2 == 1):
-		playing_field.create_text(13+12+x*24,20+y*29, text=critter)
+		playing_field.create_text(13+12+x*24,20+y*29, text=critter, fill=color)
 	else:
-		playing_field.create_text(1+12+x*24,20+y*29, text=critter)
+		playing_field.create_text(1+12+x*24,20+y*29, text=critter, fill=color)
 	
 
+
+#Main part of program. This section instatiates and places everything on the root
 if __name__ == "__main__":
 	root = Tk()
 	root.wm_title("Pred/Prey Animator")
@@ -118,6 +127,8 @@ if __name__ == "__main__":
 	yscrollbar.config(command=playing_field.yview)
 	xscrollbar.config(command=playing_field.xview)
 
+
+	#Menu Section
 	menu = Menu(root)
 	root.config(menu=menu)
 	file_menu = Menu(menu)
@@ -137,7 +148,7 @@ if __name__ == "__main__":
 	help_menu.add_command(label="About...", command=About_display)
 
 
-
+	#Slider Section
 	speed_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	speed_slider_label = Label(root, text="Speed of Animation")
 	pct_pred_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
@@ -150,6 +161,8 @@ if __name__ == "__main__":
 	pct_veg_slider_label = Label(root, text="Percentage of Map with Vegetation")
 	pct_veg_slider.set("20")
 
+
+	#Integer Input Section
 	gen_num = StringVar()
 	pred_num = StringVar()
 	prey_num = StringVar()
@@ -163,15 +176,13 @@ if __name__ == "__main__":
 	prey_num_label = Label(root, text="Number of Prey")
 	prey_num_input = Entry(root, textvariable=prey_num)
 	prey_num.set("20")
-
-	
-	
-
 	mutate_button = Button(root, text="Mutate", command=receive_mutate_parameters)
-	
 	map_size_label = Label(root, text="Size of Map")
 	map_size_input = Entry(root, textvariable=map_size)
 	map_size.set("23")
+
+
+	#Playing_Field Legend Section
 	key_title_label = Label(root, text="Map Icon Key")
 	key_pred_label = Label(root, text="Predator = D")
 	key_prey_label = Label(root, text="Prey = Y")
@@ -180,7 +191,8 @@ if __name__ == "__main__":
 
 
 
-
+	#Grid Section
+	#The following code tells each widget where to be placed on the root
 	gen_num_label.grid(row=0, column=0, sticky=S)
 	gen_num_input.grid(row=1, column=0, sticky=N)
 	pred_num_label.grid(row=2, column=0, sticky=S)
@@ -205,6 +217,7 @@ if __name__ == "__main__":
 	animate_button.grid(row=17, column=4, sticky=N)
 	playing_field.grid(row=0, column=1, rowspan=17, padx=5)
 
-
+	#Do Work
+	#Place everything on the root
 	draw_map()
 	root.mainloop()
