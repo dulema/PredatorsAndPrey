@@ -219,15 +219,13 @@ class Map:
             checky = critter[1]
             checkdistance = self.getDistance(x,y,checkx,checky)
 
-            # Sees If Plant Distance Is Not 0
             # That It Is Closer Than The Previous Closest
             # That It is Closer Than Scan Radius
-            if checkdistance != 0:
-                    if checkdistance < closest:
-                            if checkdistance < radius:
-                                    # Changes To New Closest And Direction
-                                    closest = checkdistance
-                                    direction = self.getDirection(x,y,checkx,checky,radius)
+            if checkdistance < closest:
+                    if checkdistance < radius:
+                            # Changes To New Closest And Direction
+                            closest = checkdistance
+                            direction = self.getDirection(x,y,checkx,checky,radius)
 
         if direction != -1:    
                 return closest, direction
