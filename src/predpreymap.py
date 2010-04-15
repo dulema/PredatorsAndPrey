@@ -1,5 +1,6 @@
 import random
 import critter
+import math
 from critter import Critter
 
 class Map:
@@ -135,6 +136,10 @@ class Map:
         test1 = -1
         test2 = -1
 
+        # Predator Or Prey On A Plant
+        if disx == x and disy == y:
+                return 0
+
         # Tests To See If Organy Is Much Different Than
         # Self Y, If Not That Much, Basically Only
         # Left And Right
@@ -204,8 +209,15 @@ class Map:
 
         # Non Scientific GetDistance
         # Uses Sqaure World Logic Not Hexagonal
-        distance = abs(x-checkx) + abs(y-checky)
-        return distance
+        # Uses Z^2 = X^2 + Y^2
+        xsq = abs(x-checkx)
+        ysq = abs(y-checky)
+        xsq = xsq * xsq
+        ysq = ysq * ysq
+        sq = xsq + ysq
+        distance = pow(sq,.5)
+        
+        return round(distance)
 
     def getClosestPlant(self, x, y, radius):
 
@@ -326,24 +338,24 @@ if __name__ == "__main__":
         map.setCritterAt((8,12), prey2)
         map.setCritterAt((4,5), prey3)
 
-        print(map.getSensoryData(pred1, 20)[0] == 12)
+        print(map.getSensoryData(pred1, 20)[0] == 8)
         print(map.getSensoryData(pred1, 20)[1] == 4)
-        print(map.getSensoryData(pred1, 20)[2] == 5)
+        print(map.getSensoryData(pred1, 20)[2] == 4)
         print(map.getSensoryData(pred1, 20)[3] == 3)
                                 
-        print(map.getSensoryData(prey2, 20)[0] == 4)
+        print(map.getSensoryData(prey2, 20)[0] == 3)
         print(map.getSensoryData(prey2, 20)[1] == 3)
-        print(map.getSensoryData(prey2, 20)[2] == 11)
+        print(map.getSensoryData(prey2, 20)[2] == 8)
         print(map.getSensoryData(prey2, 20)[3] == 1)
         
-        print(map.getSensoryData(pred3, 20)[0] == 10)
+        print(map.getSensoryData(pred3, 20)[0] == 7)
         print(map.getSensoryData(pred3, 20)[1] == 1)
-        print(map.getSensoryData(pred3, 20)[2] == 4)
+        print(map.getSensoryData(pred3, 20)[2] == 3)
         print(map.getSensoryData(pred3, 20)[3] == 6)
         
-        print(map.getSensoryData(prey3, 20)[0] == 5)
+        print(map.getSensoryData(prey3, 20)[0] == 4)
         print(map.getSensoryData(prey3, 20)[1] == 3)
-        print(map.getSensoryData(prey3, 20)[2] == 2)
+        print(map.getSensoryData(prey3, 20)[2] == 1)
         print(map.getSensoryData(prey3, 20)[3] == 6)
 
         #print(len(map.plants) == 50) 
