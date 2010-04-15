@@ -163,15 +163,18 @@ if __name__ == "__main__":
 	#Slider Section
 	speed_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	speed_slider_label = Label(root, text="Speed of Animation")
-	pct_pred_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
+	pct_pred_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	pct_pred_slider_label = Label(root, text="Percentage of Map with Predators")
 	pct_pred_slider.set("10")
-	pct_prey_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
+	pct_prey_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	pct_prey_slider_label = Label(root, text="Percentage of Map with Prey")
 	pct_prey_slider.set("30")
-	pct_veg_slider = Scale(root, from_=0, to=100, orient=HORIZONTAL)
+	pct_veg_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	pct_veg_slider_label = Label(root, text="Percentage of Map with Vegetation")
 	pct_veg_slider.set("20")
+	pct_pdf_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
+	pct_pdf_slider_label = Label(root, text="Percentage of Genes Mutated")
+	pct_pdf_slider.set("40")
 
 
 	#Integer Input Section
@@ -217,6 +220,8 @@ if __name__ == "__main__":
 	pct_prey_slider.grid(row=9, column=0, sticky=N)
 	pct_veg_slider_label.grid(row=10, column=0, sticky=S)
 	pct_veg_slider.grid(row=11, column=0, sticky=N)
+	pct_pdf_slider_label.grid(row=12, column=0, sticky=S)
+	pct_pdf_slider.grid(row=13, column=0, sticky=N)
 	mutate_button.grid(row=17, column=0, sticky=N)
 	key_title_label.grid(row=0, column=4)
 	key_pred_label.grid(row=1, column=4, sticky=S)
@@ -235,9 +240,6 @@ if __name__ == "__main__":
 	wolf = ImageTk.PhotoImage(file="PredPreyImages/Gerald_G_Wolf_Head_(Stylized).png")
 	sheep = ImageTk.PhotoImage(file="PredPreyImages/creohn_Sheep_in_gray.png")
 
-	#picture = ImageTk.PhotoImage(file="PredPreyImages/Telemachos_wolf_head_silhouette.png")
-	#picture = ImageTk.PhotoImage(file="PredPreyImages/creohn_Sheep_in_gray.png")
-	#playing_field.create_image(13+12+1*24,20+1*29, image=picture)
 
 
 	#Do Work
