@@ -4,6 +4,7 @@ from Tkinter import *
 from tkFileDialog import *
 import webbrowser
 import time
+from PIL import ImageTk
 
 
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
@@ -97,21 +98,32 @@ def draw_map():
 def fill_map(thing, location):
 	x=location[0]
 	y=location[1]
-		
+	
+	temp = ImageTk.PhotoImage(file="PredPreyImages/PeterM_Tree.png")
+	playing_field.create_image(13,20, image=temp)
+	
 	if(thing == "V"):
 		critter = thing
 		color = "SeaGreen"
+		#picture = ImageTk.PhotoImage(file="PredPreyImages/PeterM_Tree.png")
+		picture = vegetation
 	elif(thing == "Predator"):
 		critter = "D"
 		color = "Red"
+		#picture = ImageTk.PhotoImage(file="PredPreyImages/Telemachos_wolf_head_silhouette.png")
+		picture = wolf
 	elif(thing == "Prey"):
 		critter = "Y"
-		color = "Blue"	
+		color = "Blue"
+		#picture = ImageTk.PhotoImage(file="PredPreyImages/creohn_Sheep_in_gray.png")
+		picture = sheep	
 
 	if(y%2 == 1):
-		playing_field.create_text(13+12+x*24,20+y*29, text=critter, fill=color)
+		#playing_field.create_text(13+12+x*24,20+y*29, text=critter, fill=color)
+		playing_field.create_image(13+12+x*24,20+y*29, image=picture)
 	else:
-		playing_field.create_text(1+12+x*24,20+y*29, text=critter, fill=color)
+		#playing_field.create_text(1+12+x*24,20+y*29, text=critter, fill=color)
+		playing_field.create_image(1+12+x*24,20+y*29, image=picture)
 	
 
 
@@ -216,6 +228,17 @@ if __name__ == "__main__":
 	map_size_input.grid(row=16, column=4, sticky=N)
 	animate_button.grid(row=17, column=4, sticky=N)
 	playing_field.grid(row=0, column=1, rowspan=17, padx=5)
+
+
+	vegetation = ImageTk.PhotoImage(file="PredPreyImages/PeterM_Tree.png")
+	#wolf = ImageTk.PhotoImage(file="PredPreyImages/Telemachos_wolf_head_silhouette.png")
+	wolf = ImageTk.PhotoImage(file="PredPreyImages/Gerald_G_Wolf_Head_(Stylized).png")
+	sheep = ImageTk.PhotoImage(file="PredPreyImages/creohn_Sheep_in_gray.png")
+
+	#picture = ImageTk.PhotoImage(file="PredPreyImages/Telemachos_wolf_head_silhouette.png")
+	#picture = ImageTk.PhotoImage(file="PredPreyImages/creohn_Sheep_in_gray.png")
+	#playing_field.create_image(13+12+1*24,20+1*29, image=picture)
+
 
 	#Do Work
 	#Place everything on the root
