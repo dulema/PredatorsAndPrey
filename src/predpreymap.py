@@ -226,7 +226,7 @@ class Map:
         direction = -1
 
         # Goes Through All Plants
-        for critter in map.plants:
+        for critter in self.plants:
             checkx = critter[0]
             checky = critter[1]
             checkdistance = self.getDistance(x,y,checkx,checky)
@@ -251,8 +251,8 @@ class Map:
         direction = -1
 
         # Goes Through All Preds
-        for critter in map.getPredators():
-            checkx,checky = (map.getCritterXY(critter))
+        for critter in self.getPredators():
+            checkx,checky = (self.getCritterXY(critter))
             checkdistance = self.getDistance(x,y,checkx,checky)
 
             # Sees If Pred Distance Is Not 0
@@ -277,8 +277,8 @@ class Map:
         direction = -1
 
         # Goes Through All Preys
-        for critter in map.getPreys():
-            checkx,checky = (map.getCritterXY(critter))
+        for critter in self.getPreys():
+            checkx,checky = (self.getCritterXY(critter))
             checkdistance = self.getDistance(x,y,checkx,checky)
             
             # Sees If Prey Distance Is Not 0
@@ -337,6 +337,11 @@ if __name__ == "__main__":
         map.setCritterAt((3,4), prey1)
         map.setCritterAt((8,12), prey2)
         map.setCritterAt((4,5), prey3)
+
+        print(map.getSensoryData(pred1, 2)[0] == None)
+        print(map.getSensoryData(pred1, 2)[1] == None)
+        print(map.getSensoryData(pred1, 2)[2] == None)
+        print(map.getSensoryData(pred1, 2)[3] == None)
 
         print(map.getSensoryData(pred1, 20)[0] == 8)
         print(map.getSensoryData(pred1, 20)[1] == 4)
