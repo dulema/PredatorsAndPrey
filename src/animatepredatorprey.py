@@ -136,6 +136,7 @@ if __name__ == "__main__":
 	xscrollbar = Scrollbar(root, orient=HORIZONTAL)
 	xscrollbar.grid(row=18, column=1, sticky=N+S+W+E)
 	playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.set, xscrollcommand=xscrollbar.set, scrollregion=(0, 0, 3000, 3000))
+	
 	yscrollbar.config(command=playing_field.yview)
 	xscrollbar.config(command=playing_field.xview)
 
@@ -199,9 +200,9 @@ if __name__ == "__main__":
 
 	#Playing_Field Legend Section
 	key_title_label = Label(root, text="Map Icon Key")
-	key_pred_label = Label(root, text="Predator = D")
-	key_prey_label = Label(root, text="Prey = Y")
-	key_veg_label = Label(root, text="Vegetation = V")
+	key_pred_label = Label(root, text="	  Predator =>")
+	key_prey_label = Label(root, text="	      Prey =>")
+	key_veg_label = Label(root, text="	Vegetation =>")
 	animate_button = Button(root, text="Animate", command=animate)
 
 
@@ -223,10 +224,10 @@ if __name__ == "__main__":
 	pct_pdf_slider_label.grid(row=12, column=0, sticky=S)
 	pct_pdf_slider.grid(row=13, column=0, sticky=N)
 	mutate_button.grid(row=17, column=0, sticky=N)
-	key_title_label.grid(row=0, column=4)
-	key_pred_label.grid(row=1, column=4, sticky=S)
+	key_title_label.grid(row=0, column=4, sticky=E)
+	key_pred_label.grid(row=1, column=4)
 	key_prey_label.grid(row=2, column=4)
-	key_veg_label.grid(row=3, column=4, sticky=N)
+	key_veg_label.grid(row=3, column=4)
 	speed_slider_label.grid(row=13, column=4, sticky=S)
 	speed_slider.grid(row=14, column=4, sticky=N)
 	map_size_label.grid(row=15, column=4, sticky=S)
@@ -239,8 +240,17 @@ if __name__ == "__main__":
 	#wolf = ImageTk.PhotoImage(file="PredPreyImages/Telemachos_wolf_head_silhouette.png")
 	wolf = ImageTk.PhotoImage(file="PredPreyImages/Gerald_G_Wolf_Head_(Stylized).png")
 	sheep = ImageTk.PhotoImage(file="PredPreyImages/creohn_Sheep_in_gray.png")
+	
 
-
+	wolf_canvas = Canvas(root,width=30,height=30)
+	wolf_canvas.create_image(15,15, image=wolf)
+	wolf_canvas.grid(row=1,column=5, sticky=S+W)
+	sheep_canvas = Canvas(root,width=30,height=30)
+	sheep_canvas.create_image(15,15, image=sheep)
+	sheep_canvas.grid(row=2,column=5, sticky=S+W)
+	veg_canvas = Canvas(root,width=30,height=30)
+	veg_canvas.create_image(15,15, image=vegetation)
+	veg_canvas.grid(row=3,column=5, sticky=S+W)
 
 	#Do Work
 	#Place everything on the root
