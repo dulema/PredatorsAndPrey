@@ -43,13 +43,15 @@ class Critter:
     def getPDFMatrix(self):
 	return self.pdfmatrix
 
-    def getMutations(self, howmany):
+    def clone(self, howmany):
 	for _ in range(howmany):
-	    c = Critter()
-	    #Can't use pdfmatrix.copy() because that only creates a shallow copy.
-	    c.pdfmatrix = copy.deepcopy(self.pdfmatrix) 
+	    yield copy.deepcopy(self)
+    
+    def getMutations(self, howmany):
+	for c in self.clone(howmany):
 	    c.mutate()
 	    yield c
+
 
     #BROKEN BROKEN BROKEN
     def mutate(self):
@@ -70,9 +72,11 @@ class Critter:
 	self.status[name] = value
 
     def incrementStatus(self, name, value):
-	self.status[name] = self.status[name] + value
+	self.status[name] += value
 
     def resetStatus(self):
+	for key in self.status:
+	    self.status[key] = 0
         self.status["hunger"] = 0
 
     # No pickling the files yet, nice to be able to read the data without the program
