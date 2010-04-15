@@ -1,14 +1,16 @@
 import random
-#If you change this please let Sandro know
+import critter
+from critter import Critter
 
+#If you change this please let Sandro know
 class Map:
-        
-        topleft = 1
-        topright = 2
-        right = 3
-        bottomright = 4
-        bottomleft = 5
-        left = 6
+
+	topleft = 1
+	topright = 2
+	right = 3
+	bottomright = 4
+	bottomleft = 5
+	left = 6
 
         donothing = 0
         size = 100
@@ -45,6 +47,15 @@ class Map:
 			if location == self.critters[critter]:
 				return critter
 		return None
+
+	def checkType(self, location, organ):
+		if organ == 0:
+			return location in self.critters and self.getCritterAt(location).type == Critter.PREDATOR
+                if organ == 1:
+			return location in self.critters and  self.getCritterAt(location).type == Critter.PREY
+		if organ == 2:
+			return location in self.plants
+		raise Exception("organ type: %d was passed in " % organ)
 
         def setCritterAt(self, location, critter):
                 self.critters[critter] = location
@@ -130,7 +141,13 @@ class Map:
                 del self.critters[critter]
 
         def getCritters(self):
-                return critters.keys()
+                return self.critters.keys()
+
+	def getPreys(self):
+		return filter(lambda c : c.type == "prey", self.critters)
+
+	def getPredators(self):
+		return filter(lambda c : c.type == "predator", self.critters)
 
         def countDistance(self,work,radius):
 
@@ -276,9 +293,8 @@ class Map:
 
                         #print(work)
                         #print(x,y,maybex,maybey,distance)
-
                         if maybex != x and maybey != y and maybex != -1 and maybex != -1: 
-                                if self.getCritterAt( (maybex,maybey) ) != None:
+                                if self.checkType( (maybex,maybey), organ ) != None:
                                      closex = maybex
                                      closey = maybey
 
@@ -366,11 +382,32 @@ class Map:
 
 #Only run this code if this one file is being run a python program
 if __name__ == "__main__":
+    import critter
+    from critter import Critter
 
-    map1 = Map(100)
-    print(map1.getClosestOrganism(6, 7, 3,0) == (2, 1, 5, 5))
-    print(map1.getClosestOrganism(32, 35, 3,0) == (2, 2, 33, 33))
-    print(map1.getClosestOrganism(32, 40, 3,0) == (-1, -1, -1, -1))
-    print(map1.getClosestOrganism(38, 52, 5,0) == (-1, -1, -1, -1))
-    print(map1.getClosestOrganism(41, 49, 5,0) == (4, 2, 44, 44))
-    print(map1.getSensoryData(0,5) == (4, 2, 4, 2, 4, 2))
+    map = Map(100, 0.5)
+    pred = Critter(critter.PREDATOR) 
+    prey = Critter(critter.PREY) 
+    print(len(map.plants) == 50)
+    map.setCritterAt((3,2), pred)
+    map.setCritterAt((3,4), prey)
+    print(map.getCritterAt((3,2)) == pred)
+    print(map.getCritterAt((3,4)) == prey)
+    print(map.getCritterXY(pred) == (3, 2))
+    print(map.getCritterXY(prey) == (3, 4))
+    print(map.getCritterDest(pred, map.right) == (4, 2))
+    print(map.getTile((3,4), map.left) == (2, 4)) 
+    map.moveCritter(pred, map.right)
+    print(map.getCritterXY(pred) == map.getTile((3, 2), map.right))
+    print(map.getCritterXY(pred) == (4, 2) )
+    print(len(map.getCritters()) == 2)
+    map.removeCritter(pred)
+    print(len(map.getCritters()) == 1)
+    map.setCritterAt((5, 5), pred)
+    print(len(map.getCritters()) == 2)
+#    print(map.getSensoryData(pred, 5))
+    for critter in map.getPreys():
+	print(map.getCritterXY(critter))
+    print(map.getPreys())
+    print(map.getPredators())
+

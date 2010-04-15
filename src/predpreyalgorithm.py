@@ -64,7 +64,8 @@ def score(x):
 	#For preds
 	for c in preds:
 	    current_tile = world.getCritterXY(c)
-	    sensorydata = world.getSensoryData(c, 3)
+	    mapdata = world.getSensoryData(c, 3)
+
 	    location = None
 	    move = None
 	    c.incrementStatus("hunger", 1)
