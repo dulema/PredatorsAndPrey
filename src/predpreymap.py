@@ -124,10 +124,10 @@ class Map:
         return self.critters.keys()
 
     def getPreys(self):
-        return filter(lambda c : c.type == "prey", self.critters)
+        return [p for p in filter(lambda c : c.type == "prey", self.critters)]
 
     def getPredators(self):
-        return filter(lambda c : c.type == "predator", self.critters)
+        return [p for p in filter(lambda c : c.type == "predator", self.critters)]
 
     def getDirection(self,x,y,disx,disy,radius):
 
