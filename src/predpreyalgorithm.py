@@ -66,14 +66,20 @@ def score(x):
     
     score = 0
     while len(world.getPreys()) >  0 and len(world.getPredators()) > 0:
-	#For preds
+        #Score get incremented because it is just how every long the species lasts
 	score += 1
+
+	#Increment the hunger of all of the animals by 1
+        for c in world.getCritters():
+		c.incrementStatus("hunger", 1)
+                if c.getStatus("hunger") >= 20:
+			world.removeCritter(c)
+
 	for c in world.getPredators():
 	    current_tile = world.getCritterXY(c)
 	    sensorydata = world.getSensoryData(c, 3)
 	    location = None
 	    move = None
-	    c.incrementStatus("hunger", 1)
 	    while True:
 		while location in (None, (-1, -1)):
 		    move = directionConverter(sensorydata, c.getMove(sensorydata)) 
@@ -93,8 +99,6 @@ def score(x):
 		elif crit.type == critter.PREDATOR:
 		    location = None
 
-	    if c.getStatus("hunger") >= 20:
-		world.removeCritter(c)
 	    if hooker != None:
 		    hooker(world, score)
 
@@ -102,7 +106,6 @@ def score(x):
 	    current_tile = world.getCritterXY(c)
 	    sensorydata = world.getSensoryData(c, 3)
 	    location = None
-	    c.incrementStatus("hunger", 1)
 	    while True:
 		while location in (None, (-1, -1) ): 
 		    move = directionConverter(sensorydata, c.getMove(sensorydata))
@@ -126,8 +129,6 @@ def score(x):
 		    crit.setStatus("hunger", 0)
 		    break
 
-	    if c.getStatus("hunger") >= 20:
-		world.removeCritter(c)
             if hooker != None:
 		    hooker(world, score)
 
