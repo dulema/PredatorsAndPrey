@@ -11,6 +11,8 @@ best_pred = Critter("Predator")
 best_prey = Critter("Prey")
 
 def reverse(direction):
+    if direction == None:
+	return 0
     if direction <= 3:
 	direction += 3
     else:
@@ -18,12 +20,16 @@ def reverse(direction):
     return direction
 
 def left(direction):
+    if direction == None:
+	return 0
     if direction == 1:
 	return 6
     else:
         return direction - 1
 
 def right(direction):
+    if direction == None:
+	return 0
     if direction == 6:
 	return 1
     else:
@@ -60,8 +66,8 @@ def score(x):
     
     score = 0
     while len(preds) >  0 and len(preys) > 0:
-	score += 1
 	#For preds
+	score += 1
 	for c in preds:
 	    current_tile = world.getCritterXY(c)
 	    sensorydata = world.getSensoryData(c, 3)
@@ -72,7 +78,6 @@ def score(x):
 	    while True:
 		while location in (None, (-1, -1)):
 		    temp = c.getMove(sensorydata)
-		    #print(temp)
 		    move = directionConverter(sensorydata, temp) 
 		    location = world.getCritterDest(c,move)
 		#print(move)
