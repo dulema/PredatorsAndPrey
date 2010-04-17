@@ -10,6 +10,7 @@ from PIL import ImageTk
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
 def receive_mutate_parameters():
 	#Use gen_num.get(), pred_num.get(), prey_num.get()
+	#validate here
 	pass
 
 #Erases playing_field and then loops through critter dictionary and plant
@@ -31,6 +32,7 @@ def updatePlayingField(world, round_score):
 def animate():	
 	predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
 	draw_map()
+	#validate here
 
 def README_display():
 	webbrowser.open("../docs/help.html")
@@ -165,10 +167,10 @@ if __name__ == "__main__":
 	speed_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	speed_slider_label = Label(root, text="Speed of Animation")
 	pct_pred_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
-	pct_pred_slider_label = Label(root, text="Percentage of Map with Predators")
+	pct_pred_slider_label = Label(root, text="Percentage of Map with Predators")#validate here
 	pct_pred_slider.set("10")
 	pct_prey_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
-	pct_prey_slider_label = Label(root, text="Percentage of Map with Prey")
+	pct_prey_slider_label = Label(root, text="Percentage of Map with Prey")#validate here
 	pct_prey_slider.set("30")
 	pct_veg_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	pct_veg_slider_label = Label(root, text="Percentage of Map with Vegetation")
@@ -184,13 +186,13 @@ if __name__ == "__main__":
 	prey_num = StringVar()
 	map_size = StringVar()
 	gen_num_label = Label(root, text="Number of Generations")
-	gen_num_input = Entry(root, textvariable=gen_num)
+	gen_num_input = Entry(root, textvariable=gen_num)#validate here
 	gen_num.set("10")
 	pred_num_label = Label(root, text="Number of Predators")
-	pred_num_input = Entry(root, textvariable=pred_num)
+	pred_num_input = Entry(root, textvariable=pred_num)#validate here
 	pred_num.set("1")
 	prey_num_label = Label(root, text="Number of Prey")
-	prey_num_input = Entry(root, textvariable=prey_num)
+	prey_num_input = Entry(root, textvariable=prey_num)#validate here
 	prey_num.set("20")
 	mutate_button = Button(root, text="Mutate", command=receive_mutate_parameters)
 	map_size_label = Label(root, text="Size of Map")
