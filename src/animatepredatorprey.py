@@ -104,6 +104,7 @@ def fill_map(thing, location):
 	temp = ImageTk.PhotoImage(file="PredPreyImages/PeterM_Tree.png")
 	playing_field.create_image(13,20, image=temp)
 	
+	picture = None
 	if(thing == "V"):
 		critter = thing
 		color = "SeaGreen"

@@ -49,8 +49,6 @@ class Map:
 
     def getTile(self, location, wheretogo):
         (x, y) = location
-        if wheretogo == self.donothing:
-            return (x,y)
         if wheretogo == self.topleft:
             if y == 0:
                 return (-1, -1)
@@ -126,10 +124,10 @@ class Map:
         return self.critters.keys()
 
     def getPreys(self):
-        return filter(lambda c : c.type == "prey", self.critters)
+        return [p for p in filter(lambda c : c.type == "prey", self.critters)]
 
     def getPredators(self):
-        return filter(lambda c : c.type == "predator", self.critters)
+        return [p for p in filter(lambda c : c.type == "predator", self.critters)]
 
     def getDirection(self,x,y,disx,disy,radius):
 
@@ -362,23 +360,4 @@ if __name__ == "__main__":
         print(map.getSensoryData(prey3, 20)[1] == 3)
         print(map.getSensoryData(prey3, 20)[2] == 1)
         print(map.getSensoryData(prey3, 20)[3] == 6)
-
-        #print(len(map.plants) == 50) 
-        #print(map.getCritterAt((3,2)) == pred)
-        #print(map.getCritterAt((3,4)) == prey)
-        #print(map.getCritterXY(pred) == (3, 2))
-        #print(map.getCritterXY(prey) == (3, 4))
-        #print(map.getCritterDest(pred, map.right) == (4, 2))
-        #print(map.getTile((3,4), map.left) == (2, 4)) 
-        #map.moveCritter(pred, map.right)
-        #print(map.getCritterXY(pred) == map.getTile((3, 2), map.right))
-        #print(map.getCritterXY(pred) == (4, 2) )
-        #print(len(map.getCritters()) == 2)
-        #map.removeCritter(pred)
-        #print(len(map.getCritters()) == 1)
-        #map.setCritterAt((5, 5), pred)
-        #print(len(map.getCritters()) == 2)
-        #print(map.getSensoryData(pred, 5))
-        #print(map.getPreys())
-        #print(map.getPredators())
 

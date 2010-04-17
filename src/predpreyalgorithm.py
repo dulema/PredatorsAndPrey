@@ -7,10 +7,12 @@ from multiprocessing import Pool
 from critter import Critter
 import critter
 
-best_pred = Critter("Predator")
-best_prey = Critter("Prey")
+best_pred = Critter(critter.PREDATOR)
+best_prey = Critter(critter.PREY)
 
 def reverse(direction):
+    if direction == None:
+	return 0
     if direction <= 3:
 	direction += 3
     else:
@@ -18,12 +20,16 @@ def reverse(direction):
     return direction
 
 def left(direction):
+    if direction == None:
+	return 0
     if direction == 1:
 	return 6
     else:
         return direction - 1
 
 def right(direction):
+    if direction == None:
+	return 0
     if direction == 6:
 	return 1
     else:
@@ -37,6 +43,9 @@ def directionConverter(sensorydata, move):
     toPrey = sensorydata[3]
     toPlant = sensorydata[5]
 
+    toPred = 0 if toPred == None else toPred
+    toPrey = 0 if toPrey == None else toPrey
+    toPlant = 0 if toPlant == None else toPlant
     allpossiblemoves = [toPred,  toPrey,  toPlant,
      reverse(toPred), reverse(toPrey), reverse(toPlant),
      left(toPred),    left(toPrey),    left(toPlant),
@@ -52,30 +61,29 @@ def score(x):
 	hooker = x[2]
 
     world = Map(23, 0.5)
-    preds = [p for p in pred.clone(4)]
-    preys = [p for p in prey.clone(15)]
-
-    for c in preds: world.setCritterAt(world.getRandomUntakenTile(), c)
-    for c in preys: world.setCritterAt(world.getRandomUntakenTile(), c)
+    for p in pred.clone(4): world.setCritterAt(world.getRandomUntakenTile(), p)
+    for p in prey.clone(14): world.setCritterAt(world.getRandomUntakenTile(), p)
     
     score = 0
-    while len(preds) >  0 and len(preys) > 0:
+    while len(world.getPreys()) >  0 and len(world.getPredators()) > 0:
+        #Score get incremented because it is just how every long the species lasts
 	score += 1
-	#For preds
-	for c in preds:
+
+	#Increment the hunger of all of the animals by 1
+        for c in world.getCritters():
+		c.incrementStatus("hunger", 1)
+                if c.getStatus("hunger") >= 20:
+			world.removeCritter(c)
+
+	for c in world.getPredators():
 	    current_tile = world.getCritterXY(c)
 	    sensorydata = world.getSensoryData(c, 3)
-
 	    location = None
 	    move = None
-	    c.incrementStatus("hunger", 1)
 	    while True:
 		while location in (None, (-1, -1)):
-		    temp = c.getMove(sensorydata)
-		    #print(temp)
-		    move = directionConverter(sensorydata, temp) 
+		    move = directionConverter(sensorydata, c.getMove(sensorydata)) 
 		    location = world.getCritterDest(c,move)
-		#print(move)
 		crit = world.getCritterAt(location)
 
 		if crit == c: #If it doesn't wanna move
@@ -84,25 +92,20 @@ def score(x):
 		    world.moveCritter(c, move)
 		    break
 		elif crit.type == critter.PREY:
-		    preys.remove(crit)
-		    world.remove(crit)
+		    world.removeCritter(crit)
 		    world.moveCritter(c, move)
 		    c.setStatus("hunger", 0)
 		    break
 		elif crit.type == critter.PREDATOR:
 		    location = None
 
-	    if c.getStatus("hunger") >= 20:
-		world.removeCritter(c)
-		preds.remove(c)
 	    if hooker != None:
 		    hooker(world, score)
 
-	for c in preys:
+	for c in world.getPreys():
 	    current_tile = world.getCritterXY(c)
 	    sensorydata = world.getSensoryData(c, 3)
 	    location = None
-	    c.incrementStatus("hunger", 1)
 	    while True:
 		while location in (None, (-1, -1) ): 
 		    move = directionConverter(sensorydata, c.getMove(sensorydata))
@@ -122,14 +125,10 @@ def score(x):
 		elif crit.type == critter.PREY:
 		    location = None
 		elif crit.type == critter.PREDATOR:
-		    preys.remove(c)
-		    world.remove(c)
+		    world.removeCritter(c)
 		    crit.setStatus("hunger", 0)
 		    break
 
-	    if c.getStatus("hunger") >= 20:
-		world.removeCritter(c)
-		preys.remove(c)
             if hooker != None:
 		    hooker(world, score)
 
