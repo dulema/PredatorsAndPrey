@@ -5,13 +5,19 @@ from tkFileDialog import *
 import webbrowser
 import time
 from PIL import ImageTk
-
+import re
 
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
 def receive_mutate_parameters():
-	#Use gen_num.get(), pred_num.get(), prey_num.get()
-	#validate here
-	pass
+	if pct_pred_slider.get()+pct_prey_slider.get() > 100:
+		print("Uh oh!!!! mutate prob")#take out once fix warning
+		#tkMessageBox.showwarning(
+		#	"Percents of predators and prey covering the map add up to over 100!",
+		#	"Please fix this."
+		#)
+	else:
+		#Use gen_num.get(), pred_num.get(), prey_num.get()
+		pass
 
 #Erases playing_field and then loops through critter dictionary and plant
 #array and calls fill+map to place appropriate letter in appropriate
@@ -29,10 +35,18 @@ def updatePlayingField(world, round_score):
 
 #Command intiated by clicking the Animate button. Calls score in PredPreyAlgo
 #update the playing_field.
-def animate():	
-	predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
-	draw_map()
-	#validate here
+def animate():
+	if pct_pred_slider.get()+pct_prey_slider.get() > 100:
+		print("Uh oh!!!!animate prob")#take out once fix warning
+		#tkMessageBox.showwarning(
+		#	"Percents of predators and prey covering the map add up to over 100!",
+		#	"Please fix this."
+		#)
+		predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))#take out once fix warning
+		draw_map()#take out once fix warning
+	else:
+		predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
+		draw_map()
 
 def README_display():
 	webbrowser.open("../docs/help.html")
@@ -127,8 +141,14 @@ def fill_map(thing, location):
 	else:
 		#playing_field.create_text(1+12+x*24,20+y*29, text=critter, fill=color)
 		playing_field.create_image(1+12+x*24,20+y*29, image=picture)
-	
 
+def validate(typedinvalue):
+	stringified = str(typedinvalue)
+	if(re.match("^[0-9]+$",stringified) == None):#checks if a number, made of integers, was input
+		print("You didn't type a number!")
+		return 0
+	else:
+		return 1
 
 #Main part of program. This section instatiates and places everything on the root
 if __name__ == "__main__":
@@ -168,10 +188,10 @@ if __name__ == "__main__":
 	speed_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	speed_slider_label = Label(root, text="Speed of Animation")
 	pct_pred_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
-	pct_pred_slider_label = Label(root, text="Percentage of Map with Predators")#validate here
+	pct_pred_slider_label = Label(root, text="Percentage of Map with Predators")
 	pct_pred_slider.set("10")
 	pct_prey_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
-	pct_prey_slider_label = Label(root, text="Percentage of Map with Prey")#validate here
+	pct_prey_slider_label = Label(root, text="Percentage of Map with Prey")
 	pct_prey_slider.set("30")
 	pct_veg_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	pct_veg_slider_label = Label(root, text="Percentage of Map with Vegetation")
@@ -187,18 +207,25 @@ if __name__ == "__main__":
 	prey_num = StringVar()
 	map_size = StringVar()
 	gen_num_label = Label(root, text="Number of Generations")
-	gen_num_input = Entry(root, textvariable=gen_num)#validate here
+	gen_num_input = Entry(root, textvariable=gen_num)
 	gen_num.set("10")
 	pred_num_label = Label(root, text="Number of Predators")
-	pred_num_input = Entry(root, textvariable=pred_num)#validate here
+	pred_num_input = Entry(root, textvariable=pred_num)
 	pred_num.set("1")
 	prey_num_label = Label(root, text="Number of Prey")
-	prey_num_input = Entry(root, textvariable=prey_num)#validate here
+	prey_num_input = Entry(root, textvariable=prey_num)
 	prey_num.set("20")
 	mutate_button = Button(root, text="Mutate", command=receive_mutate_parameters)
 	map_size_label = Label(root, text="Size of Map")
 	map_size_input = Entry(root, textvariable=map_size)
 	map_size.set("23")
+	#Validation configuration stuff here
+	vcmd = (gen_num_input.register(validate),'%P')
+	gen_num_input.configure(vcmd=vcmd, validate='key')
+	vcmd = (pred_num_input.register(validate),'%P')
+	pred_num_input.configure(vcmd=vcmd, validate='key')
+	vcmd = (prey_num_input.register(validate),'%P')
+	prey_num_input.configure(vcmd=vcmd, validate='key')
 
 
 	#Playing_Field Legend Section
