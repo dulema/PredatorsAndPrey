@@ -12,12 +12,13 @@ class Map:
     bottomleft = 5
     left = 6
 
-    directions = []
-    gooddirections = []
-    critters = {}
-    plants = []
-
     def __init__(self, size, plantpercent):
+
+
+        self.directions = []
+        self.gooddirections = []
+        self.critters = {}
+        self.plants = []
 
         self.size = size
         #Fill the map with plants

@@ -23,6 +23,7 @@ def receive_mutate_parameters():
 #array and calls fill+map to place appropriate letter in appropriate
 #hexagon
 def updatePlayingField(world, round_score):
+	print(round_score)
 	playing_field.delete(ALL)
 	for critter, location in world.critters.iteritems():
 		fill_map(critter.type, location)

@@ -8,13 +8,13 @@ PREY = "prey"
 #Naive implementation that currently just runs on python
 class Critter:
 
-    pdfmatrix = {}
-    choices = 13
-    status = {"hunger":0}
-    type = ""
-
+    
     def __init__(self, type="No type defined", choices = 13):
-        self.type = type
+        self.pdfmatrix = {}
+        self.choices = 13
+	self.status = {"hunger":0}
+	self.type = ""
+	self.type = type
         self.choices = choices
 
     #Returns the move to make.
