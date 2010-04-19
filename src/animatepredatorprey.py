@@ -114,9 +114,9 @@ def draw_map():
 def fill_map(thing, location):
 	x=location[0]
 	y=location[1]
-	
-	temp = ImageTk.PhotoImage(file="PredPreyImages/PeterM_Tree.png")
-	playing_field.create_image(13,20, image=temp)
+	print(thing)
+	#temp = ImageTk.PhotoImage(file="PredPreyImages/PeterM_Tree.png")
+	#playing_field.create_image(13,20, image=temp)
 	
 	picture = None
 	if(thing == "V"):
@@ -124,12 +124,12 @@ def fill_map(thing, location):
 		color = "SeaGreen"
 		#picture = ImageTk.PhotoImage(file="PredPreyImages/PeterM_Tree.png")
 		picture = vegetation
-	elif(thing == "Predator"):
+	elif(thing == "predator"):
 		critter = "D"
 		color = "Red"
 		#picture = ImageTk.PhotoImage(file="PredPreyImages/Telemachos_wolf_head_silhouette.png")
 		picture = wolf
-	elif(thing == "Prey"):
+	elif(thing == "prey"):
 		critter = "Y"
 		color = "Blue"
 		#picture = ImageTk.PhotoImage(file="PredPreyImages/creohn_Sheep_in_gray.png")
