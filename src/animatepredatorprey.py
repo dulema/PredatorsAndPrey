@@ -6,15 +6,12 @@ import webbrowser
 import time
 from PIL import ImageTk
 import re
+import tkMessageBox
 
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
 def receive_mutate_parameters():
 	if pct_pred_slider.get()+pct_prey_slider.get() > 100:
-		print("Uh oh!!!! mutate prob")#take out once fix warning
-		#tkMessageBox.showwarning(
-		#	"Percents of predators and prey covering the map add up to over 100!",
-		#	"Please fix this."
-		#)
+		tkMessageBox.showwarning("Mutate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
 	else:
 		#Use gen_num.get(), pred_num.get(), prey_num.get()
 		pass
@@ -38,13 +35,7 @@ def updatePlayingField(world, round_score):
 #update the playing_field.
 def animate():
 	if pct_pred_slider.get()+pct_prey_slider.get() > 100:
-		print("Uh oh!!!!animate prob")#take out once fix warning
-		#tkMessageBox.showwarning(
-		#	"Percents of predators and prey covering the map add up to over 100!",
-		#	"Please fix this."
-		#)
-		predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))#take out once fix warning
-		draw_map()#take out once fix warning
+		tkMessageBox.showwarning("Animate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
 	else:
 		predpreyalgorithm.score((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, updatePlayingField))
 		draw_map()
@@ -224,6 +215,8 @@ if __name__ == "__main__":
 	pred_num_input.configure(vcmd=vcmd, validate='key')
 	vcmd = (prey_num_input.register(validate),'%P')
 	prey_num_input.configure(vcmd=vcmd, validate='key')
+	vcmd = (map_size_input.register(validate),'%P')
+	map_size_input.configure(vcmd=vcmd, validate='key')
 
 
 	#Playing_Field Legend Section
