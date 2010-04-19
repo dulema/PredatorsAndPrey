@@ -114,9 +114,6 @@ def draw_map():
 def fill_map(thing, location):
 	x=location[0]
 	y=location[1]
-	print(thing)
-	#temp = ImageTk.PhotoImage(file="PredPreyImages/PeterM_Tree.png")
-	#playing_field.create_image(13,20, image=temp)
 	
 	picture = None
 	if(thing == "V"):
