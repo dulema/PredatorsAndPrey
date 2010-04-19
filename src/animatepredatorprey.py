@@ -139,7 +139,7 @@ def validate(typedinvalue):
 	else:
 		return 1
 
-#Main part of program. This section instatiates and places everything on the root
+#Main part of program. This section instantiates and places everything on the root
 if __name__ == "__main__":
 	root = Tk()
 	root.wm_title("Pred/Prey Animator")
@@ -256,11 +256,16 @@ if __name__ == "__main__":
 	animate_button.grid(row=17, column=4, sticky=N)
 	playing_field.grid(row=0, column=1, rowspan=17, padx=5)
 
-
-	vegetation = ImageTk.PhotoImage(file="PredPreyImages/PeterM_Tree.png")
-	#wolf = ImageTk.PhotoImage(file="PredPreyImages/Telemachos_wolf_head_silhouette.png")
-	wolf = ImageTk.PhotoImage(file="PredPreyImages/Gerald_G_Wolf_Head_(Stylized).png")
-	sheep = ImageTk.PhotoImage(file="PredPreyImages/creohn_Sheep_in_gray.png")
+	#animatepredatorprey.py = 22characters
+	guiLocation = []
+	imagesLocation = []
+	guiLocation = (__file__)
+	imagesLocation = guiLocation[:-22]
+	
+	vegetation = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/PeterM_Tree.png")
+	#wolf = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Telemachos_wolf_head_silhouette.png")
+	wolf = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Gerald_G_Wolf_Head_(Stylized).png")
+	sheep = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/creohn_Sheep_in_gray.png")
 	
 
 	wolf_canvas = Canvas(root,width=30,height=30)
