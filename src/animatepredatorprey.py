@@ -8,6 +8,9 @@ from PIL import ImageTk
 import re
 import tkMessageBox
 
+
+canvas_items = []
+
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
 def receive_mutate_parameters():
 	if pct_pred_slider.get()+pct_prey_slider.get() > 100:
@@ -19,16 +22,27 @@ def receive_mutate_parameters():
 #Erases playing_field and then loops through critter dictionary and plant
 #array and calls fill+map to place appropriate letter in appropriate
 #hexagon
+
+def scale_canvas():
+	pass
+	#print(type(canvas_items[0]))
+	#for i in canvas_items:
+		#playing_field.scale(i,1,1,.1,.1)
+
+
 def updatePlayingField(world, round_score):
-	print(round_score)
+	global canvas_items
+	canvas_items = []
 	playing_field.delete(ALL)
 	for critter, location in world.critters.iteritems():
 		fill_map(critter.type, location)
 	for i in world.plants:
 		fill_map("V", i)
 	draw_map()
+	scale_canvas()
 	root.update()
-	time.sleep(0.1)
+	speed = speed_slider.get() / 100
+	time.sleep(speed)
 
 
 #Command intiated by clicking the Animate button. Calls score in PredPreyAlgo
@@ -85,6 +99,7 @@ def reset():
 
 #Draw the map of hexagons on the playing_field
 def draw_map():
+	global canvas_items
 	size = map_size.get()
 	size = int(size)
 	y = 0
@@ -92,12 +107,14 @@ def draw_map():
     		if (i % 2 == 1):
         		x = 13
         		for j in range(size):       
-            			playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="black")
+            			hexagon = playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="black")
+				canvas_items.append(hexagon)
             			x = x + 24
     		else:
         		x = 1
         		for j in range(size):       
-            			playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="black")
+            			hexagon = playing_field.create_polygon(x,y+12, x+12,y, x+24,y+12, x+24,y+29, x+12,y+41, x,y+29, fill='', outline="black")
+				canvas_items.append(hexagon)
             			x = x + 24
     		y = y + 29
 
@@ -111,24 +128,19 @@ def fill_map(thing, location):
 	if(thing == "V"):
 		critter = thing
 		color = "SeaGreen"
-		#picture = ImageTk.PhotoImage(file="PredPreyImages/PeterM_Tree.png")
 		picture = vegetation
 	elif(thing == "predator"):
 		critter = "D"
 		color = "Red"
-		#picture = ImageTk.PhotoImage(file="PredPreyImages/Telemachos_wolf_head_silhouette.png")
 		picture = wolf
 	elif(thing == "prey"):
 		critter = "Y"
 		color = "Blue"
-		#picture = ImageTk.PhotoImage(file="PredPreyImages/creohn_Sheep_in_gray.png")
 		picture = sheep	
 
 	if(y%2 == 1):
-		#playing_field.create_text(13+12+x*24,20+y*29, text=critter, fill=color)
 		playing_field.create_image(13+12+x*24,20+y*29, image=picture)
 	else:
-		#playing_field.create_text(1+12+x*24,20+y*29, text=critter, fill=color)
 		playing_field.create_image(1+12+x*24,20+y*29, image=picture)
 
 def validate(typedinvalue):
@@ -148,7 +160,7 @@ if __name__ == "__main__":
 	xscrollbar = Scrollbar(root, orient=HORIZONTAL)
 	xscrollbar.grid(row=18, column=1, sticky=N+S+W+E)
 	playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.set, xscrollcommand=xscrollbar.set, scrollregion=(0, 0, 3000, 3000))
-	
+	playing_field.scale(playing_field,.1,.1,10,10)
 	yscrollbar.config(command=playing_field.yview)
 	xscrollbar.config(command=playing_field.xview)
 
@@ -176,6 +188,8 @@ if __name__ == "__main__":
 	#Slider Section
 	speed_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	speed_slider_label = Label(root, text="Speed of Animation")
+	scale_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
+	scale_slider_label = Label(root, text="Scale of Playing Field")
 	pct_pred_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	pct_pred_slider_label = Label(root, text="Percent of Map with Predators")
 	pct_pred_slider.set("10")
@@ -249,10 +263,12 @@ if __name__ == "__main__":
 	key_pred_label.grid(row=1, column=4)
 	key_prey_label.grid(row=2, column=4)
 	key_veg_label.grid(row=3, column=4)
-	speed_slider_label.grid(row=13, column=4, sticky=S)
-	speed_slider.grid(row=14, column=4, sticky=N)
-	map_size_label.grid(row=15, column=4, sticky=S)
-	map_size_input.grid(row=16, column=4, sticky=N)
+	speed_slider_label.grid(row=11, column=4, sticky=S)
+	speed_slider.grid(row=12, column=4, sticky=N)
+	map_size_label.grid(row=13, column=4, sticky=S)
+	map_size_input.grid(row=14, column=4, sticky=N)
+	scale_slider_label.grid(row=15,column=4, sticky=S)
+	scale_slider.grid(row=16,column=4, sticky=N)
 	animate_button.grid(row=17, column=4, sticky=N)
 	playing_field.grid(row=0, column=1, rowspan=17, padx=5)
 
