@@ -5,18 +5,18 @@ from critter import Critter
 
 class Map:
 
-    topleft = 1
-    topright = 2
-    right = 3
-    bottomright = 4
-    bottomleft = 5
-    left = 6
-
     def __init__(self, size, plantpercent):
         self.directions = []
         self.gooddirections = []
         self.critters = {}
         self.plants = []
+	self.topleft = 1
+	self.topright = 2
+	self.right = 3
+	self.bottomright = 4
+	self.bottomleft = 5
+	self.left = 6
+
 
         self.size = size
         #Fill the map with plants
@@ -48,6 +48,8 @@ class Map:
 
     def getTile(self, location, wheretogo):
         (x, y) = location
+	if wheretogo == -1:
+	    return (-1, -1)
         if wheretogo == self.topleft:
             if y == 0:
                 return (-1, -1)
@@ -215,7 +217,7 @@ class Map:
         sq = xsq + ysq
         distance = pow(sq,.5)
         
-        return round(distance)
+        return int(round(distance))
 
     def getClosestPlant(self, x, y, radius):
 

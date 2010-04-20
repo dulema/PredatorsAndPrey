@@ -2,8 +2,8 @@
 import random
 from predpreymap import Map
 import copy
-import multiprocessing
-from multiprocessing import Pool
+#import multiprocessing
+#from multiprocessing import Pool
 from critter import Critter
 import critter
 
@@ -11,7 +11,7 @@ best_pred = Critter(critter.PREDATOR)
 best_prey = Critter(critter.PREY)
 
 def reverse(direction):
-    if direction == None:
+    if direction == None or direction == 0:
 	return 0
     if direction <= 3:
 	direction += 3
@@ -20,7 +20,7 @@ def reverse(direction):
     return direction
 
 def left(direction):
-    if direction == None:
+    if direction == None or direction == 0:
 	return 0
     if direction == 1:
 	return 6
@@ -28,7 +28,7 @@ def left(direction):
         return direction - 1
 
 def right(direction):
-    if direction == None:
+    if direction == None or direction == 0:
 	return 0
     if direction == 6:
 	return 1
@@ -50,7 +50,7 @@ def directionConverter(sensorydata, move):
      reverse(toPred), reverse(toPrey), reverse(toPlant),
      left(toPred),    left(toPrey),    left(toPlant),
      right(toPred),   right(toPrey),   right(toPlant), 0  ]
-
+    #print( "%s -> %s" % (move, allpossiblemoves[move]) )
     return allpossiblemoves[move]
 
 def score(x):
@@ -78,7 +78,8 @@ def score(x):
 
 	for c in world.getPredators():
 	    current_tile = world.getCritterXY(c)
-	    sensorydata = world.getSensoryData(c, 3)
+	    sensorydata = world.getSensoryData(c, 20)
+	    print(sensorydata)
 	    location = None
 	    move = None
 	    while True:
@@ -105,13 +106,13 @@ def score(x):
 
 	for c in world.getPreys():
 	    current_tile = world.getCritterXY(c)
-	    sensorydata = world.getSensoryData(c, 3)
+	    sensorydata = world.getSensoryData(c, 20)
 	    location = None
 	    while True:
 		while location in (None, (-1, -1) ): 
-		    move = directionConverter(sensorydata, c.getMove(sensorydata))
+		    critmove = c.getMove(sensorydata)
+		    move = directionConverter(sensorydata,critmove )
 		    location = world.getCritterDest(c, move)
-
 		crit = world.getCritterAt(location)
 
 		if crit == c: #if the prey decides not to move
@@ -165,7 +166,7 @@ def roundprogress(map, score):
 
 def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, progress=__printProgress): 
     global best_pred, best_prey, score
-    pool = Pool()
+    #pool = Pool()
 
     for i in range(gens):
 	progress(i, gens)
