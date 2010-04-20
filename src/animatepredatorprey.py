@@ -16,7 +16,7 @@ def receive_mutate_parameters():
 	if pct_pred_slider.get()+pct_prey_slider.get() > 100:
 		tkMessageBox.showwarning("Mutate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
 	else:
-		#Use gen_num.get(), pred_num.get(), prey_num.get()
+		#Use gen_num.get(), pred_num.get(), prey_num.get() -- be sure to int-ify it
 		pass
 
 #Erases playing_field and then loops through critter dictionary and plant
@@ -24,10 +24,9 @@ def receive_mutate_parameters():
 #hexagon
 
 def scale_canvas():
-	pass
-	#print(type(canvas_items[0]))
-	#for i in canvas_items:
-		#playing_field.scale(i,1,1,.1,.1)
+	scale_factor = float(scale_num.get())
+	for i in canvas_items:
+		playing_field.scale(i,0,0,scale_factor,scale_factor)
 
 
 def updatePlayingField(world, round_score):
@@ -39,7 +38,7 @@ def updatePlayingField(world, round_score):
 	for i in world.plants:
 		fill_map("V", i)
 	draw_map()
-	scale_canvas()
+	#scale_canvas()
 	root.update()
 	speed = speed_slider.get() / 100
 	time.sleep(speed)
@@ -123,7 +122,7 @@ def draw_map():
 def fill_map(thing, location):
 	x=location[0]
 	y=location[1]
-	
+	global canvas_items
 	picture = None
 	if(thing == "V"):
 		critter = thing
@@ -139,9 +138,13 @@ def fill_map(thing, location):
 		picture = sheep	
 
 	if(y%2 == 1):
-		playing_field.create_image(13+12+x*24,20+y*29, image=picture)
+		photo = playing_field.create_image(13+12+x*24,20+y*29, image=picture)
+		canvas_items.append(photo)
 	else:
-		playing_field.create_image(1+12+x*24,20+y*29, image=picture)
+		photo = playing_field.create_image(1+12+x*24,20+y*29, image=picture)
+		canvas_items.append(photo)
+
+
 
 def validate(typedinvalue):
 	stringified = str(typedinvalue)
@@ -184,12 +187,13 @@ if __name__ == "__main__":
 	help_menu.add_command(label="README", command=README_display)
 	help_menu.add_command(label="About...", command=About_display)
 
-
+	scale_num = StringVar()
 	#Slider Section
 	speed_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	speed_slider_label = Label(root, text="Speed of Animation")
-	scale_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
-	scale_slider_label = Label(root, text="Scale of Playing Field")
+	scale_input = Entry(root, textvariable=scale_num, width=10)
+	scale_label = Label(root, text="Scale of Playing Field")
+	scale_num.set("1")
 	pct_pred_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	pct_pred_slider_label = Label(root, text="Percent of Map with Predators")
 	pct_pred_slider.set("10")
@@ -267,8 +271,8 @@ if __name__ == "__main__":
 	speed_slider.grid(row=12, column=4, sticky=N)
 	map_size_label.grid(row=13, column=4, sticky=S)
 	map_size_input.grid(row=14, column=4, sticky=N)
-	scale_slider_label.grid(row=15,column=4, sticky=S)
-	scale_slider.grid(row=16,column=4, sticky=N)
+	scale_label.grid(row=15,column=4, sticky=S)
+	scale_input.grid(row=16,column=4, sticky=N)
 	animate_button.grid(row=17, column=4, sticky=N)
 	playing_field.grid(row=0, column=1, rowspan=17, padx=5)
 
