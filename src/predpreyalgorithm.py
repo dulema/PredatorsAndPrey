@@ -39,6 +39,8 @@ def right(direction):
 #sensorydata holds the data from the map
 #move holds a direction like "Move towards predator"
 def directionConverter(sensorydata, move):
+    if sensorydata == (None, None, None, None, 0, 0):
+	return random.randint(0, 6)
     toPred = sensorydata[1]
     toPrey = sensorydata[3]
     toPlant = sensorydata[5]
@@ -83,23 +85,32 @@ def score(x):
 	    location = None
 	    move = None
 	    while True:
+		print("pred looping")
 		while location in (None, (-1, -1)):
-		    move = directionConverter(sensorydata, c.getMove(sensorydata)) 
+		    print("pred location loop")
+                    critmove = c.getMove(sensorydata) 
+		    print(sensorydata, critmove)
+		    move = directionConverter(sensorydata,critmove ) 
 		    location = world.getCritterDest(c,move)
 		crit = world.getCritterAt(location)
 
 		if crit == c: #If it doesn't wanna move
+		    print("crit == c")
 		    break
 		elif crit == None:
 		    world.moveCritter(c, move)
+		    print("crit == None")
 		    break
 		elif crit.type == critter.PREY:
 		    world.removeCritter(crit)
 		    world.moveCritter(c, move)
 		    c.setStatus("hunger", 0)
+		    print("crit.type == critter.PREY")
 		    break
 		elif crit.type == critter.PREDATOR:
 		    location = None
+		else:
+		    print("pred WTFFF?")
 
 	    if hooker != None:
 		    hooker(world, score)
@@ -109,8 +120,11 @@ def score(x):
 	    sensorydata = world.getSensoryData(c, 20)
 	    location = None
 	    while True:
+		print("prey looping")
 		while location in (None, (-1, -1) ): 
+		    print("prey location loop")
 		    critmove = c.getMove(sensorydata)
+		    print(sensorydata, critmove)
 		    move = directionConverter(sensorydata,critmove )
 		    location = world.getCritterDest(c, move)
 		crit = world.getCritterAt(location)
@@ -118,11 +132,13 @@ def score(x):
 		if crit == c: #if the prey decides not to move
 		    if world.isPlant(location):
 			c.setStatus("hunger", 0)
+		    print("crit == c")
 	            break
 		elif crit == None:
 		    world.moveCritter(c, move)
 		    if world.isPlant(location):
 			c.setStatus("hunger", 0)
+		    print("crit == None")
 		    break
 		elif crit.type == critter.PREY:
 		    location = None
@@ -130,6 +146,7 @@ def score(x):
 		elif crit.type == critter.PREDATOR:
 		    world.removeCritter(c)
 		    crit.setStatus("hunger", 0)
+		    print("crit.type == critter.PREDATOR")
 		    break
 		else:
 		    print("WTF?")
