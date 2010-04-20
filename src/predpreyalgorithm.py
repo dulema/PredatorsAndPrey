@@ -2,8 +2,8 @@
 import random
 from predpreymap import Map
 import copy
-import multiprocessing
-from multiprocessing import Pool
+#import multiprocessing
+#from multiprocessing import Pool
 from critter import Critter
 import critter
 
@@ -75,6 +75,7 @@ def score(x):
                 if c.getStatus("hunger") >= 20:
 			world.removeCritter(c)
 
+	print("About to find preds")
 	for c in world.getPredators():
 	    current_tile = world.getCritterXY(c)
 	    sensorydata = world.getSensoryData(c, 3)
@@ -161,7 +162,7 @@ def roundprogress(map, score):
 
 def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, progress=__printProgress): 
     global best_pred, best_prey, score
-    pool = Pool()
+    #pool = Pool()
 
     for i in range(gens):
 	progress(i, gens)
