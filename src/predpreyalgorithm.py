@@ -11,7 +11,7 @@ best_pred = Critter(critter.PREDATOR)
 best_prey = Critter(critter.PREY)
 
 def reverse(direction):
-    if direction == None:
+    if direction == None or direction == 0:
 	return 0
     if direction <= 3:
 	direction += 3
@@ -20,7 +20,7 @@ def reverse(direction):
     return direction
 
 def left(direction):
-    if direction == None:
+    if direction == None or direction == 0:
 	return 0
     if direction == 1:
 	return 6
@@ -28,7 +28,7 @@ def left(direction):
         return direction - 1
 
 def right(direction):
-    if direction == None:
+    if direction == None or direction == 0:
 	return 0
     if direction == 6:
 	return 1
@@ -39,6 +39,8 @@ def right(direction):
 #sensorydata holds the data from the map
 #move holds a direction like "Move towards predator"
 def directionConverter(sensorydata, move):
+    if sensorydata == (None, None, None, None, 0, 0):
+	return random.randint(0, 6)
     toPred = sensorydata[1]
     toPrey = sensorydata[3]
     toPlant = sensorydata[5]
@@ -50,7 +52,7 @@ def directionConverter(sensorydata, move):
      reverse(toPred), reverse(toPrey), reverse(toPlant),
      left(toPred),    left(toPrey),    left(toPlant),
      right(toPred),   right(toPrey),   right(toPlant), 0  ]
-
+    #print( "%s -> %s" % (move, allpossiblemoves[move]) )
     return allpossiblemoves[move]
 
 def score(x):
@@ -66,6 +68,7 @@ def score(x):
     
     score = 0
     while len(world.getPreys()) >  0 and len(world.getPredators()) > 0:
+	print(len(world.getPreys()), len(world.getPredators()))
         #Score get incremented because it is just how every long the species lasts
 	score += 1
 
@@ -78,57 +81,76 @@ def score(x):
 	print("About to find preds")
 	for c in world.getPredators():
 	    current_tile = world.getCritterXY(c)
-	    sensorydata = world.getSensoryData(c, 3)
+	    sensorydata = world.getSensoryData(c, 20)
+	    print(sensorydata)
 	    location = None
 	    move = None
 	    while True:
+		print("pred looping")
 		while location in (None, (-1, -1)):
-		    move = directionConverter(sensorydata, c.getMove(sensorydata)) 
+		    print("pred location loop")
+                    critmove = c.getMove(sensorydata) 
+		    print(sensorydata, critmove)
+		    move = directionConverter(sensorydata,critmove ) 
 		    location = world.getCritterDest(c,move)
 		crit = world.getCritterAt(location)
 
 		if crit == c: #If it doesn't wanna move
+		    print("crit == c")
 		    break
 		elif crit == None:
 		    world.moveCritter(c, move)
+		    print("crit == None")
 		    break
 		elif crit.type == critter.PREY:
 		    world.removeCritter(crit)
 		    world.moveCritter(c, move)
 		    c.setStatus("hunger", 0)
+		    print("crit.type == critter.PREY")
 		    break
 		elif crit.type == critter.PREDATOR:
 		    location = None
+		else:
+		    print("pred WTFFF?")
 
 	    if hooker != None:
 		    hooker(world, score)
 
 	for c in world.getPreys():
 	    current_tile = world.getCritterXY(c)
-	    sensorydata = world.getSensoryData(c, 3)
+	    sensorydata = world.getSensoryData(c, 20)
 	    location = None
 	    while True:
+		print("prey looping")
 		while location in (None, (-1, -1) ): 
-		    move = directionConverter(sensorydata, c.getMove(sensorydata))
+		    print("prey location loop")
+		    critmove = c.getMove(sensorydata)
+		    print(sensorydata, critmove)
+		    move = directionConverter(sensorydata,critmove )
 		    location = world.getCritterDest(c, move)
-
 		crit = world.getCritterAt(location)
 
 		if crit == c: #if the prey decides not to move
 		    if world.isPlant(location):
 			c.setStatus("hunger", 0)
+		    print("crit == c")
 	            break
 		elif crit == None:
 		    world.moveCritter(c, move)
 		    if world.isPlant(location):
 			c.setStatus("hunger", 0)
+		    print("crit == None")
 		    break
 		elif crit.type == critter.PREY:
 		    location = None
+		    print("self")
 		elif crit.type == critter.PREDATOR:
 		    world.removeCritter(c)
 		    crit.setStatus("hunger", 0)
+		    print("crit.type == critter.PREDATOR")
 		    break
+		else:
+		    print("WTF?")
 
             if hooker != None:
 		    hooker(world, score)
@@ -179,12 +201,18 @@ def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, progress=__printProg
 	
 	#Parse the results
 	#predscores = predResult.get(None) #Probably dangerous to not specify a timeout
-        predscores = map(score, zip(preds, [copy.deepcopy(best_prey) for _ in range(num_of_preds_per_gen)], [roundprogress for _ in range(len(preds))] )   )
+	predscores = []
+	for p in preds:
+		predscores.append(score((p, copy.deepcopy(best_prey), roundprogress)))
+        #predscores = map(score, zip(preds, [copy.deepcopy(best_prey) for _ in range(len(preds))], [roundprogress for _ in range(len(preds))] )   )
 	bestscore = max(predscores)
 	dindex = predscores.index(bestscore)
 
 	#preyscores = preyResult.get(None)
-	preyscores = map(score, zip([copy.deepcopy(best_pred) for _ in range(len(preys))], preys) )
+	#preyscores = map(score, zip([copy.deepcopy(best_pred) for _ in range(len(preys))], preys) )
+	preyscores = []
+	for p in preys:
+		preyscores.append(score((copy.deepcopy(best_pred), p, roundprogress)))
 	bestscore = max(preyscores)
 	yindex = preyscores.index(bestscore)
 
