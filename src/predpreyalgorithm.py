@@ -66,6 +66,7 @@ def score(x):
     
     score = 0
     while len(world.getPreys()) >  0 and len(world.getPredators()) > 0:
+	print(len(world.getPreys()), len(world.getPredators()))
         #Score get incremented because it is just how every long the species lasts
 	score += 1
 
@@ -124,10 +125,13 @@ def score(x):
 		    break
 		elif crit.type == critter.PREY:
 		    location = None
+		    print("self")
 		elif crit.type == critter.PREDATOR:
 		    world.removeCritter(c)
 		    crit.setStatus("hunger", 0)
 		    break
+		else:
+		    print("WTF?")
 
             if hooker != None:
 		    hooker(world, score)
@@ -178,12 +182,18 @@ def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, progress=__printProg
 	
 	#Parse the results
 	#predscores = predResult.get(None) #Probably dangerous to not specify a timeout
-        predscores = map(score, zip(preds, [copy.deepcopy(best_prey) for _ in range(num_of_preds_per_gen)], [roundprogress for _ in range(len(preds))] )   )
+	predscores = []
+	for p in preds:
+		predscores.append(score((p, copy.deepcopy(best_prey), roundprogress)))
+        #predscores = map(score, zip(preds, [copy.deepcopy(best_prey) for _ in range(len(preds))], [roundprogress for _ in range(len(preds))] )   )
 	bestscore = max(predscores)
 	dindex = predscores.index(bestscore)
 
 	#preyscores = preyResult.get(None)
-	preyscores = map(score, zip([copy.deepcopy(best_pred) for _ in range(len(preys))], preys) )
+	#preyscores = map(score, zip([copy.deepcopy(best_pred) for _ in range(len(preys))], preys) )
+	preyscores = []
+	for p in preys:
+		preyscores.append(score((copy.deepcopy(best_pred), p, roundprogress)))
 	bestscore = max(preyscores)
 	yindex = preyscores.index(bestscore)
 
