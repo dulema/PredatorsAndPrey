@@ -21,7 +21,7 @@ class Map:
         self.size = size
         self.plantlife = plantlife
         #Fill the map with plants
-        for _ in range(int(plantpercent*size)):
+        for _ in range(int(plantpercent*size*size)):
                 loc = (random.randint(0, size-1), random.randint(0, size-1),self.plantlife)
                 while loc in self.plants:
                         loc = (random.randint(0, size-1), random.randint(0, size-1),self.plantlife)
@@ -337,7 +337,7 @@ if __name__ == "__main__":
         import critter
         from critter import Critter
 
-        map1 = Map(100, 0.5,10)
+        map1 = Map(100, 0.95,10)
 
         pred1 = Critter(critter.PREDATOR)
         pred2 = Critter(critter.PREDATOR)
@@ -353,6 +353,9 @@ if __name__ == "__main__":
         map1.setCritterAt((8,12), prey2)
         map1.setCritterAt((4,5), prey3)
 
+        #print(map1)
+
+        print(map1.isPlant((50,40)))
         print(map1.plants)
         map1.bushbombplants(1)
         print(map1.plants)
