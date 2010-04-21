@@ -24,7 +24,7 @@ def receive_mutate_parameters():
 #hexagon
 
 def scale_canvas():
-	scale_factor = float(scale_num.get())
+	scale_factor = float(scale_slider.get())
 	for i in canvas_items:
 		playing_field.scale(i,0,0,scale_factor,scale_factor)
 
@@ -38,9 +38,10 @@ def updatePlayingField(world, round_score):
 	for i in world.plants:
 		fill_map("V", i)
 	draw_map()
-	#scale_canvas()
+	scale_canvas()
 	root.update()
-	speed = speed_slider.get() / 100
+	speed = float(float(speed_slider.get()) / 500)
+	print(speed)
 	time.sleep(speed)
 
 
@@ -187,13 +188,13 @@ if __name__ == "__main__":
 	help_menu.add_command(label="README", command=README_display)
 	help_menu.add_command(label="About...", command=About_display)
 
-	scale_num = StringVar()
+	#scale_num = StringVar()
 	#Slider Section
 	speed_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	speed_slider_label = Label(root, text="Speed of Animation")
-	scale_input = Entry(root, textvariable=scale_num, width=10)
+	scale_slider = Scale(root, from_=0.5, to=1.5, orient=HORIZONTAL, resolution=0.1)
 	scale_label = Label(root, text="Scale of Playing Field")
-	scale_num.set("1")
+	scale_slider.set("1.0")
 	pct_pred_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	pct_pred_slider_label = Label(root, text="Percent of Map with Predators")
 	pct_pred_slider.set("10")
@@ -272,7 +273,7 @@ if __name__ == "__main__":
 	map_size_label.grid(row=13, column=4, sticky=S)
 	map_size_input.grid(row=14, column=4, sticky=N)
 	scale_label.grid(row=15,column=4, sticky=S)
-	scale_input.grid(row=16,column=4, sticky=N)
+	scale_slider.grid(row=16,column=4, sticky=N)
 	animate_button.grid(row=17, column=4, sticky=N)
 	playing_field.grid(row=0, column=1, rowspan=17, padx=5)
 
