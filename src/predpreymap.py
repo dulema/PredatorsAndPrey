@@ -131,6 +131,9 @@ class Map:
     def getPredators(self):
         return [p for p in filter(lambda c : c.type == "predator", self.critters)]
 
+    def obama(self):
+        return 0
+
     def getDirection(self,x,y,disx,disy,radius):
 
         test1 = -1
