@@ -89,14 +89,19 @@ def calcscore(x):
 	    sensorydata = world.getSensoryData(c, sight)
 	    location = None
 	    move = None
-	    while True:
+	    loopcount = 0
+	    while loopcount <= 40:
+		loopcount += 1
 		while location in (None, (-1, -1)):
+		    #print("pred loc loop")
                     critmove = c.getMove(sensorydata) 
 		    move = directionConverter(sensorydata,critmove ) 
+		    #print "Pred move:",move 
 		    location = world.getCritterDest(c,move)
 		crit = world.getCritterAt(location)
 
 		if crit == c: #If it doesn't wanna move
+		    print("pred: Hello me!!")
 		    break
 		elif crit == None:
 		    world.moveCritter(c, move)
@@ -118,14 +123,19 @@ def calcscore(x):
 	    current_tile = world.getCritterXY(c)
 	    sensorydata = world.getSensoryData(c, sight)
 	    location = None
-	    while True:
+	    loopcount = 0
+	    while loopcount <= 40:
+		loopcount += 1
 		while location in (None, (-1, -1) ): 
+		    #print("prey loc loop")
 		    critmove = c.getMove(sensorydata)
 		    move = directionConverter(sensorydata, critmove)
+		    #print "Prey move:",move 
 		    location = world.getCritterDest(c, move)
 		crit = world.getCritterAt(location)
 
 		if crit == c: #if the prey decides not to move
+		    print("prey: Hello me!!")
 		    if world.isPlant(location):
 			c.setStatus("hunger", 0)
 	            break
