@@ -56,6 +56,7 @@ def directionConverter(sensorydata, move):
     return allpossiblemoves[move]
 
 def calcscore(x):
+    print("Hello")
     pred = x[0]
     prey = x[1]
 
@@ -66,6 +67,8 @@ def calcscore(x):
     predpercent = settings["predpercent"] if "predpercent" in settings else 0.1
     maxhunger = settings["maxhunger"] if "maxhunger" in settings else 20
     sight = settings["sight"] if "sight" in settings else 20
+
+    print("mapsize=%d, vegpercent=%.2f, preypercent=%.2f, predpercent=%.2f, maxhunger=%d, sight=%d" % (mapsize, vegpercent, preypercent, predpercent, maxhunger, sight))
 
     hooker = x[3] if len(x) > 3 else None
 
@@ -193,29 +196,30 @@ def getCalcScoreArgs(preds, preys, bpred, bprey, settings):
     return predArgs, preyArgs
 
 def getResults(predArgs, preyArgs):
-    return map(calcscore, predArgs), map(calcscore, preyArgs) 
+    return map(calcscore, predArgs) if len(predArgs) > 1 else [0], map(calcscore, preyArgs) if len(preyArgs) > 1 else [0]
 
 def getMultiProcessedResults(predArgs, preyArgs):
     #Now comes the multiprocessing magic...
     import multiprocessing
     from multiprocessing import Pool
     pool = Pool()
-    predResults = pool.map_async(calcscore, predArgs)
-    preyResults = pool.map_async(calcscore, preyArgs)
-    return predResults.get(), preyResults.get()
+    predResults = pool.map_async(calcscore, predArgs) if len(predArgs) > 1 else None
+    preyResults = pool.map_async(calcscore, preyArgs) if len(preyArgs) > 1 else None
+    return predResults.get() if predResults else [0], preyResults.get() if preyResults else [0]
 
 
-def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, settings=DEFAULT_SETTINGS, progress=__printProgress): 
+def mutate(gens, pred__clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETTINGS, progress=__printProgress): 
     global best_pred, best_prey, calcscore
 
     for i in range(gens):
 	progress(i, gens)
 
-        preds = [pred for pred in best_pred.getMutations(num_of_preds_per_gen - 1)]
+        preds = [pred for pred in best_pred.getMutations(pred__clones_per_gen)]
         preds.append(best_pred)
 
-        preys =  [prey for prey in best_prey.getMutations(num_of_prey_per_gen - 1)]
+        preys =  [prey for prey in best_prey.getMutations(prey_clones_per_gen)]
         preys.append(best_prey)
+
 
 	predArgs, preyArgs = getCalcScoreArgs(preds, preys, best_pred, best_prey, settings)
 
@@ -228,8 +232,8 @@ def mutate(gens, num_of_preds_per_gen, num_of_prey_per_gen, settings=DEFAULT_SET
 	
 if __name__ == "__main__":
     gens = input("How many generations?")	
-    preds = input("How many preds per generations?")	
-    preys = input("How many preys per generations?")	
+    preds = input("How many predator clones per generation?")	
+    preys = input("How many preys clones per generation?")	
     mutate(gens, preds, preys)
     __clearProgress()
     print(best_pred.type)
