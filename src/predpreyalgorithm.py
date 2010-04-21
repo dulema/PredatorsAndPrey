@@ -56,7 +56,6 @@ def directionConverter(sensorydata, move):
     return allpossiblemoves[move]
 
 def calcscore(x):
-    print("Hello")
     pred = x[0]
     prey = x[1]
 
@@ -68,7 +67,7 @@ def calcscore(x):
     maxhunger = settings["maxhunger"] if "maxhunger" in settings else 20
     sight = settings["sight"] if "sight" in settings else 20
 
-    print("mapsize=%d, vegpercent=%.2f, preypercent=%.2f, predpercent=%.2f, maxhunger=%d, sight=%d" % (mapsize, vegpercent, preypercent, predpercent, maxhunger, sight))
+    #print("mapsize=%d, vegpercent=%.2f, preypercent=%.2f, predpercent=%.2f, maxhunger=%d, sight=%d" % (mapsize, vegpercent, preypercent, predpercent, maxhunger, sight))
 
     hooker = x[3] if len(x) > 3 else None
 
