@@ -10,12 +10,12 @@ class Map:
         self.gooddirections = []
         self.critters = {}
         self.plants = []
-	self.topleft = 1
-	self.topright = 2
-	self.right = 3
-	self.bottomright = 4
-	self.bottomleft = 5
-	self.left = 6
+        self.topleft = 1
+        self.topright = 2
+        self.right = 3
+        self.bottomright = 4
+        self.bottomleft = 5
+        self.left = 6
 
 
         self.size = size
@@ -48,8 +48,8 @@ class Map:
 
     def getTile(self, location, wheretogo):
         (x, y) = location
-	if wheretogo == -1:
-	    return (-1, -1)
+        if wheretogo == -1:
+            return (-1, -1)
         if wheretogo == self.topleft:
             if y == 0:
                 return (-1, -1)
@@ -112,12 +112,12 @@ class Map:
         if newloc == None or newloc == (-1, -1):
             raise Exception("Can't move in that direction: ")
 
-        #made it this far, do the move
-	oldsize = len(self.getCritters())
+            #made it this far, do the move
+        oldsize = len(self.getCritters())
         self.removeCritter(critter)
         self.setCritterAt(newloc, critter)
-	if len(self.getCritters())!=oldsize:
-		print("WTFF")
+        if len(self.getCritters())!=oldsize:
+            print("WTFF")
             
     def removeCritter(self, critter):
         del self.critters[critter]
@@ -316,13 +316,13 @@ class Map:
         return loc
         
     def __str__(self):
-	s =  "Map<Prey at: " 
-	s += ",".join(map((lambda p : str(self.getCritterXY(p))), self.getPreys() ) )
-	s += " Preds at: " 
-	s += ",".join(map((lambda p : str(self.getCritterXY(p))), self.getPredators() ) )
-	s += "Plants at: " + ",".join(str(self.plants))
-	s += ">"
-	return s
+        s =  "Map<Prey at: " 
+        s += ",".join(map((lambda p : str(self.getCritterXY(p))), self.getPreys() ) )
+        s += " Preds at: " 
+        s += ",".join(map((lambda p : str(self.getCritterXY(p))), self.getPredators() ) )
+        s += "Plants at: " + ",".join(str(self.plants))
+        s += ">"
+        return s
 
 
 #Only run this code if this one file is being run a python program
@@ -346,7 +346,7 @@ if __name__ == "__main__":
         map1.setCritterAt((8,12), prey2)
         map1.setCritterAt((4,5), prey3)
 	
-	print(map1)
+        print(map1)
 
         print(map1.getSensoryData(pred1, 2)[0] == None)
         print(map1.getSensoryData(pred1, 2)[1] == None)

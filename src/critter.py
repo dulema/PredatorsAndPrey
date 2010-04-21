@@ -12,9 +12,9 @@ class Critter:
     def __init__(self, type="No type defined", choices = 13):
         self.pdfmatrix = {}
         self.choices = 13
-	self.status = {"hunger":0}
-	self.type = ""
-	self.type = type
+        self.status = {"hunger":0}
+        self.type = ""
+        self.type = type
         self.choices = choices
 
     #Returns the move to make.
