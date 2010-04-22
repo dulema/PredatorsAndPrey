@@ -8,7 +8,6 @@ PREY = "prey"
 #Naive implementation that currently just runs on python
 class Critter:
 
-    
     def __init__(self, type="No type defined", choices = 13):
         self.pdfmatrix = {}
         self.choices = 13
@@ -53,15 +52,19 @@ class Critter:
             yield c
 
 
-    #BROKEN BROKEN BROKEN
-    def mutate(self):
+    def mutate(self, percentpdf, inputranges, increment):
         if not self.pdfmatrix: #just quit if we don't have any entries
                 return
+
+	#The size of the pdf matrix is the product of the ranges
+	for _ in range(percentpdf*reduce(lambda x,y:x*y, inputranges)):
+		randominput = map(lambda x:random.randint(0, x), inputranges)
+
 
         key = random.choice([k for k in iter(self.pdfmatrix)]) 
         pdf = self.pdfmatrix[key]
         index = random.randrange(len(pdf))
-        pdf[index] = pdf[index] + random.random()-0.5
+        pdf[index] = pdf[index] + random.uniform(-increment, increment)
         normalizer = sum(pdf)
         self.pdfmatrix[key] = [float(i)/normalizer for i in pdf]
 
