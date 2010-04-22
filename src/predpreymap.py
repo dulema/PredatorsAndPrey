@@ -10,7 +10,7 @@ class Map:
         self.gooddirections = []
         self.critters = {}
         self.plants = []
-	self.dontmove = 0
+        self.dontmove = 0
         self.topleft = 1
         self.topright = 2
         self.right = 3
@@ -53,10 +53,10 @@ class Map:
         return False
    
     def getCritterXY(self, critter):
-	if critter in self.critters:
-		return self.critters[critter]
-	else:
-		return None
+        if critter in self.critters:
+            return self.critters[critter]
+        else:
+            return None
 
     def getCritterAt(self,location):
         for critter in self.critters:
@@ -76,8 +76,8 @@ class Map:
         (x, y) = location
         if wheretogo == -1:
             return None
-	if wheretogo == 0:
-	    return location
+        if wheretogo == 0:
+            return location
         if wheretogo == self.topleft:
             if y == 0:
                 return None
@@ -133,7 +133,7 @@ class Map:
         if critter not in self.critters:
             raise Exception("Critter not on map")
 
-	newloc = self.getCritterDest(critter, move)
+        newloc = self.getCritterDest(critter, move)
         if newloc == None or newloc == (-1, -1):
             raise Exception("Can't move in that direction: %d"%move)
 
