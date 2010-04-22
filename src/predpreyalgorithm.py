@@ -7,7 +7,7 @@ import critter
 
 best_pred = Critter(critter.PREDATOR)
 best_prey = Critter(critter.PREY)
-DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.5, "preypercent":0.1, "predpercent":0.1, "sight":10, "plantbites":3}
+DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3}
 
 
 def reverse(direction):
