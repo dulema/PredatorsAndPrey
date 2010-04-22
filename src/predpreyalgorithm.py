@@ -62,8 +62,8 @@ def calcscore(x):
     settings = x[2] if len(x) > 2 else DEFAULT_SETTINGS
     mapsize = settings["mapsize"] if "mapsize" in settings else 20
     vegpercent = settings["vegpercent"] if "vegpercent" in settings else 0.5
-    #plantbites = 3
-    plantbites = ufaufaufa
+    plantbites = 3
+    #plantbites = ufaufaufa
     preypercent = settings["preypercent"] if "preypercent" in settings else 0.1
     predpercent = settings["predpercent"] if "predpercent" in settings else 0.1
     maxhunger = settings["maxhunger"] if "maxhunger" in settings else 20
@@ -147,7 +147,7 @@ def calcscore(x):
 		elif crit == None:
 		    world.moveCritter(c, move)
 		    #Returns Two Parm, One Of Boolean Other Is Health
-		    if (world.isPlant(location):
+		    if (world.isPlant(location)):
 			c.setStatus("hunger", 0)
 		    break
 		elif crit.type == critter.PREY:
