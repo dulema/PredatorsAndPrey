@@ -20,11 +20,9 @@ canvas_items = []
 
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
 def receive_mutate_parameters():
-	validate(gen_num.get(),"gennum")
-	validate(pred_num.get(),"prednum")
-	validate(prey_num.get(),"preynum")
-	validate(map_size.get(),"mapnum")
-	if pct_pred_slider.get()+pct_prey_slider.get() > 100:
+	if validate() == 0:
+		pass
+	elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
 		tkMessageBox.showwarning("Mutate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
 	else:
 		#Use gen_num.get(), pred_num.get(), prey_num.get() -- be sure to int-ify it
@@ -58,11 +56,9 @@ def updatePlayingField(world, round_score):
 #Command intiated by clicking the Animate button. Calls score in PredPreyAlgo
 #update the playing_field.
 def animate():
-	validate(gen_num.get(),"gennum")
-	validate(pred_num.get(),"prednum")
-	validate(prey_num.get(),"preynum")
-	validate(map_size.get(),"mapnum")
-	if pct_pred_slider.get()+pct_prey_slider.get() > 100:
+	if validate() == 0:
+		pass
+	elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
 		tkMessageBox.showwarning("Animate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
 	else:
 		predpreyalgorithm.calcscore((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, predpreyalgorithm.DEFAULT_SETTINGS ,updatePlayingField))
@@ -157,20 +153,22 @@ def fill_map(thing, location):
 		photo = playing_field.create_image(1+12+x*24,20+y*29, image=picture)
 		canvas_items.append(photo)
 
-def validate(typedinvalue,field):
-	if re.match("^[0-9]+$",typedinvalue) == None:#checks if a number, made of integers, was input
-		if field == "gennum":
-			tkMessageBox.showwarning("Fix Generation Number","Number of generations is invalid! Resetting to default.")
-			gen_num.set("10")
-		if field == "prednum":
-			tkMessageBox.showwarning("Fix Predator Number","Number of predators is invalid! Resetting to default.")
-			pred_num.set("1")
-		if field == "preynum":
-			tkMessageBox.showwarning("Fix Prey Number","Number of prey is invalid! Resetting to default.")
-			prey_num.set("20")
-		if field == "mapnum":
-			tkMessageBox.showwarning("Fix Map Size","Map size is invalid! Resetting to default.")
-			map_size.set("23")
+def validate():
+	wrongstuff = "\n"
+	if re.match("^[0-9]+$",gen_num.get()) == None:#checks if a number, made of integers, was input
+		wrongstuff = wrongstuff + "Number of generations\n"
+		gen_num.set("10")
+	if re.match("^[0-9]+$",pred_num.get()) == None:
+		wrongstuff = wrongstuff + "Number of predators\n"
+		pred_num.set("1")
+	if re.match("^[0-9]+$",prey_num.get()) == None:
+		wrongstuff = wrongstuff + "Number of prey\n"
+		prey_num.set("20")
+	if re.match("^[0-9]+$",map_size.get()) == None:
+		wrongstuff = wrongstuff + "Size of map\n"
+		map_size.set("23")
+	if len(wrongstuff) > 1:
+		tkMessageBox.showwarning("Fix Input","Fix the following:\n" + wrongstuff)
 		return 0
 	else:
 		return 1
