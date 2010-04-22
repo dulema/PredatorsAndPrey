@@ -5,8 +5,8 @@ import copy
 from critter import Critter
 import critter
 
-#import psyco
-#psyco.full()
+import psyco
+psyco.full()
 
 best_pred = Critter(critter.PREDATOR)
 best_prey = Critter(critter.PREY)

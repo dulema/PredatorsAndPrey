@@ -9,11 +9,11 @@ import re
 import tkMessageBox
 
 
-#try:
-        #import psyco
-        #psyco.full()
-#except ImportError:
-        #print("No JIT for you")
+try:
+        import psyco
+        psyco.full()
+except ImportError:
+        print("No JIT for you")
 
 
 canvas_items = []
