@@ -128,15 +128,15 @@ def fill_map(thing, location):
 	if(thing == "V"):
 		critter = thing
 		color = "SeaGreen"
-		picture = vegetation
+		picture = vegetation[5]
 	elif(thing == "predator"):
 		critter = "D"
 		color = "Red"
-		picture = wolf
+		picture = wolf[5]
 	elif(thing == "prey"):
 		critter = "Y"
 		color = "Blue"
-		picture = sheep	
+		picture = sheep[5]	
 
 	if(y%2 == 1):
 		photo = playing_field.create_image(13+12+x*24,20+y*29, image=picture)
@@ -282,11 +282,15 @@ if __name__ == "__main__":
 	imagesLocation = []
 	guiLocation = (__file__)
 	imagesLocation = guiLocation[:-22]
-	
-	vegetation = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/PeterM_Tree.png")
-	#wolf = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Telemachos_wolf_head_silhouette.png")
-	wolf = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Gerald_G_Wolf_Head_(Stylized).png")
-	sheep = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/creohn_Sheep_in_gray.png")
+
+	vegetation = []
+	wolf = []
+	sheep = []
+	for i in range(11):
+		j = i*10 + 50
+		vegetation = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/PeterM_Tree" + str(j) + ".png")
+		wolf = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png")
+		sheep = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png")
 	
 
 	wolf_canvas = Canvas(root,width=30,height=30)
