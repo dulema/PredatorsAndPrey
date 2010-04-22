@@ -170,7 +170,7 @@ def __printProgress(num, total):
         else:
             s = s + "-"
     s = s + "]\r"
-    print (s)
+    print s,
     import sys
     sys.stdout.flush()
 
