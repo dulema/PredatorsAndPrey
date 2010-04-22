@@ -5,6 +5,9 @@ import copy
 from critter import Critter
 import critter
 
+import psyco
+psyco.full()
+
 best_pred = Critter(critter.PREDATOR)
 best_prey = Critter(critter.PREY)
 DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3}
