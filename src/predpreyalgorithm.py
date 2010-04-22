@@ -62,8 +62,7 @@ def calcscore(x):
     settings = x[2] if len(x) > 2 else DEFAULT_SETTINGS
     mapsize = settings["mapsize"] if "mapsize" in settings else 20
     vegpercent = settings["vegpercent"] if "vegpercent" in settings else 0.5
-    plantbites = 3
-    #plantbites = ufaufaufa
+    plantbites = settings["plantbites"] if "plantbites" in settings else 3
     preypercent = settings["preypercent"] if "preypercent" in settings else 0.1
     predpercent = settings["predpercent"] if "predpercent" in settings else 0.1
     maxhunger = settings["maxhunger"] if "maxhunger" in settings else 20
