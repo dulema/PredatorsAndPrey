@@ -14,12 +14,11 @@ except ImportError:
 
 best_pred = Critter(critter.PREDATOR)
 best_prey = Critter(critter.PREY)
-DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3, "maxhunger":20}
-
+DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3, "maxhunger":20, "pdfpercent":0.1, "inputranges":(10,6,10,6,10,6), "mutationincrement":0.3}
 
 def reverse(direction):
-    if direction == None or direction == 0:
-        return 0
+    if direction == 0:
+	return 0
     if direction <= 3:
         direction += 3
     else:
@@ -27,16 +26,16 @@ def reverse(direction):
     return direction
 
 def left(direction):
-    if direction == None or direction == 0:
-        return 0
+    if direction == 0:
+	return 0
     if direction == 1:
         return 6
     else:
         return direction - 1
 
 def right(direction):
-    if direction == None or direction == 0:
-        return 0
+    if direction == 0:
+	return 0
     if direction == 6:
         return 1
     else:
@@ -45,10 +44,7 @@ def right(direction):
 #This converts for example "Move towards predator" to "Move left"
 #sensorydata holds the data from the map
 #move holds a direction like "Move towards predator"
-def directionConverter(sensorydata, move):
-    #print(sensorydata)
-    if sensorydata == (None, None, None, None, 0, 0) or (None, None, None, None, None, None):
-        return random.randint(0, 6)
+def directionConverter(sensorydata):
     toPred = sensorydata[1]
     toPrey = sensorydata[3]
     toPlant = sensorydata[5]
@@ -60,25 +56,26 @@ def directionConverter(sensorydata, move):
      reverse(toPred), reverse(toPrey), reverse(toPlant),
      left(toPred),    left(toPrey),    left(toPlant),
      right(toPred),   right(toPrey),   right(toPlant), 0  ]
-    return allpossiblemoves[move]
+    return allpossiblemoves
 
 def getAMove(critter, world, settings):
-        validmoves = [0, 1, 2, 3, 4, 5, 6]
-        if world.getCritterXY(critter) == None:
-                raise Exception("Critter isn't on the map!")    
-        senses = world.getSensoryData(critter, settings["sight"])
-        while len(validmoves) > 0:
-                destinationTile = None
-                directionMove = -1
-                while destinationTile == None or directionMove == -1 or directionMove == None or directionMove not in validmoves:
-                        move = critter.getMove(senses)
-                        directionMove = directionConverter(senses, move)
-                        destinationTile = world.getCritterDest(critter, directionMove)
-                if directionMove in validmoves:
-                        validmoves.remove(directionMove)
-                else:
-                        raise Exception("%d not in %s"%(directionMove, validmoves))
-                yield destinationTile, directionMove
+	if world.getCritterXY(critter) == None:
+		raise Exception("Critter isn't on the map!")	
+	senses = world.getSensoryData(critter, settings["sight"])
+	dirconv = directionConverter(senses)
+	validmoves = list(set(dirconv))
+	while len(validmoves) > 0:
+		destinationTile = None
+		directionMove = -1
+		while destinationTile == None or directionMove == -1 or directionMove == None or directionMove not in validmoves:
+			move = critter.getMove(senses)
+			directionMove = dirconv[move]
+			destinationTile = world.getCritterDest(critter, directionMove)
+		if directionMove in validmoves:
+			validmoves.remove(directionMove)
+		else:
+			raise Exception("%d not in %s"%(directionMove, validmoves))
+		yield destinationTile, directionMove
 
 def preyMakeMove(prey, settings, world):
         for destinationTile, directionMove in getAMove(prey, world, settings):
@@ -125,8 +122,6 @@ def calcscore(x):
     predpercent = settings["predpercent"] if "predpercent" in settings else 0.1
     maxhunger = settings["maxhunger"] if "maxhunger" in settings else 20
     sight = settings["sight"] if "sight" in settings else 20
-
-    #print("mapsize=%d, vegpercent=%.2f, preypercent=%.2f, predpercent=%.2f, maxhunger=%d, sight=%d" % (mapsize, vegpercent, preypercent, predpercent, maxhunger, sight))
 
     hooker = x[3] if len(x) > 3 else None
 
@@ -213,17 +208,17 @@ def mutate(gens, pred__clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SET
     for i in range(gens):
         progress(i, gens)
 
-        preds = [pred for pred in best_pred.getMutations(pred__clones_per_gen)]
+        preds = [pred for pred in best_pred.getMutations(pred__clones_per_gen, settings["pdfpercent"], settings["inputranges"], settings["mutationincrement"] )]
         preds.append(best_pred)
 
-        preys =  [prey for prey in best_prey.getMutations(prey_clones_per_gen)]
+        preys =  [prey for prey in best_prey.getMutations(prey_clones_per_gen, settings["pdfpercent"], settings["inputranges"], settings["mutationincrement"] )]
         preys.append(best_prey)
 
 
         predArgs, preyArgs = getCalcScoreArgs(preds, preys, best_pred, best_prey, settings)
 
-        predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
-        #predscores, preyscores = getResults(predArgs, preyArgs)
+	predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
+	#predscores, preyscores = getResults(predArgs, preyArgs)
 
         best_prey = preds[predscores.index(max(predscores))]
         best_pred = preys[preyscores.index(max(preyscores))]

@@ -269,7 +269,7 @@ class Map:
         if direction != -1:    
                 return closest, direction
         else:
-                return None, None
+                return 0, 0
         
     def getClosestPred(self, x, y, radius):
 
@@ -295,7 +295,7 @@ class Map:
         if direction != -1:    
                 return closest, direction
         else:
-                return None, None
+                return 0, 0
 
     def getClosestPrey(self, x, y, radius):
 
@@ -321,7 +321,7 @@ class Map:
         if direction != -1:    
                 return closest, direction
         else:
-                return None, None
+                return 0, 0
 
     def getSensoryData(self,critter, radius):
 
