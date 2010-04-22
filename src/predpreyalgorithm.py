@@ -4,10 +4,13 @@ from predpreymap import Map
 import copy
 from critter import Critter
 import critter
+import psyco
+
+psyco.full()
 
 best_pred = Critter(critter.PREDATOR)
 best_prey = Critter(critter.PREY)
-DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3}
+DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3, "maxhunger":20}
 
 
 def reverse(direction):
@@ -55,39 +58,44 @@ def directionConverter(sensorydata, move):
      right(toPred),   right(toPrey),   right(toPlant), 0  ]
     return allpossiblemoves[move]
 
-def getAMove(critter, senses):
+def getAMove(critter, world, settings):
 	validmoves = [0, 1, 2, 3, 4, 5, 6]
+	if world.getCritterXY(critter) == None:
+		raise Exception("Critter isn't on the map!")	
+	senses = world.getSensoryData(critter, settings["sight"])
 	while len(validmoves) > 0:
 		destinationTile = None
 		directionMove = -1
-		while destinationTile == None and directionMove not in validmoves:
-			move = world.getMove(senses)
+		while destinationTile == None or directionMove == -1 or directionMove == None or directionMove not in validmoves:
+			move = critter.getMove(senses)
 			directionMove = directionConverter(senses, move)
-			destinationTile = world.getCritterDest(prey, directionMove)
-		validmoves.remove(directionMove)
+			destinationTile = world.getCritterDest(critter, directionMove)
+		if directionMove in validmoves:
+			validmoves.remove(directionMove)
+		else:
+			raise Exception("%d not in %s"%(directionMove, validmoves))
 		yield destinationTile, directionMove
 
 def preyMakeMove(prey, settings, world):
-	senses = world.getSensoryData(prey, settings["sight"])
-	for destinationTile, directionMove in getAMove(prey, senses):
+	for destinationTile, directionMove in getAMove(prey, world, settings):
 		critterOnTile = world.getCritterAt(destinationTile)
 		if critterOnTile == None:
 			world.moveCritter(prey, directionMove)
 			if world.isPlant(destinationTile): 
 				#isPlant bites for me
-				critter.setStatus("hunger", 0)
+				prey.setStatus("hunger", 0)
 			return
 		elif critterOnTile.type == critter.PREY:
 			continue
 		elif critterOnTile.type == critter.PREDATOR:
 			world.removeCritter(prey)
+			critterOnTile.setStatus("hunger", 0)
 			return
 		else:
 		     raise Exception("There is a prey case that is not accounted for: " + critterOnTile)
 
 def predMakeMove(pred, settings, world):
-	senses = world.getSensoryData(pred, settings["sight"])
-	for destinationTile, directionMove in getAMove(pred, senses):
+	for destinationTile, directionMove in getAMove(pred, world, settings):
 		critterOnTile = world.getCritterAt(destinationTile)
 		if critterOnTile == None:
 			world.moveCritter(pred, directionMove)
@@ -125,16 +133,20 @@ def calcscore(x):
     score = 0
     while len(world.getPredators()) > 0 and len(world.getPreys()) > 0:
 	score += 1
-	critters = random.shuffle(world.getPredator() + world.getPreys())        
+	critters = world.getPredators() + world.getPreys()
+	random.shuffle(critters)
+	if critters == None:
+		raise Exception("Critter cannot be none!!")
 	for c in critters:
+		if world.getCritterXY(c) == None: continue
 		c.incrementStatus("hunger", 1)
 		if c.type == critter.PREY:
 			preyMakeMove(c, settings, world)
-		else if c.type == critter.PREDATOR:
+		elif c.type == critter.PREDATOR:
 			predMakeMove(c, settings, world)
 		else:
 			raise Exception("Something that is not a critter is in the map: " + c)
-		if c.getStatus("hunger") >= settings["maxhunger"]:
+		if c.getStatus("hunger") >= settings["maxhunger"] and world.getCritterXY(c) != None:
 			world.removeCritter(c)
 		if hooker != None:
 			hooker(world, score)
@@ -206,8 +218,8 @@ def mutate(gens, pred__clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SET
 
 	predArgs, preyArgs = getCalcScoreArgs(preds, preys, best_pred, best_prey, settings)
 
-	predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
-	#predscores, preyscores = getResults(predArgs, preyArgs)
+	#predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
+	predscores, preyscores = getResults(predArgs, preyArgs)
 
 	best_prey = preds[predscores.index(max(predscores))]
 	best_pred = preys[preyscores.index(max(preyscores))]

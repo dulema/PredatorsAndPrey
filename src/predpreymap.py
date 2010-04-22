@@ -53,7 +53,10 @@ class Map:
         return False
    
     def getCritterXY(self, critter):
-        return self.critters[critter]
+	if critter in self.critters:
+		return self.critters[critter]
+	else:
+		return None
 
     def getCritterAt(self,location):
         for critter in self.critters:
@@ -130,19 +133,15 @@ class Map:
         if critter not in self.critters:
             raise Exception("Critter not on map")
 
-
-        oldloc = self.critters[critter]
-        newloc = self.getTile(oldloc, move)
-
+	newloc = self.getCritterDest(critter, move)
         if newloc == None or newloc == (-1, -1):
-            raise Exception("Can't move in that direction: ")
+            raise Exception("Can't move in that direction: %d"%move)
 
-            #made it this far, do the move
         oldsize = len(self.getCritters())
         self.removeCritter(critter)
         self.setCritterAt(newloc, critter)
         if len(self.getCritters())!=oldsize:
-            print("WTFF")
+            print("Map size changed in move")
 
     def bushbombplants(self, spot):
         del self.plants[spot]
