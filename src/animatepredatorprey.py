@@ -8,12 +8,11 @@ from PIL import ImageTk
 import re
 import tkMessageBox
 
-
 try:
 	import psyco
 	psyco.full()
 except ImportError:
-	print("No JIT for you")
+	print("Install Python psyco for increased performance\n")
 
 
 canvas_items = []
