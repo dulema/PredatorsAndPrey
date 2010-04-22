@@ -62,7 +62,6 @@ class Critter:
 		hist = self.getHistogram(randominput)
 		hist[random.randint(0,len(hist)-1)] += random.uniform(-increment, increment)
 		scalar = sum(hist)
-		print("sandy: " + str(randominput))
 		self.pdfmatrix[randominput] = [f for f in map(lambda x: float(x)/scalar, hist)]
 
     def getStatus(self, name):
