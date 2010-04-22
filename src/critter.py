@@ -46,27 +46,24 @@ class Critter:
         for _ in range(howmany):
                 yield copy.deepcopy(self)
     
-    def getMutations(self, howmany):
+    def getMutations(self, howmany, percentpdf, inputranges, increment):
         for c in self.clone(howmany):
-            c.mutate()
+            c.mutate(percentpdf, inputranges, increment)
             yield c
 
 
     def mutate(self, percentpdf, inputranges, increment):
-        if not self.pdfmatrix: #just quit if we don't have any entries
-                return
+	if increment < 0:
+	    increment *= -1
 
 	#The size of the pdf matrix is the product of the ranges
-	for _ in range(percentpdf*reduce(lambda x,y:x*y, inputranges)):
-		randominput = map(lambda x:random.randint(0, x), inputranges)
-
-
-        key = random.choice([k for k in iter(self.pdfmatrix)]) 
-        pdf = self.pdfmatrix[key]
-        index = random.randrange(len(pdf))
-        pdf[index] = pdf[index] + random.uniform(-increment, increment)
-        normalizer = sum(pdf)
-        self.pdfmatrix[key] = [float(i)/normalizer for i in pdf]
+	for _ in range(int(percentpdf*reduce(lambda x,y:x*y, inputranges))):
+		randominput = tuple(map(lambda x:random.randint(0, x), inputranges))
+		hist = self.getHistogram(randominput)
+		hist[random.randint(0,len(hist)-1)] += random.uniform(-increment, increment)
+		scalar = sum(hist)
+		print("sandy: " + str(randominput))
+		self.pdfmatrix[randominput] = [f for f in map(lambda x: float(x)/scalar, hist)]
 
     def getStatus(self, name):
         return self.status[name]
@@ -112,7 +109,7 @@ if __name__ == "__main__":
     print("Histogram: %s" % c.getHistogram((3,4,5)))
 
     print(c.getPDFMatrix())
-    for m in c.getMutations(2): print(m.pdfmatrix)
+    #for m in c.getMutations(2, 0.5, (6, 6, 6), 0.3): print(m.pdfmatrix)
     results = [ 0 for _ in range(c.choices)]
     for _ in range(10000):
         r = c.getMove(input)
