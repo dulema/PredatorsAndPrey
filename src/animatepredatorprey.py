@@ -23,7 +23,7 @@ def receive_mutate_parameters():
         elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
                 tkMessageBox.showwarning("Mutate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
         else:
-                #Use gen_num.get(), pred_num.get(), prey_num.get() -- be sure to int-ify it
+                #Use map_size.get(), pct_veg_slider.get(), pct_prey_slider.get(), pct_pred_slider.get(), sight_range.get(), tree_life_slider.get(), max_hunger_slider.get()-- be sure to int-ify it
                 pass
 
 #Erases playing_field and then loops through critter dictionary and plant
@@ -209,22 +209,27 @@ if __name__ == "__main__":
         scale_slider = Scale(root, from_=0.5, to=1.5, orient=HORIZONTAL, resolution=0.1)
         scale_label = Label(root, text="Scale of Playing Field")
         scale_slider.set("1.0")
-        pct_pred_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
+        pct_pred_slider = Scale(root, from_=1, to=25, orient=HORIZONTAL)
         pct_pred_slider_label = Label(root, text="Percent of Map with Predators")
-        pct_pred_slider.set("10")
-        pct_prey_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
+        pct_pred_slider.set("1")
+        pct_prey_slider = Scale(root, from_=1, to=25, orient=HORIZONTAL)
         pct_prey_slider_label = Label(root, text="Percent of Map with Prey")
-        pct_prey_slider.set("30")
-        pct_veg_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
+        pct_prey_slider.set("2")
+        pct_veg_slider = Scale(root, from_=1, to=25, orient=HORIZONTAL)
         pct_veg_slider_label = Label(root, text="Percent of Map with Vegetation")
-        pct_veg_slider.set("20")
+        pct_veg_slider.set("5")
         pct_pdf_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
         pct_pdf_slider_label = Label(root, text="Percent of Genes Mutated")
         pct_pdf_slider.set("40")
-        tree_life_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
+        tree_life_slider = Scale(root, from_=1, to=25, orient=HORIZONTAL)
         tree_life_label = Label(root, text="Tree Life (in bites by Prey)")
-        tree_life_slider.set("25")
-
+        tree_life_slider.set("3")
+	sight_range_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
+        sight_range_label = Label(root, text="Critter Sight Range")
+        sight_range_slider.set("10")
+	max_hunger_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
+        max_hunger_label = Label(root, text="Maximum Critter Hunger")
+        max_hunger_slider.set("20")
 
         #Integer Input Section
         gen_num = StringVar()
@@ -243,7 +248,7 @@ if __name__ == "__main__":
         mutate_button = Button(root, text="Mutate", command=receive_mutate_parameters)
         map_size_label = Label(root, text="Size of Map")
         map_size_input = Entry(root, textvariable=map_size, width=10)
-        map_size.set("23")
+        map_size.set("20")
 
         #Playing_Field Legend Section
         key_title_label = Label(root, text="Map Icon Key")
@@ -256,35 +261,40 @@ if __name__ == "__main__":
 
         #Grid Section
         #The following code tells each widget where to be placed on the root
-        gen_num_label.grid(row=0, column=0, sticky=S)
-        gen_num_input.grid(row=1, column=0, sticky=N)
-        pred_num_label.grid(row=2, column=0, sticky=S)
-        pred_num_input.grid(row=3, column=0, sticky=N)
-        prey_num_label.grid(row=4, column=0, sticky=S)
-        prey_num_input.grid(row=5, column=0, sticky=N)
-        pct_pred_slider_label.grid(row=7, column=0, sticky=S)
-        pct_pred_slider.grid(row=8, column=0, sticky=N)
-        pct_prey_slider_label.grid(row=9, column=0, sticky=S)
-        pct_prey_slider.grid(row=10, column=0, sticky=N)
-        pct_veg_slider_label.grid(row=11, column=0, sticky=S)
-        pct_veg_slider.grid(row=12, column=0, sticky=N)
-        pct_pdf_slider_label.grid(row=13, column=0, sticky=S)
-        pct_pdf_slider.grid(row=14, column=0, sticky=N)
-        tree_life_label.grid(row=15, column=0, sticky=S)
-        tree_life_slider.grid(row=16, column=0, sticky=N)
+        
+        pct_pred_slider_label.grid(row=0, column=0, sticky=S)
+        pct_pred_slider.grid(row=1, column=0, sticky=N)
+        pct_prey_slider_label.grid(row=2, column=0, sticky=S)
+        pct_prey_slider.grid(row=3, column=0, sticky=N)
+        pct_veg_slider_label.grid(row=4, column=0, sticky=S)
+        pct_veg_slider.grid(row=5, column=0, sticky=N)
+        pct_pdf_slider_label.grid(row=6, column=0, sticky=S)
+        pct_pdf_slider.grid(row=7, column=0, sticky=N)
+        tree_life_label.grid(row=8, column=0, sticky=S)
+        tree_life_slider.grid(row=9, column=0, sticky=N)
+	max_hunger_label.grid(row=10, column=0, sticky=S)
+        max_hunger_slider.grid(row=11, column=0, sticky=N)
+	sight_range_label.grid(row=12, column=0, sticky=S)
+        sight_range_slider.grid(row=13, column=0, sticky=N)
         mutate_button.grid(row=17, column=0, sticky=N)
         key_title_label.grid(row=0, column=4, sticky=E)
         key_pred_label.grid(row=1, column=4)
         key_prey_label.grid(row=2, column=4)
         key_veg_label.grid(row=3, column=4)
-        speed_slider_label.grid(row=11, column=4, sticky=S, columnspan=2)
-        speed_slider.grid(row=12, column=4, sticky=N, columnspan=2)
-        map_size_label.grid(row=13, column=4, sticky=S, columnspan=2)
-        map_size_input.grid(row=14, column=4, sticky=N, columnspan=2)
+        speed_slider_label.grid(row=13, column=4, sticky=S, columnspan=2)
+        speed_slider.grid(row=14, column=4, sticky=N, columnspan=2)
+        map_size_label.grid(row=11, column=4, sticky=S, columnspan=2)
+        map_size_input.grid(row=12, column=4, sticky=N, columnspan=2)
         scale_label.grid(row=15,column=4, sticky=S, columnspan=2)
         scale_slider.grid(row=16,column=4, sticky=N, columnspan=2)
         animate_button.grid(row=17, column=4, sticky=N,columnspan=2)
         playing_field.grid(row=0, column=1, rowspan=17, padx=5)
+	gen_num_label.grid(row=5, column=4, sticky=S,columnspan=2)
+        gen_num_input.grid(row=6, column=4, sticky=N,columnspan=2)
+        pred_num_label.grid(row=7, column=4, sticky=S,columnspan=2)
+        pred_num_input.grid(row=8, column=4, sticky=N,columnspan=2)
+        prey_num_label.grid(row=9, column=4, sticky=S,columnspan=2)
+        prey_num_input.grid(row=10, column=4, sticky=N,columnspan=2)
 
         #animatepredatorprey.py = 22characters
         guiLocation = []
