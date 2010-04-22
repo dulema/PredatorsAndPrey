@@ -9,6 +9,13 @@ import re
 import tkMessageBox
 
 
+try:
+	import psyco
+	psyco.full()
+except ImportError:
+	print("No JIT for you")
+
+
 canvas_items = []
 
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
