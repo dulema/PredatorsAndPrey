@@ -10,6 +10,7 @@ class Map:
         self.gooddirections = []
         self.critters = {}
         self.plants = []
+	self.dontmove = 0
         self.topleft = 1
         self.topright = 2
         self.right = 3
@@ -71,10 +72,12 @@ class Map:
     def getTile(self, location, wheretogo):
         (x, y) = location
         if wheretogo == -1:
-            return (-1, -1)
+            return None
+	if wheretogo == 0:
+	    return location
         if wheretogo == self.topleft:
             if y == 0:
-                return (-1, -1)
+                return None
             if x == 0 and y%2 == 0:
                 return (self.size-1, y-1)
             if y % 2 == 1:
@@ -83,7 +86,7 @@ class Map:
                 return (x-1, y-1)
         if wheretogo == self.topright:
             if y == 0:
-                return (-1, -1)
+                return None
             if x == self.size-1 and y%2 == 1:
                 return (0,y-1)
             if y % 2 == 1:
@@ -105,7 +108,7 @@ class Map:
 
         if wheretogo == self.bottomleft:
             if y == self.size - 1:
-                return (-1, -1)
+                return None
             if x == 0 and y%2 == 0:
                 return (self.size-1, y+1)
             if y % 2 == 1:
@@ -115,7 +118,7 @@ class Map:
 
         if wheretogo == self.bottomright:
             if y == self.size -1:
-                return (-1, -1)
+                return None
             if x == self.size-1 and y % 2 == 1:
                 return (0, y+1)
             if y % 2 == 1:
@@ -155,9 +158,6 @@ class Map:
 
     def getPredators(self):
         return [p for p in filter(lambda c : c.type == "predator", self.critters)]
-
-    def obama(self):
-        return 0
 
     def getDirection(self,x,y,disx,disy,radius):
 

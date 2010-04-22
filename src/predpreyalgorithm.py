@@ -55,6 +55,52 @@ def directionConverter(sensorydata, move):
      right(toPred),   right(toPrey),   right(toPlant), 0  ]
     return allpossiblemoves[move]
 
+def getAMove(critter, senses):
+	validmoves = [0, 1, 2, 3, 4, 5, 6]
+	while len(validmoves) > 0:
+		destinationTile = None
+		directionMove = -1
+		while destinationTile == None and directionMove not in validmoves:
+			move = world.getMove(senses)
+			directionMove = directionConverter(senses, move)
+			destinationTile = world.getCritterDest(prey, directionMove)
+		validmoves.remove(directionMove)
+		yield destinationTile, directionMove
+
+def preyMakeMove(prey, settings, world):
+	senses = world.getSensoryData(prey, settings["sight"])
+	for destinationTile, directionMove in getAMove(prey, senses):
+		critterOnTile = world.getCritterAt(destinationTile)
+		if critterOnTile == None:
+			world.moveCritter(prey, directionMove)
+			if world.isPlant(destinationTile): 
+				#isPlant bites for me
+				critter.setStatus("hunger", 0)
+			return
+		elif critterOnTile.type == critter.PREY:
+			continue
+		elif critterOnTile.type == critter.PREDATOR:
+			world.removeCritter(prey)
+			return
+		else:
+		     raise Exception("There is a prey case that is not accounted for: " + critterOnTile)
+
+def predMakeMove(pred, settings, world):
+	senses = world.getSensoryData(pred, settings["sight"])
+	for destinationTile, directionMove in getAMove(pred, senses):
+		critterOnTile = world.getCritterAt(destinationTile)
+		if critterOnTile == None:
+			world.moveCritter(pred, directionMove)
+			return
+		elif critterOnTile.type == critter.PREY:
+			world.removeCritter(critterOnTile)
+			pred.setStatus("hunger", 0)
+			return
+		elif critterOnTile.type == critter.PREDATOR:
+			continue			
+		else:
+		     raise Exception("There is a predator case that is not accounted for: " + critterOnTile)
+
 def calcscore(x):
     pred = x[0]
     prey = x[1]
@@ -77,89 +123,21 @@ def calcscore(x):
     for p in prey.clone(int((mapsize**2)*preypercent)): world.setCritterAt(world.getRandomUntakenTile(), p)
 
     score = 0
-    while len(world.getPreys()) >  0 and len(world.getPredators()) > 0:
-        #Score get incremented because it is just how every long the species lasts
+    while len(world.getPredators()) > 0 and len(world.getPreys()) > 0:
 	score += 1
-
-	#Increment the hunger of all of the animals by 1
-        for c in world.getCritters():
+	critters = random.shuffle(world.getPredator() + world.getPreys())        
+	for c in critters:
 		c.incrementStatus("hunger", 1)
-                if c.getStatus("hunger") >= maxhunger:
+		if c.type == critter.PREY:
+			preyMakeMove(c, settings, world)
+		else if c.type == critter.PREDATOR:
+			predMakeMove(c, settings, world)
+		else:
+			raise Exception("Something that is not a critter is in the map: " + c)
+		if c.getStatus("hunger") >= settings["maxhunger"]:
 			world.removeCritter(c)
-
-	for c in world.getPredators():
-	    current_tile = world.getCritterXY(c)
-	    sensorydata = world.getSensoryData(c, sight)
-	    location = None
-	    move = None
-	    loopcount = 0
-	    while loopcount <= 40:
-		loopcount += 1
-		while location in (None, (-1, -1)):
-		    #print("pred loc loop")
-                    critmove = c.getMove(sensorydata) 
-		    move = directionConverter(sensorydata,critmove ) 
-		    #print "Pred move:",move 
-		    location = world.getCritterDest(c,move)
-		crit = world.getCritterAt(location)
-
-		if crit == c: #If it doesn't wanna move
-		    print("pred: Hello me!!")
-		    break
-		elif crit == None:
-		    world.moveCritter(c, move)
-		    break
-		elif crit.type == critter.PREY:
-		    world.removeCritter(crit)
-		    world.moveCritter(c, move)
-		    c.setStatus("hunger", 0)
-		    break
-		elif crit.type == critter.PREDATOR:
-		    location = None
-		else:
-		    raise Exception("Unhandled case for preds")
-
-	    if hooker != None:
-		    hooker(world, score)
-
-	for c in world.getPreys():
-	    current_tile = world.getCritterXY(c)
-	    sensorydata = world.getSensoryData(c, sight)
-	    location = None
-	    loopcount = 0
-	    while loopcount <= 40:
-		loopcount += 1
-		while location in (None, (-1, -1) ): 
-		    #print("prey loc loop")
-		    critmove = c.getMove(sensorydata)
-		    move = directionConverter(sensorydata, critmove)
-		    #print "Prey move:",move 
-		    location = world.getCritterDest(c, move)
-		crit = world.getCritterAt(location)
-
-		if crit == c: #if the prey decides not to move
-		    print("prey: Hello me!!")
-		    #Returns Two Parm, One Of Boolean Other Is Health
-		    if (world.isPlant(location)):
-			c.setStatus("hunger", 0)
-	            break
-		elif crit == None:
-		    world.moveCritter(c, move)
-		    #Returns Two Parm, One Of Boolean Other Is Health
-		    if (world.isPlant(location)):
-			c.setStatus("hunger", 0)
-		    break
-		elif crit.type == critter.PREY:
-		    location = None
-		elif crit.type == critter.PREDATOR:
-		    world.removeCritter(c)
-		    crit.setStatus("hunger", 0)
-		    break
-		else:
-		    raise Exception("Unhandled case for preys")
-
-            if hooker != None:
-		    hooker(world, score)
+		if hooker != None:
+			hooker(world, score)
 
     if hooker != None:
 	hooker(world, score)
