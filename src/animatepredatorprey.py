@@ -9,11 +9,20 @@ import re
 import tkMessageBox
 
 
+try:
+	import psyco
+	psyco.full()
+except ImportError:
+	print("No JIT for you")
+
+
 canvas_items = []
 
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
 def receive_mutate_parameters():
-	if pct_pred_slider.get()+pct_prey_slider.get() > 100:
+	if validate() == 0:
+		pass
+	elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
 		tkMessageBox.showwarning("Mutate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
 	else:
 		#Use gen_num.get(), pred_num.get(), prey_num.get() -- be sure to int-ify it
@@ -47,7 +56,9 @@ def updatePlayingField(world, round_score):
 #Command intiated by clicking the Animate button. Calls score in PredPreyAlgo
 #update the playing_field.
 def animate():
-	if pct_pred_slider.get()+pct_prey_slider.get() > 100:
+	if validate() == 0:
+		pass
+	elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
 		tkMessageBox.showwarning("Animate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
 	else:
 		predpreyalgorithm.calcscore((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, predpreyalgorithm.DEFAULT_SETTINGS ,updatePlayingField))
@@ -92,9 +103,6 @@ def reset():
 	prey_num.set("20")
 	pct_veg_slider.set("20")
 	draw_map()
-
-
-
 
 #Draw the map of hexagons on the playing_field
 def draw_map():
@@ -145,12 +153,22 @@ def fill_map(thing, location):
 		photo = playing_field.create_image(1+12+x*24,20+y*29, image=picture)
 		canvas_items.append(photo)
 
-
-
-def validate(typedinvalue):
-	stringified = str(typedinvalue)
-	if(re.match("^[0-9]+$",stringified) == None):#checks if a number, made of integers, was input
-		print("You didn't type a number!")
+def validate():
+	wrongstuff = "\n"
+	if re.match("^[0-9]+$",gen_num.get()) == None:#checks if a number, made of integers, was input
+		wrongstuff = wrongstuff + "Number of generations\n"
+		gen_num.set("10")
+	if re.match("^[0-9]+$",pred_num.get()) == None:
+		wrongstuff = wrongstuff + "Number of predators\n"
+		pred_num.set("1")
+	if re.match("^[0-9]+$",prey_num.get()) == None:
+		wrongstuff = wrongstuff + "Number of prey\n"
+		prey_num.set("20")
+	if re.match("^[0-9]+$",map_size.get()) == None:
+		wrongstuff = wrongstuff + "Size of map\n"
+		map_size.set("23")
+	if len(wrongstuff) > 1:
+		tkMessageBox.showwarning("Fix Input","Fix the following:\n" + wrongstuff)
 		return 0
 	else:
 		return 1
@@ -167,7 +185,6 @@ if __name__ == "__main__":
 	playing_field.scale(playing_field,.1,.1,10,10)
 	yscrollbar.config(command=playing_field.yview)
 	xscrollbar.config(command=playing_field.xview)
-
 
 	#Menu Section
 	menu = Menu(root)
@@ -229,16 +246,6 @@ if __name__ == "__main__":
 	map_size_label = Label(root, text="Size of Map")
 	map_size_input = Entry(root, textvariable=map_size, width=10)
 	map_size.set("23")
-	#Validation configuration stuff here
-	vcmd = (gen_num_input.register(validate),'%P')
-	gen_num_input.configure(vcmd=vcmd, validate='key')
-	vcmd = (pred_num_input.register(validate),'%P')
-	pred_num_input.configure(vcmd=vcmd, validate='key')
-	vcmd = (prey_num_input.register(validate),'%P')
-	prey_num_input.configure(vcmd=vcmd, validate='key')
-	vcmd = (map_size_input.register(validate),'%P')
-	map_size_input.configure(vcmd=vcmd, validate='key')
-
 
 	#Playing_Field Legend Section
 	key_title_label = Label(root, text="Map Icon Key")
