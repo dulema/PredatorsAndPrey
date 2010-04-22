@@ -1,4 +1,4 @@
-import random
+import numpy.random
 import copy
 
 PREDATOR = "predator"
@@ -19,7 +19,7 @@ class Critter:
     #Returns the move to make.
     def getMove(self, senses):
         pdf = self.getHistogram(senses)
-        r = random.random()
+        r = numpy.random.random_sample()
         sum = 0
         for i in range(len(pdf)):
             sum = sum + pdf[i]
@@ -27,7 +27,7 @@ class Critter:
                 return i
 
     def generatePDF(self):
-        pdf = [ random.randint(1, 10) for _ in range(self.choices) ]
+        pdf = [ numpy.random.random_integers(1, 10) for _ in range(self.choices) ]
         total = sum(pdf)
         return [float(i)/total for i in pdf]
  
@@ -55,12 +55,12 @@ class Critter:
     def mutate(self, percentpdf, inputranges, increment):
 	if increment < 0:
 	    increment *= -1
-
+	pdfsize = int(percentpdf*reduce(lambda x,y:x*y, inputranges))
 	#The size of the pdf matrix is the product of the ranges
-	for _ in range(int(percentpdf*reduce(lambda x,y:x*y, inputranges))):
-		randominput = tuple(map(lambda x:random.randint(0, x), inputranges))
+	for _ in range(pdfsize):
+		randominput = tuple(map(lambda x:numpy.random.random_integers(x), inputranges))
 		hist = self.getHistogram(randominput)
-		hist[random.randint(0,len(hist)-1)] += random.uniform(-increment, increment)
+		hist[numpy.random.randint(0,len(hist))] += numpy.random.uniform(-increment, increment)
 		scalar = sum(hist)
 		self.pdfmatrix[randominput] = [f for f in map(lambda x: float(x)/scalar, hist)]
 
