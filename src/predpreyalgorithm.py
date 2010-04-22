@@ -195,7 +195,7 @@ def roundprogress(map, score):
 def getCalcScoreArgs(preds, preys, bpred, bprey, settings):
     bpreyclones = [copy.deepcopy(bprey) for _ in preds]
     bpredclones = [copy.deepcopy(bpred) for _ in preys]
-    settingsclones = [settings for _ in range(max(len(preds),len(preys)))]
+    settingsclones = [settings] * max(len(preds),len(preys))
     predArgs = zip(preds, bpreyclones, settingsclones[:len(preds)])
     preyArgs = zip(bpredclones, preys, settingsclones[:len(preys)])
     return predArgs, preyArgs
