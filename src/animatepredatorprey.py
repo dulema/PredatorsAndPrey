@@ -41,7 +41,6 @@ def updatePlayingField(world, round_score):
 	scale_canvas()
 	root.update()
 	speed = float(float(speed_slider.get()) / 500)
-	print(speed)
 	time.sleep(speed)
 
 
@@ -125,18 +124,19 @@ def fill_map(thing, location):
 	y=location[1]
 	global canvas_items
 	picture = None
+	pic_scale = int((float(scale_slider.get()) - 0.5) * 10)
 	if(thing == "V"):
 		critter = thing
 		color = "SeaGreen"
-		picture = vegetation[5]
+		picture = vegetation[pic_scale]
 	elif(thing == "predator"):
 		critter = "D"
 		color = "Red"
-		picture = wolf[5]
+		picture = wolf[pic_scale]
 	elif(thing == "prey"):
 		critter = "Y"
 		color = "Blue"
-		picture = sheep[5]	
+		picture = sheep[pic_scale]	
 
 	if(y%2 == 1):
 		photo = playing_field.create_image(13+12+x*24,20+y*29, image=picture)
@@ -160,7 +160,7 @@ if __name__ == "__main__":
 	root = Tk()
 	root.wm_title("Pred/Prey Animator")
 	yscrollbar = Scrollbar(root, orient=VERTICAL)
-	yscrollbar.grid(row=0, column=2, sticky=N+S+W+E, rowspan=17)
+	yscrollbar.grid(row=0, column=2, sticky=N+S+W+E, rowspan=17, padx=10)
 	xscrollbar = Scrollbar(root, orient=HORIZONTAL)
 	xscrollbar.grid(row=18, column=1, sticky=N+S+W+E)
 	playing_field = Canvas(root, width=600, height=600, yscrollcommand=yscrollbar.set, xscrollcommand=xscrollbar.set, scrollregion=(0, 0, 3000, 3000))
@@ -188,7 +188,6 @@ if __name__ == "__main__":
 	help_menu.add_command(label="README", command=README_display)
 	help_menu.add_command(label="About...", command=About_display)
 
-	#scale_num = StringVar()
 	#Slider Section
 	speed_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	speed_slider_label = Label(root, text="Speed of Animation")
@@ -207,6 +206,9 @@ if __name__ == "__main__":
 	pct_pdf_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
 	pct_pdf_slider_label = Label(root, text="Percent of Genes Mutated")
 	pct_pdf_slider.set("40")
+	tree_life_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
+	tree_life_label = Label(root, text="Tree Life (in bites by Prey)")
+	tree_life_slider.set("25")
 
 
 	#Integer Input Section
@@ -255,26 +257,28 @@ if __name__ == "__main__":
 	pred_num_input.grid(row=3, column=0, sticky=N)
 	prey_num_label.grid(row=4, column=0, sticky=S)
 	prey_num_input.grid(row=5, column=0, sticky=N)
-	pct_pred_slider_label.grid(row=6, column=0, sticky=S)
-	pct_pred_slider.grid(row=7, column=0, sticky=N)
-	pct_prey_slider_label.grid(row=8, column=0, sticky=S)
-	pct_prey_slider.grid(row=9, column=0, sticky=N)
-	pct_veg_slider_label.grid(row=10, column=0, sticky=S)
-	pct_veg_slider.grid(row=11, column=0, sticky=N)
-	pct_pdf_slider_label.grid(row=12, column=0, sticky=S)
-	pct_pdf_slider.grid(row=13, column=0, sticky=N)
+	pct_pred_slider_label.grid(row=7, column=0, sticky=S)
+	pct_pred_slider.grid(row=8, column=0, sticky=N)
+	pct_prey_slider_label.grid(row=9, column=0, sticky=S)
+	pct_prey_slider.grid(row=10, column=0, sticky=N)
+	pct_veg_slider_label.grid(row=11, column=0, sticky=S)
+	pct_veg_slider.grid(row=12, column=0, sticky=N)
+	pct_pdf_slider_label.grid(row=13, column=0, sticky=S)
+	pct_pdf_slider.grid(row=14, column=0, sticky=N)
+	tree_life_label.grid(row=15, column=0, sticky=S)
+	tree_life_slider.grid(row=16, column=0, sticky=N)
 	mutate_button.grid(row=17, column=0, sticky=N)
 	key_title_label.grid(row=0, column=4, sticky=E)
 	key_pred_label.grid(row=1, column=4)
 	key_prey_label.grid(row=2, column=4)
 	key_veg_label.grid(row=3, column=4)
-	speed_slider_label.grid(row=11, column=4, sticky=S)
-	speed_slider.grid(row=12, column=4, sticky=N)
-	map_size_label.grid(row=13, column=4, sticky=S)
-	map_size_input.grid(row=14, column=4, sticky=N)
-	scale_label.grid(row=15,column=4, sticky=S)
-	scale_slider.grid(row=16,column=4, sticky=N)
-	animate_button.grid(row=17, column=4, sticky=N)
+	speed_slider_label.grid(row=11, column=4, sticky=S, columnspan=2)
+	speed_slider.grid(row=12, column=4, sticky=N, columnspan=2)
+	map_size_label.grid(row=13, column=4, sticky=S, columnspan=2)
+	map_size_input.grid(row=14, column=4, sticky=N, columnspan=2)
+	scale_label.grid(row=15,column=4, sticky=S, columnspan=2)
+	scale_slider.grid(row=16,column=4, sticky=N, columnspan=2)
+	animate_button.grid(row=17, column=4, sticky=N,columnspan=2)
 	playing_field.grid(row=0, column=1, rowspan=17, padx=5)
 
 	#animatepredatorprey.py = 22characters
@@ -288,19 +292,19 @@ if __name__ == "__main__":
 	sheep = []
 	for i in range(11):
 		j = i*10 + 50
-		vegetation = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/PeterM_Tree" + str(j) + ".png")
-		wolf = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png")
-		sheep = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png")
+		vegetation.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/PeterM_Tree" + str(j) + ".png"))
+		wolf.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png"))
+		sheep.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png"))
 	
 
 	wolf_canvas = Canvas(root,width=30,height=30)
-	wolf_canvas.create_image(15,15, image=wolf)
+	wolf_canvas.create_image(15,15, image=wolf[5])
 	wolf_canvas.grid(row=1,column=5, sticky=S+W)
 	sheep_canvas = Canvas(root,width=30,height=30)
-	sheep_canvas.create_image(15,15, image=sheep)
+	sheep_canvas.create_image(15,15, image=sheep[5])
 	sheep_canvas.grid(row=2,column=5, sticky=S+W)
 	veg_canvas = Canvas(root,width=30,height=30)
-	veg_canvas.create_image(15,15, image=vegetation)
+	veg_canvas.create_image(15,15, image=vegetation[5])
 	veg_canvas.grid(row=3,column=5, sticky=S+W)
 
 	#Do Work
