@@ -5,7 +5,7 @@ from critter import Critter
 
 class Map:
 
-    def __init__(self, size, plantpercent,plantlife):
+    def __init__(self, size, plantpercent,plantbites):
         self.directions = []
         self.gooddirections = []
         self.critters = {}
@@ -19,17 +19,38 @@ class Map:
 
 
         self.size = size
-        self.plantlife = plantlife
+        self.plantbites = plantbites
         #Fill the map with plants
         for _ in range(int(plantpercent*size*size)):
-                loc = (random.randint(0, size-1), random.randint(0, size-1),self.plantlife)
+                loc = (random.randint(0, size-1), random.randint(0, size-1),self.plantbites)
                 while loc in self.plants:
-                        loc = (random.randint(0, size-1), random.randint(0, size-1),self.plantlife)
+                        loc = (random.randint(0, size-1), random.randint(0, size-1),self.plantbites)
                 self.plants.append(loc)
 
+        #TEST REMOVE WHEN DONE
+        ufa = (50,40,1)
+        self.plants.append(ufa)
+
     def isPlant(self, location):
-        return location in self.plants
-                
+        
+        x,y = location
+
+        # Goes Through Plants To See If Plant There
+        # If So Plant Eaten And Returned True
+        
+        for i in range (len(self.plants)):
+            j,k,l = self.plants[i]
+            if x == j and y == k:
+                #If True Then Plant Is Eaten
+                #If One Left None Else Decrease 1
+                if l == 1:
+                    self.bushbombplants(i)
+                else:
+                    self.plants[i] = j,k,l-1
+                return True
+            
+        return False
+   
     def getCritterXY(self, critter):
         return self.critters[critter]
 
@@ -337,7 +358,7 @@ if __name__ == "__main__":
         import critter
         from critter import Critter
 
-        map1 = Map(100, 0.95,10)
+        map1 = Map(100, 0.005,10)
 
         pred1 = Critter(critter.PREDATOR)
         pred2 = Critter(critter.PREDATOR)
@@ -355,9 +376,9 @@ if __name__ == "__main__":
 
         #print(map1)
 
-        print(map1.isPlant((50,40)))
         print(map1.plants)
-        map1.bushbombplants(1)
+        location = (50,40)
+        print(map1.isPlant((location)))
         print(map1.plants)
 
         print(map1.getSensoryData(pred1, 2)[0] == None)

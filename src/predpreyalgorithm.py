@@ -62,6 +62,8 @@ def calcscore(x):
     settings = x[2] if len(x) > 2 else DEFAULT_SETTINGS
     mapsize = settings["mapsize"] if "mapsize" in settings else 20
     vegpercent = settings["vegpercent"] if "vegpercent" in settings else 0.5
+    #plantbites = 3
+    plantbites = ufaufaufa
     preypercent = settings["preypercent"] if "preypercent" in settings else 0.1
     predpercent = settings["predpercent"] if "predpercent" in settings else 0.1
     maxhunger = settings["maxhunger"] if "maxhunger" in settings else 20
@@ -69,7 +71,7 @@ def calcscore(x):
 
     hooker = x[3] if len(x) > 3 else None
 
-    world = Map(mapsize, vegpercent)
+    world = Map(mapsize, vegpercent,plantbites)
     for p in pred.clone(int((mapsize**2)*predpercent)): world.setCritterAt(world.getRandomUntakenTile(), p)
     for p in prey.clone(int((mapsize**2)*preypercent)): world.setCritterAt(world.getRandomUntakenTile(), p)
 
@@ -136,12 +138,14 @@ def calcscore(x):
 
 		if crit == c: #if the prey decides not to move
 		    print("prey: Hello me!!")
-		    if world.isPlant(location):
+		    #Returns Two Parm, One Of Boolean Other Is Health
+		    if (world.isPlant(location)):
 			c.setStatus("hunger", 0)
 	            break
 		elif crit == None:
 		    world.moveCritter(c, move)
-		    if world.isPlant(location):
+		    #Returns Two Parm, One Of Boolean Other Is Health
+		    if (world.isPlant(location):
 			c.setStatus("hunger", 0)
 		    break
 		elif crit.type == critter.PREY:
