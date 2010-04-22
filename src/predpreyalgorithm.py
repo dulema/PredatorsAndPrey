@@ -161,6 +161,9 @@ def calcscore(x):
             if hooker != None:
 		    hooker(world, score)
 
+    if hooker != None:
+	hooker(world, score)
+
     return score
 
 def __printProgress(num, total):
