@@ -41,7 +41,6 @@ def updatePlayingField(world, round_score):
 	scale_canvas()
 	root.update()
 	speed = float(float(speed_slider.get()) / 500)
-	print(speed)
 	time.sleep(speed)
 
 
@@ -125,18 +124,19 @@ def fill_map(thing, location):
 	y=location[1]
 	global canvas_items
 	picture = None
+	pic_scale = int((float(scale_slider.get()) - 0.5) * 10)
 	if(thing == "V"):
 		critter = thing
 		color = "SeaGreen"
-		picture = vegetation[5]
+		picture = vegetation[pic_scale]
 	elif(thing == "predator"):
 		critter = "D"
 		color = "Red"
-		picture = wolf[5]
+		picture = wolf[pic_scale]
 	elif(thing == "prey"):
 		critter = "Y"
 		color = "Blue"
-		picture = sheep[5]	
+		picture = sheep[pic_scale]	
 
 	if(y%2 == 1):
 		photo = playing_field.create_image(13+12+x*24,20+y*29, image=picture)
@@ -288,19 +288,19 @@ if __name__ == "__main__":
 	sheep = []
 	for i in range(11):
 		j = i*10 + 50
-		vegetation = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/PeterM_Tree" + str(j) + ".png")
-		wolf = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png")
-		sheep = ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png")
+		vegetation.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/PeterM_Tree" + str(j) + ".png"))
+		wolf.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png"))
+		sheep.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png"))
 	
 
 	wolf_canvas = Canvas(root,width=30,height=30)
-	wolf_canvas.create_image(15,15, image=wolf)
+	wolf_canvas.create_image(15,15, image=wolf[5])
 	wolf_canvas.grid(row=1,column=5, sticky=S+W)
 	sheep_canvas = Canvas(root,width=30,height=30)
-	sheep_canvas.create_image(15,15, image=sheep)
+	sheep_canvas.create_image(15,15, image=sheep[5])
 	sheep_canvas.grid(row=2,column=5, sticky=S+W)
 	veg_canvas = Canvas(root,width=30,height=30)
-	veg_canvas.create_image(15,15, image=vegetation)
+	veg_canvas.create_image(15,15, image=vegetation[5])
 	veg_canvas.grid(row=3,column=5, sticky=S+W)
 
 	#Do Work
