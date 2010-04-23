@@ -18,7 +18,7 @@ DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpe
 
 def reverse(direction):
     if direction == 0:
-	return 0
+        return 0
     if direction <= 3:
         direction += 3
     else:
@@ -27,7 +27,7 @@ def reverse(direction):
 
 def left(direction):
     if direction == 0:
-	return 0
+        return 0
     if direction == 1:
         return 6
     else:
@@ -35,7 +35,7 @@ def left(direction):
 
 def right(direction):
     if direction == 0:
-	return 0
+        return 0
     if direction == 6:
         return 1
     else:
@@ -59,23 +59,23 @@ def directionConverter(sensorydata):
     return allpossiblemoves
 
 def getAMove(critter, world, settings):
-	if world.getCritterXY(critter) == None:
-		raise Exception("Critter isn't on the map!")	
-	senses = world.getSensoryData(critter, settings["sight"])
-	dirconv = directionConverter(senses)
-	validmoves = list(set(dirconv))
-	while len(validmoves) > 0:
-		destinationTile = None
-		directionMove = -1
-		while destinationTile == None or directionMove == -1 or directionMove == None or directionMove not in validmoves:
-			move = critter.getMove(senses)
-			directionMove = dirconv[move]
-			destinationTile = world.getCritterDest(critter, directionMove)
-		if directionMove in validmoves:
-			validmoves.remove(directionMove)
-		else:
-			raise Exception("%d not in %s"%(directionMove, validmoves))
-		yield destinationTile, directionMove
+        if world.getCritterXY(critter) == None:
+                raise Exception("Critter isn't on the map!")    
+        senses = world.getSensoryData(critter, settings["sight"])
+        dirconv = directionConverter(senses)
+        validmoves = list(set(dirconv))
+        while len(validmoves) > 0:
+                destinationTile = None
+                directionMove = -1
+                while destinationTile == None or directionMove == -1 or directionMove == None or directionMove not in validmoves:
+                        move = critter.getMove(senses)
+                        directionMove = dirconv[move]
+                        destinationTile = world.getCritterDest(critter, directionMove)
+                if directionMove in validmoves:
+                        validmoves.remove(directionMove)
+                else:
+                        raise Exception("%d not in %s"%(directionMove, validmoves))
+                yield destinationTile, directionMove
 
 def preyMakeMove(prey, settings, world):
         for destinationTile, directionMove in getAMove(prey, world, settings):
@@ -217,8 +217,8 @@ def mutate(gens, pred__clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SET
 
         predArgs, preyArgs = getCalcScoreArgs(preds, preys, best_pred, best_prey, settings)
 
-	predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
-	#predscores, preyscores = getResults(predArgs, preyArgs)
+        predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
+        #predscores, preyscores = getResults(predArgs, preyArgs)
 
         best_prey = preds[predscores.index(max(predscores))]
         best_pred = preys[preyscores.index(max(preyscores))]

@@ -12,7 +12,7 @@ try:
         import psyco
         psyco.full()
 except ImportError:
-	print("Install Python psyco for increased performance\n")
+        print("Install Python psyco for increased performance\n")
 
 canvas_items = []
 
@@ -224,10 +224,10 @@ if __name__ == "__main__":
         tree_life_slider = Scale(root, from_=1, to=25, orient=HORIZONTAL)
         tree_life_label = Label(root, text="Tree Life (in bites by Prey)")
         tree_life_slider.set("3")
-	sight_range_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
+        sight_range_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
         sight_range_label = Label(root, text="Critter Sight Range")
         sight_range_slider.set("10")
-	max_hunger_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
+        max_hunger_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
         max_hunger_label = Label(root, text="Maximum Critter Hunger")
         max_hunger_slider.set("20")
 
@@ -272,9 +272,9 @@ if __name__ == "__main__":
         pct_pdf_slider.grid(row=7, column=0, sticky=N)
         tree_life_label.grid(row=8, column=0, sticky=S)
         tree_life_slider.grid(row=9, column=0, sticky=N)
-	max_hunger_label.grid(row=10, column=0, sticky=S)
+        max_hunger_label.grid(row=10, column=0, sticky=S)
         max_hunger_slider.grid(row=11, column=0, sticky=N)
-	sight_range_label.grid(row=12, column=0, sticky=S)
+        sight_range_label.grid(row=12, column=0, sticky=S)
         sight_range_slider.grid(row=13, column=0, sticky=N)
         mutate_button.grid(row=17, column=0, sticky=N)
         key_title_label.grid(row=0, column=4, sticky=E)
@@ -289,7 +289,7 @@ if __name__ == "__main__":
         scale_slider.grid(row=16,column=4, sticky=N, columnspan=2)
         animate_button.grid(row=17, column=4, sticky=N,columnspan=2)
         playing_field.grid(row=0, column=1, rowspan=17, padx=5)
-	gen_num_label.grid(row=5, column=4, sticky=S,columnspan=2)
+        gen_num_label.grid(row=5, column=4, sticky=S,columnspan=2)
         gen_num_input.grid(row=6, column=4, sticky=N,columnspan=2)
         pred_num_label.grid(row=7, column=4, sticky=S,columnspan=2)
         pred_num_input.grid(row=8, column=4, sticky=N,columnspan=2)

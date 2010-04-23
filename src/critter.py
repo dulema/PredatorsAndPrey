@@ -53,16 +53,16 @@ class Critter:
 
 
     def mutate(self, percentpdf, inputranges, increment):
-	if increment < 0:
-	    increment *= -1
-	pdfsize = int(percentpdf*reduce(lambda x,y:x*y, inputranges))
-	#The size of the pdf matrix is the product of the ranges
-	for _ in range(pdfsize):
-		randominput = tuple(map(lambda x:numpy.random.random_integers(x), inputranges))
-		hist = self.getHistogram(randominput)
-		hist[numpy.random.randint(0,len(hist))] += numpy.random.uniform(-increment, increment)
-		scalar = sum(hist)
-		self.pdfmatrix[randominput] = [f for f in map(lambda x: float(x)/scalar, hist)]
+        if increment < 0:
+            increment *= -1
+        pdfsize = int(percentpdf*reduce(lambda x,y:x*y, inputranges))
+        #The size of the pdf matrix is the product of the ranges
+        for _ in range(pdfsize):
+                randominput = tuple(map(lambda x:numpy.random.random_integers(x), inputranges))
+                hist = self.getHistogram(randominput)
+                hist[numpy.random.randint(0,len(hist))] += numpy.random.uniform(-increment, increment)
+                scalar = sum(hist)
+                self.pdfmatrix[randominput] = [f for f in map(lambda x: float(x)/scalar, hist)]
 
     def getStatus(self, name):
         return self.status[name]
