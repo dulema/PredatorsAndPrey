@@ -315,7 +315,7 @@ if __name__ == "__main__":
 
         for i in range(11):
                 j = i*10 + 50
-                vegetation.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages\PeterM_Tree" + str(j) + ".png"))
+                vegetation.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/PeterM_Tree" + str(j) + ".png"))
                 wolf.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png"))
                 sheep.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png"))
         
