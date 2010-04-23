@@ -7,12 +7,13 @@ import time
 from PIL import ImageTk
 import re
 import tkMessageBox
+import os
 
 try:
         import psyco
         psyco.full()
 except ImportError:
-        print("Install Python psyco for increased performance\n")
+        print("Install Python Psyco For Increased Performance.\nAnimate\n")
 
 canvas_items = []
 
@@ -301,13 +302,20 @@ if __name__ == "__main__":
         imagesLocation = []
         guiLocation = (__file__)
         imagesLocation = guiLocation[:-22]
+        #imagesLocation = guiLocation
 
         vegetation = []
         wolf = []
         sheep = []
+        difiorepath = []
+        #difiorepath = "D:\School/Manhattan\Senior 2009-2010\Sem 2\Cmpt 456-01\Project 2\src"
+        #imagesLocation = difiorepath
+        #imagesLocation = os.path.abspath(difiorepath)
+        #print(imagesLocation)
+
         for i in range(11):
                 j = i*10 + 50
-                vegetation.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/PeterM_Tree" + str(j) + ".png"))
+                vegetation.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages\PeterM_Tree" + str(j) + ".png"))
                 wolf.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png"))
                 sheep.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png"))
         

@@ -10,7 +10,7 @@ try:
     psyco.full()
 except ImportError:
     import sys
-    sys.stderr.write("Install Python psyco for increased performance\n")
+    sys.stderr.write("Install Python Psyco For Increased Performance.\nAlgo\n")
 
 best_pred = Critter(critter.PREDATOR)
 best_prey = Critter(critter.PREY)
