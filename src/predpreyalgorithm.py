@@ -217,8 +217,8 @@ def mutate(gens, pred__clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SET
 
         predArgs, preyArgs = getCalcScoreArgs(preds, preys, best_pred, best_prey, settings)
 
-        predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
-        #predscores, preyscores = getResults(predArgs, preyArgs)
+        #predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
+        predscores, preyscores = getResults(predArgs, preyArgs)
 
         best_prey = preds[predscores.index(max(predscores))]
         best_pred = preys[preyscores.index(max(preyscores))]

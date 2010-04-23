@@ -8,17 +8,17 @@ PREY = "prey"
 #Naive implementation that currently just runs on python
 class Critter:
 
-    def __init__(self, type="No type defined", choices = 13):
-        self.pdfmatrix = {}
+    def __init__(self, pdfmatrix, type="No type defined", choices = 13):
         self.choices = 13
         self.status = {"hunger":0}
         self.type = ""
         self.type = type
         self.choices = choices
+	self.pdfmatrix = pdfmatrix
 
     #Returns the move to make.
     def getMove(self, senses):
-        pdf = self.getHistogram(senses)
+        pdf = self.getHistogram(numpy.array(senses))
         r = numpy.random.random_sample()
         sum = 0
         for i in range(len(pdf)):
@@ -27,20 +27,20 @@ class Critter:
                 return i
 
     def generatePDF(self):
-        pdf = [ numpy.random.random_integers(1, 10) for _ in range(self.choices) ]
-        total = sum(pdf)
-        return [float(i)/total for i in pdf]
+	pdf = numpy.random.random_sample(self.choices)
+	pdf /= pdf.sum()
+	return pdf
  
     def getHistogram(self, senses):
         s = [x for x in senses]
         for x in self.status.itervalues(): s.append(x)
         input = tuple(s)
-        if input not in self.pdfmatrix:
-            self.pdfmatrix[input] = self.generatePDF()
-        return self.pdfmatrix[input]
+        if input not in pdfmatrix:
+            pdfmatrix[input] = self.generatePDF()
+        return pdfmatrix[input]
 
     def getPDFMatrix(self):
-        return self.pdfmatrix
+        return pdfmatrix
 
     def clone(self, howmany):
         for _ in range(howmany):
@@ -55,14 +55,16 @@ class Critter:
     def mutate(self, percentpdf, inputranges, increment):
         if increment < 0:
             increment *= -1
-        pdfsize = int(percentpdf*reduce(lambda x,y:x*y, inputranges))
+
+        pdfsize = int(percentpdf*numpy.array(inputranges).prod())
         #The size of the pdf matrix is the product of the ranges
-        for _ in range(pdfsize):
+	increments = numpy.random.uniform(-increment, increment, pdfsize)
+        for i in range(pdfsize):
                 randominput = tuple(map(lambda x:numpy.random.random_integers(x), inputranges))
                 hist = self.getHistogram(randominput)
-                hist[numpy.random.randint(0,len(hist))] += numpy.random.uniform(-increment, increment)
+                hist[numpy.random.randint(0,len(hist))] += increments[i]
                 scalar = sum(hist)
-                self.pdfmatrix[randominput] = [f for f in map(lambda x: float(x)/scalar, hist)]
+                pdfmatrix[randominput] = [f for f in map(lambda x: float(x)/scalar, hist)]
 
     def getStatus(self, name):
         return self.status[name]
@@ -81,7 +83,7 @@ class Critter:
     # No pickling the files yet, nice to be able to read the data without the program
     def save(self, file):
         file.write(self.type + "\n") 
-        file.write(str(self.pdfmatrix) + "\n")
+        file.write(str(pdfmatrix) + "\n")
         file.write(str(self.choices))
         file.close()
 
@@ -90,8 +92,8 @@ class Critter:
         stringmatrix = file.readline()
         choices = file.readline()
         file.close()
-        self.pdfmatrix = type
-        self.pdfmatrix = eval(stringmatrix)
+        pdfmatrix = type
+        pdfmatrix = eval(stringmatrix)
         self.choices = eval(choices)
 
 if __name__ == "__main__":
