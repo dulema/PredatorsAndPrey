@@ -1,5 +1,4 @@
 import numpy.random
-import copy
 
 PREDATOR = "predator"
 PREY = "prey"
@@ -18,7 +17,7 @@ class Critter:
 
     #Returns the move to make.
     def getMove(self, senses):
-        pdf = self.getHistogram(numpy.array(senses))
+        pdf = self.getHistogram(senses)
         r = numpy.random.random_sample()
         sum = 0
         for i in range(len(pdf)):
@@ -32,39 +31,13 @@ class Critter:
 	return pdf
  
     def getHistogram(self, senses):
-        s = [x for x in senses]
-        for x in self.status.itervalues(): s.append(x)
-        input = tuple(s)
-        if input not in pdfmatrix:
-            pdfmatrix[input] = self.generatePDF()
-        return pdfmatrix[input]
+	input = senses + tuple(self.status.itervalues())
+        if input not in self.pdfmatrix:
+            self.pdfmatrix[input] = self.generatePDF()
+        return self.pdfmatrix[input]
 
     def getPDFMatrix(self):
-        return pdfmatrix
-
-    def clone(self, howmany):
-        for _ in range(howmany):
-                yield copy.deepcopy(self)
-    
-    def getMutations(self, howmany, percentpdf, inputranges, increment):
-        for c in self.clone(howmany):
-            c.mutate(percentpdf, inputranges, increment)
-            yield c
-
-
-    def mutate(self, percentpdf, inputranges, increment):
-        if increment < 0:
-            increment *= -1
-
-        pdfsize = int(percentpdf*numpy.array(inputranges).prod())
-        #The size of the pdf matrix is the product of the ranges
-	increments = numpy.random.uniform(-increment, increment, pdfsize)
-        for i in range(pdfsize):
-                randominput = tuple(map(lambda x:numpy.random.random_integers(x), inputranges))
-                hist = self.getHistogram(randominput)
-                hist[numpy.random.randint(0,len(hist))] += increments[i]
-                scalar = sum(hist)
-                pdfmatrix[randominput] = [f for f in map(lambda x: float(x)/scalar, hist)]
+        return self.pdfmatrix
 
     def getStatus(self, name):
         return self.status[name]
@@ -80,30 +53,14 @@ class Critter:
                 self.status[key] = 0
         self.status["hunger"] = 0
 
-    # No pickling the files yet, nice to be able to read the data without the program
-    def save(self, file):
-        file.write(self.type + "\n") 
-        file.write(str(pdfmatrix) + "\n")
-        file.write(str(self.choices))
-        file.close()
-
-    def load(self, file):
-        type = file.readline()
-        stringmatrix = file.readline()
-        choices = file.readline()
-        file.close()
-        pdfmatrix = type
-        pdfmatrix = eval(stringmatrix)
-        self.choices = eval(choices)
-
 if __name__ == "__main__":
-    s = Critter("Predator")
+    s = Critter({}, PREDATOR)
     input = (3, 4, 5)
     s.getMove(input)
-    s.save(open("critters/deniz.predator", "w"))
+#    s.save(open("critters/deniz.predator", "w"))
 
-    c = Critter()
-    c.load(open("critters/deniz.predator", "r"))
+    c = Critter({}, PREY)
+#    c.load(open("critters/deniz.predator", "r"))
 
     c.setStatus("hunger", c.getStatus("hunger")/2)
     c.getMove((3, 4, 5))
