@@ -297,28 +297,17 @@ if __name__ == "__main__":
         prey_num_label.grid(row=9, column=4, sticky=S,columnspan=2)
         prey_num_input.grid(row=10, column=4, sticky=N,columnspan=2)
 
-        #animatepredatorprey.py = 22characters
-        guiLocation = []
-        imagesLocation = []
-        guiLocation = (__file__)
-        imagesLocation = guiLocation[:-22]
-        #imagesLocation = guiLocation
-
         vegetation = []
         wolf = []
         sheep = []
-        difiorepath = []
-        #difiorepath = "D:\School/Manhattan\Senior 2009-2010\Sem 2\Cmpt 456-01\Project 2\src"
-        #imagesLocation = difiorepath
-        #imagesLocation = os.path.abspath(difiorepath)
-        #print(imagesLocation)
 
+        cwd = os.getcwd() + os.path.sep
         for i in range(11):
                 j = i*10 + 50
-                vegetation.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages\PeterM_Tree" + str(j) + ".png"))
-                wolf.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png"))
-                sheep.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png"))
-        
+                vegetation.append(ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","PeterM_Tree",str(j)+".png")))
+                wolf.append(      ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","Gerald_G_Wolf_Head_(Stylized)",str(j)+".png")))
+                sheep.append(     ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","creohn_Sheep_in_gray",str(j)+".png")))
+
 
         wolf_canvas = Canvas(root,width=30,height=30)
         wolf_canvas.create_image(15,15, image=wolf[5])
