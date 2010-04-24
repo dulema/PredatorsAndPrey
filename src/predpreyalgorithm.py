@@ -213,10 +213,8 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
     for i in range(gens):
         progress(i, gens)
 
-        predpdfs = mutate.createMutations(best_pred, pred_clones_per_gen, settings)
+        predpdfs,preypdfs = mutate.createMutations( ((best_pred, pred_clones_per_gen),  (best_prey, prey_clones_per_gen)) , settings)
         predpdfs.append(best_pred)
-
-        preypdfs = mutate.createMutations(best_pred, prey_clones_per_gen, settings)
         preypdfs.append(best_prey)
 
         predArgs, preyArgs = getCalcScoreArgs(predpdfs, preypdfs, best_pred, best_prey, settings)
@@ -234,5 +232,3 @@ if __name__ == "__main__":
     preys = input("How many preys clones per generation?")
     mutate(gens, preds, preys)
     __clearProgress()
-    print(best_pred.type)
-    print(best_prey.type)
