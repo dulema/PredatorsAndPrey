@@ -8,6 +8,7 @@ from PIL import ImageTk
 import re
 import tkMessageBox
 import os
+import sys
 
 try:
         import psyco
@@ -223,7 +224,7 @@ if __name__ == "__main__":
         pct_pdf_slider_label = Label(root, text="Percent of Genes Mutated")
         pct_pdf_slider.set("40")
         tree_life_slider = Scale(root, from_=1, to=25, orient=HORIZONTAL)
-        tree_life_label = Label(root, text="Tree Life (in bites by Prey)")
+        tree_life_label = Label(root, text="Tree Life (In Bites By Prey)")
         tree_life_slider.set("3")
         sight_range_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
         sight_range_label = Label(root, text="Critter Sight Range")
@@ -298,26 +299,36 @@ if __name__ == "__main__":
         prey_num_input.grid(row=10, column=4, sticky=N,columnspan=2)
 
         #animatepredatorprey.py = 22characters
-        guiLocation = []
-        imagesLocation = []
-        guiLocation = (__file__)
-        imagesLocation = guiLocation[:-22]
+        
+        #guiLocation = []
+        #imagesLocation = []
+        #guiLocation = (__file__)
+        #imagesLocation = guiLocation[:-22]
         #imagesLocation = guiLocation
 
         vegetation = []
         wolf = []
         sheep = []
-        difiorepath = []
-        #difiorepath = "D:\School/Manhattan\Senior 2009-2010\Sem 2\Cmpt 456-01\Project 2\src"
-        #imagesLocation = difiorepath
-        #imagesLocation = os.path.abspath(difiorepath)
-        #print(imagesLocation)
+
+        location = []
+        #This Gets Current Directory (Windows)
+        location = sys.path[0]
 
         for i in range(11):
                 j = i*10 + 50
-                vegetation.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/PeterM_Tree" + str(j) + ".png"))
-                wolf.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png"))
-                sheep.append(ImageTk.PhotoImage(file=imagesLocation + "PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png"))
+                
+                veglocation = location + "/PredPreyImages/PeterM_Tree" + str(j) + ".png"
+                wolflocation = location + "/PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png"
+                sheeplocation = location + "/PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png"
+
+                #Makes Path OS Blind
+                osblindveglocation = os.path.abspath(veglocation)
+                osblindwolflocation = os.path.abspath(wolflocation)
+                osblindsheeplocation = os.path.abspath(sheeplocation)
+                
+                vegetation.append(ImageTk.PhotoImage(file=osblindveglocation))
+                wolf.append(ImageTk.PhotoImage(file=osblindwolflocation))
+                sheep.append(ImageTk.PhotoImage(file=osblindsheeplocation))
         
 
         wolf_canvas = Canvas(root,width=30,height=30)
