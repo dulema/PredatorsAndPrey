@@ -8,6 +8,7 @@ from PIL import ImageTk
 import re
 import tkMessageBox
 import os
+import sys
 
 try:
         import psyco
@@ -223,7 +224,7 @@ if __name__ == "__main__":
         pct_pdf_slider_label = Label(root, text="Percent of Genes Mutated")
         pct_pdf_slider.set("40")
         tree_life_slider = Scale(root, from_=1, to=25, orient=HORIZONTAL)
-        tree_life_label = Label(root, text="Tree Life (in bites by Prey)")
+        tree_life_label = Label(root, text="Tree Life (In Bites By Prey)")
         tree_life_slider.set("3")
         sight_range_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
         sight_range_label = Label(root, text="Critter Sight Range")
@@ -297,9 +298,14 @@ if __name__ == "__main__":
         prey_num_label.grid(row=9, column=4, sticky=S,columnspan=2)
         prey_num_input.grid(row=10, column=4, sticky=N,columnspan=2)
 
+
         vegetation = []
         wolf = []
         sheep = []
+
+        location = []
+        #This Gets Current Directory (Windows)
+        location = sys.path[0]
 
         cwd = os.getcwd() + os.path.sep
         for i in range(11):
@@ -308,6 +314,18 @@ if __name__ == "__main__":
                 wolf.append(      ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","Gerald_G_Wolf_Head_(Stylized)"+str(j)+".png")))
                 sheep.append(     ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","creohn_Sheep_in_gray"+str(j)+".png")))
 
+                veglocation = location + "/PredPreyImages/PeterM_Tree" + str(j) + ".png"
+                wolflocation = location + "/PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png"
+                sheeplocation = location + "/PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png"
+
+                #Makes Path OS Blind
+                osblindveglocation = os.path.abspath(veglocation)
+                osblindwolflocation = os.path.abspath(wolflocation)
+                osblindsheeplocation = os.path.abspath(sheeplocation)
+
+                vegetation.append(ImageTk.PhotoImage(file=osblindveglocation))
+                wolf.append(ImageTk.PhotoImage(file=osblindwolflocation))
+                sheep.append(ImageTk.PhotoImage(file=osblindsheeplocation))
 
         wolf_canvas = Canvas(root,width=30,height=30)
         wolf_canvas.create_image(15,15, image=wolf[5])
