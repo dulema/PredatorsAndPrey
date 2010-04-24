@@ -13,34 +13,45 @@ DEFAULT_MUT_SETTINGS =  [20, 7, 20, 7, 20, 7, 20]
 
 #given a pdf this function will return a number of pdfs that are mutated
 def createMutations(args, settings):
-    newpdf = pdf
     increment = abs(settings["mutationincrement"] if "mutationincrement" in settings else 0.5)
     pdfpercent = settings["pdfpercent"] if "pdfpercent" in settings else 0.5
     inputranges = settings["inputranges"] if "inputranges" in settings else DEFAULT_MUT_SETTINGS
 
     mutationcount = int(pdfpercent*numpy.array(inputranges).prod())
 
-    mapargs = ()
+    mapargs = []
     for pdf,howmany in args:
-        mapargs += (pdf, mutationcount, inputranges) * howmany
+        for _ in range(howmany):
+            mapargs.append( (pdf, mutationcount, inputranges, increment) )
 
-    mutations = []
-    increments = numpy.random.uniform(-increment, increment, pdfsize * howmany)
+    #Single threaded
+    results = map(mutatepdf, mapargs)
+
+    #Multithreaded
+    results = Pool().map(mutatepdf, mapargs)
+
+    count = 0
+    for pdf,howmany in args:
+        yield results[count, count + howmany]
+        count += howmany
+
 
 def mutatepdf( x ):
-    pdf, pdfsize, inputranges  = x
+    pdf, pdfsize, inputranges, increment  = x
 
     newpdf = copy.deepcopy(pdf)
+    increments = numpy.random.uniform(-increment, increment, pdfsize)
+    mutations = []
     for i in range(pdfsize):
         randominput = tuple(map(lambda x:numpy.random.random_integers(x), inputranges))
-        if randominput not in pdf:
+        if randominput not in newpdf:
             hist = numpy.random.random_sample(len(inputranges))
             hist /= hist.sum()
-            pdf[randominput] = hist
+            newpdf[randominput] = hist
 
-        hist = pdf[randominput] #Get the histogram for a move
+        hist = newpdf[randominput] #Get the histogram for a move
         randommove = numpy.random.randint(0,len(hist)) #pick a random move to change
-        hist[randommove] += increments[ (j*pdfsize) + i] #Randomly modify the histogram
+        hist[randommove] += increments[i] #Randomly modify the histogram
         hist /= hist.sum() #Normalize the vector by dividing by the sum of the elements
     mutations.append(newpdf)
     return mutations
