@@ -4,6 +4,7 @@ from predpreymap import Map
 import copy
 from critter import Critter
 import critter
+import mutate
 
 try:
     import psyco
@@ -12,9 +13,9 @@ except ImportError:
     import sys
     sys.stderr.write("Install Python Psyco For Increased Performance.\nAlgo\n")
 
-best_pred = Critter(critter.PREDATOR)
-best_prey = Critter(critter.PREY)
-DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3, "maxhunger":20, "pdfpercent":0.1, "inputranges":(10,6,10,6,10,6), "mutationincrement":0.3}
+best_pred = {}
+best_prey = {}
+DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3, "maxhunger":20, "pdfpercent":0.1, "inputranges":(10,7,10,7,10,7,20), "mutationincrement":0.3}
 
 def reverse(direction):
     if direction == 0:
@@ -126,8 +127,11 @@ def calcscore(x):
     hooker = x[3] if len(x) > 3 else None
 
     world = Map(mapsize, vegpercent,plantbites)
-    for p in pred.clone(int((mapsize**2)*predpercent)): world.setCritterAt(world.getRandomUntakenTile(), p)
-    for p in prey.clone(int((mapsize**2)*preypercent)): world.setCritterAt(world.getRandomUntakenTile(), p)
+    for _ in range(int((mapsize**2)*predpercent)):
+        world.setCritterAt(world.getRandomUntakenTile(), Critter(pred, critter.PREDATOR) )
+
+    for _ in range(int((mapsize**2)*preypercent)):
+        world.setCritterAt(world.getRandomUntakenTile(), Critter(prey, critter.PREY) )
 
     score = 0
     while len(world.getPredators()) > 0 and len(world.getPreys()) > 0:
@@ -170,7 +174,7 @@ def __printProgress(num, total):
     sys.stdout.flush()
 
 def __clearProgress():
-    print ("                                                                         \n"),
+    print (" "*80) + "\n",
     import sys
     sys.stdout.flush()
 
@@ -182,8 +186,8 @@ def roundprogress(map, score):
 
 
 def getCalcScoreArgs(preds, preys, bpred, bprey, settings):
-    bpreyclones = [copy.deepcopy(bprey) for _ in preds]
-    bpredclones = [copy.deepcopy(bpred) for _ in preys]
+    bpreyclones = [bprey for _ in preds]
+    bpredclones = [bpred for _ in preys]
     settingsclones = [settings] * max(len(preds),len(preys))
     predArgs = zip(preds, bpreyclones, settingsclones[:len(preds)])
     preyArgs = zip(bpredclones, preys, settingsclones[:len(preys)])
@@ -202,32 +206,32 @@ def getMultiProcessedResults(predArgs, preyArgs):
     return predResults.get() if predResults else [0], preyResults.get() if preyResults else [0]
 
 
-def mutate(gens, pred__clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETTINGS, progress=__printProgress): 
+def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETTINGS, progress=__printProgress): 
     global best_pred, best_prey, calcscore
+    import mutate
 
     for i in range(gens):
         progress(i, gens)
 
-        preds = [pred for pred in best_pred.getMutations(pred__clones_per_gen, settings["pdfpercent"], settings["inputranges"], settings["mutationincrement"] )]
-        preds.append(best_pred)
+        predpdfs = mutate.createMutations(best_pred, pred_clones_per_gen, settings)
+        predpdfs.append(best_pred)
 
-        preys =  [prey for prey in best_prey.getMutations(prey_clones_per_gen, settings["pdfpercent"], settings["inputranges"], settings["mutationincrement"] )]
-        preys.append(best_prey)
+        preypdfs = mutate.createMutations(best_pred, prey_clones_per_gen, settings)
+        preypdfs.append(best_prey)
+
+        predArgs, preyArgs = getCalcScoreArgs(predpdfs, preypdfs, best_pred, best_prey, settings)
+
+        #predpdfscores, preypdfscores = getMultiProcessedResults(predArgs, preyArgs)
+        predpdfscores, preypdfscores = getResults(predArgs, preyArgs)
+
+        best_prey = predpdfs[predpdfscores.index(max(predpdfscores))]
+        best_pred = preypdfs[preypdfscores.index(max(preypdfscores))]
 
 
-        predArgs, preyArgs = getCalcScoreArgs(preds, preys, best_pred, best_prey, settings)
-
-        predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
-        #predscores, preyscores = getResults(predArgs, preyArgs)
-
-        best_prey = preds[predscores.index(max(predscores))]
-        best_pred = preys[preyscores.index(max(preyscores))]
-
-        
 if __name__ == "__main__":
-    gens = input("How many generations?")       
-    preds = input("How many predator clones per generation?")   
-    preys = input("How many preys clones per generation?")      
+    gens = input("How many generations?")
+    preds = input("How many predator clones per generation?")
+    preys = input("How many preys clones per generation?")
     mutate(gens, preds, preys)
     __clearProgress()
     print(best_pred.type)
