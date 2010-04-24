@@ -61,7 +61,7 @@ def directionConverter(sensorydata):
 
 def getAMove(critter, world, settings):
         if world.getCritterXY(critter) == None:
-                raise Exception("Critter isn't on the map!")    
+                raise Exception("Critter isn't on the map!")
         senses = world.getSensoryData(critter, settings["sight"])
         dirconv = directionConverter(senses)
         validmoves = list(set(dirconv))
@@ -213,7 +213,8 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
     for i in range(gens):
         progress(i, gens)
 
-        predpdfs,preypdfs = mutate.createMutations( ((best_pred, pred_clones_per_gen),  (best_prey, prey_clones_per_gen)) , settings)
+        predpdfs, preypdfs = mutate.createMutations( ((best_pred, pred_clones_per_gen),  (best_prey, prey_clones_per_gen)) , settings)
+
         predpdfs.append(best_pred)
         preypdfs.append(best_prey)
 

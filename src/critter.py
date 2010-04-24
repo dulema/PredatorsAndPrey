@@ -13,7 +13,7 @@ class Critter:
         self.type = ""
         self.type = type
         self.choices = choices
-	self.pdfmatrix = pdfmatrix
+        self.pdfmatrix = pdfmatrix
 
     #Returns the move to make.
     def getMove(self, senses):
@@ -26,12 +26,12 @@ class Critter:
                 return i
 
     def generatePDF(self):
-	pdf = numpy.random.random_sample(self.choices)
-	pdf /= pdf.sum()
-	return pdf
- 
+        pdf = numpy.random.random_sample(self.choices)
+        pdf /= pdf.sum()
+        return pdf
+
     def getHistogram(self, senses):
-	input = senses + tuple(self.status.itervalues())
+        input = senses + tuple(self.status.itervalues())
         if input not in self.pdfmatrix:
             self.pdfmatrix[input] = self.generatePDF()
         return self.pdfmatrix[input]

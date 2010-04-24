@@ -28,12 +28,14 @@ def createMutations(args, settings):
     results = map(mutatepdf, mapargs)
 
     #Multithreaded
-    results = Pool().map(mutatepdf, mapargs)
+    #results = Pool().map(mutatepdf, mapargs)
 
     count = 0
+    pdfs = []
     for pdf,howmany in args:
-        yield results[count, count + howmany]
+        pdfs.append(results[count:count + howmany])
         count += howmany
+    return pdfs
 
 
 def mutatepdf( x ):
