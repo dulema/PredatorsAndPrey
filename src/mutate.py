@@ -28,7 +28,7 @@ def createMutations(args, settings):
     results = map(mutatepdf, mapargs)
 
     #Multithreaded
-    #results = Pool().map(mutatepdf, mapargs)
+    #results = Pool().map(mutatepdf, mapargs, 20000)
 
     count = 0
     pdfs = []
@@ -39,12 +39,16 @@ def createMutations(args, settings):
 
 
 def mutatepdf( x ):
-    pdf, pdfsize, inputranges, increment  = x
+    pdf, pdfsize, ranges, increment  = x
 
-    newpdf = copy.deepcopy(pdf)
-    increments = numpy.random.uniform(-increment, increment, pdfsize)
-    for i in range(pdfsize):
-        randominput = tuple(map(lambda x:numpy.random.random_integers(x), inputranges))
+    inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
+
+    newpdf = copy.deepcopy(pdf) #Make a new copy of the array to mess with
+    increments = numpy.random.uniform(-increment, increment, pdfsize) #Generate all of the random increments to be added to the pdfs
+    inputs = (numpy.random.uniform(0, 1, (pdfsize, len(inputranges))) * inputranges).astype('int') #generate all of the random inputs in one fell swoop
+
+    for i, rand in enumerate(inputs):
+        randominput = tuple(rand)
         if randominput not in newpdf:
             hist = numpy.random.random_sample(len(inputranges))
             hist /= hist.sum()
@@ -63,7 +67,7 @@ if __name__ == "__main__":
     pdf1 = {}
     pdf2 = {}
 
-    result = createMutations( ((pdf1, 5), (pdf2, 3)), {"mutationincrement":0.3, "pdfpercent":0.5, "inputranges":[2, 3, 3] } )
+    result = createMutations( ((pdf1, 5), (pdf2, 3)), {"mutationincrement":0.3, "pdfpercent":0.5, "inputranges":[2, 3, 4] } )
     for n, r in enumerate(result):
         print(" == R %d of %d == "% (n, len(result)))
         for i, x in enumerate(r):

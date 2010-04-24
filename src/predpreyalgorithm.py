@@ -201,8 +201,8 @@ def getMultiProcessedResults(predArgs, preyArgs):
     import multiprocessing
     from multiprocessing import Pool
     pool = Pool()
-    predResults = pool.map_async(calcscore, predArgs) if len(predArgs) > 1 else None
-    preyResults = pool.map_async(calcscore, preyArgs) if len(preyArgs) > 1 else None
+    predResults = pool.map_async(calcscore, predArgs, 20000) if len(predArgs) > 1 else None
+    preyResults = pool.map_async(calcscore, preyArgs, 20000) if len(preyArgs) > 1 else None
     return predResults.get() if predResults else [0], preyResults.get() if preyResults else [0]
 
 
