@@ -304,9 +304,9 @@ if __name__ == "__main__":
         cwd = os.getcwd() + os.path.sep
         for i in range(11):
                 j = i*10 + 50
-                vegetation.append(ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","PeterM_Tree",str(j)+".png")))
-                wolf.append(      ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","Gerald_G_Wolf_Head_(Stylized)",str(j)+".png")))
-                sheep.append(     ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","creohn_Sheep_in_gray",str(j)+".png")))
+                vegetation.append(ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","PeterM_Tree"+str(j)+".png")))
+                wolf.append(      ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","Gerald_G_Wolf_Head_(Stylized)"+str(j)+".png")))
+                sheep.append(     ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","creohn_Sheep_in_gray"+str(j)+".png")))
 
 
         wolf_canvas = Canvas(root,width=30,height=30)
