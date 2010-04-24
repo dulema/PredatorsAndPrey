@@ -15,7 +15,7 @@ except ImportError:
 
 best_pred = {}
 best_prey = {}
-DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3, "maxhunger":20, "pdfpercent":0.1, "inputranges":(10,7,10,7,10,7,20), "mutationincrement":0.3}
+DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3, "maxhunger":20, "pdfpercent":0.01, "inputranges":(10,7,10,7,10,7,20), "mutationincrement":0.3}
 
 def reverse(direction):
     if direction == 0:

@@ -24,8 +24,7 @@ def createMutations(pdf, howmany, settings):
 
             hist = pdf[randominput] #Get the histogram for a move
             randommove = numpy.random.randint(0,len(hist)) #pick a random move to change
-            hist[randommove] += increments[j + i] #Randomly modify the histogram
+            hist[randommove] += increments[ (j*pdfsize) + i] #Randomly modify the histogram
             hist /= hist.sum() #Normalize the vector by dividing by the sum of the elements
-        j += pdfsize
         mutations.append(newpdf)
     return mutations
