@@ -128,10 +128,10 @@ def calcscore(x):
 
     world = Map(mapsize, vegpercent,plantbites)
     for _ in range(int((mapsize**2)*predpercent)):
-	world.setCritterAt(world.getRandomUntakenTile(), Critter(pred, critter.PREDATOR) )
+        world.setCritterAt(world.getRandomUntakenTile(), Critter(pred, critter.PREDATOR) )
 
     for _ in range(int((mapsize**2)*preypercent)):
-	world.setCritterAt(world.getRandomUntakenTile(), Critter(prey, critter.PREY) )
+        world.setCritterAt(world.getRandomUntakenTile(), Critter(prey, critter.PREY) )
 
     score = 0
     while len(world.getPredators()) > 0 and len(world.getPreys()) > 0:
@@ -174,7 +174,7 @@ def __printProgress(num, total):
     sys.stdout.flush()
 
 def __clearProgress():
-    print ("                                                                         \n"),
+    print (" "*80) + "\n",
     import sys
     sys.stdout.flush()
 
@@ -227,11 +227,11 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
         best_prey = predpdfs[predpdfscores.index(max(predpdfscores))]
         best_pred = preypdfs[preypdfscores.index(max(preypdfscores))]
 
-        
+
 if __name__ == "__main__":
-    gens = input("How many generations?")       
-    preds = input("How many predator clones per generation?")   
-    preys = input("How many preys clones per generation?")      
+    gens = input("How many generations?")
+    preds = input("How many predator clones per generation?")
+    preys = input("How many preys clones per generation?")
     mutate(gens, preds, preys)
     __clearProgress()
     print(best_pred.type)
