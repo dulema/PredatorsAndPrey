@@ -67,7 +67,7 @@ if __name__ == "__main__":
     pdf2 = {}
     settings = {"mutationincrement":0.3, "pdfpercent":0.01, "inputranges":[20, 7, 20, 7, 20, 7, 20], "choices":13 }
     for i in range(rounds):
-        print(" ==== ROUND %d ====")
+        print(" ==== ROUND %d ====" % i)
         results1, results2 = createMasks( ((pdf1, 5), (pdf2, 3)), settings)
         pdf1 = random.choice(results1)
         pdf2 = random.choice(results2)
