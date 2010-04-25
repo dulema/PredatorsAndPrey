@@ -65,7 +65,7 @@ def getAMove(critter, world, settings):
                 raise Exception("Critter isn't on the map!")
         senses = world.getSensoryData(critter, settings["sight"])
         dirconv = directionConverter(senses)
-        validmoves = list(set(dirconv))
+        validmoves = list(set(dirconv)) #removes all duplicates in the list
         while len(validmoves) > 0:
                 destinationTile = None
                 directionMove = -1
