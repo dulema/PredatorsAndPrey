@@ -48,7 +48,16 @@ def getCalcScoreArgs(preds, preys, bpred, bprey, settings):
     return predArgs, preyArgs
 
 def getResults(predArgs, preyArgs):
-    return map(scorealgorithm.calcscore, predArgs) if len(predArgs) > 1 else [0], map(scorealgorithm.calcscore, preyArgs) if len(preyArgs) > 1 else [0]
+    predResults = [0]
+    preyResults = [0]
+
+    if len(predArgs) > 1:
+        predResults = [ scorealgorithm.calcscore(arg) for arg in predArgs ]
+
+    if len(preyArgs) > 1:
+        preyResults = [ scorealgorithm.calcscore(arg) for arg in preyArgs ]
+
+    return predResults, preyResults
 
 def getMultiProcessedResults(predArgs, preyArgs):
     #Now comes the multiprocessing magic...
