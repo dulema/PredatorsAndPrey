@@ -67,19 +67,36 @@ def animate():
 
 
 def critter_view():
-	bar = [20, 55, 12, 22, 60, 29]
+	bar = [20, 55, 12, 22, 60, 29, 70]
+	labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
+	labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
 	critter_view_window = Tk()
 	critter_view_window.wm_title("Critter View")
-	graph = Canvas(critter_view_window)
-	graph.grid(row=0, column=0)
+	graph = Canvas(critter_view_window, width = 550, height = 250)
+	graph.grid(row=0, column=0, columnspan=15, padx=10)
 	y_base = 200
-	j = 0
+	j = 10
 	for i in range(len(bar)):
-		graph.create_polygon(10+j*20, y_base, 10+j*20, y_base - bar[i], 10+(j+1)*20, y_base - bar[i], 10+(j+1)*20, y_base, fill="red")
-		graph.create_text((j+1)*20, y_base - bar[i] - 10, text=str(bar[i]))
-		j = j + 2
+		graph.create_polygon(j, y_base,j, y_base - bar[i], j+30, y_base - bar[i],j+30, y_base, fill="red")
+		graph.create_text(j+15, y_base - bar[i] - 10, text=str(bar[i]))
+		graph.create_text(j+15,y_base + 10,text=labels_top[i])
+		graph.create_text(j+15,y_base + 20,text=labels_bottom[i])
+		j = j + 80
 	
-	
+	pred_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	pred_dist.grid(row=1, column=0, sticky = N) 
+	pred_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	pred_dir.grid(row=1, column=2, sticky = N) 
+	prey_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	prey_dist.grid(row=1, column=4, sticky = N)
+	prey_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	prey_dir.grid(row=1, column=6, sticky = N) 
+	plant_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	plant_dist.grid(row=1, column=8, sticky = N) 
+	plant_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	plant_dir.grid(row=1, column=10, sticky = N) 
+	hunger = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	hunger.grid(row=1, column=12, sticky = N) 
 	critter_view_window.mainloop()
 	
 
