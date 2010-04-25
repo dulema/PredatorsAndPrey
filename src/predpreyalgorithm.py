@@ -75,9 +75,7 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
     try:
         import psyco
         psyco.log()
-        psyco.full()
-        psyco.profile(0.05, memory=100)
-        psyco.profile(0.2)
+        psyco.profile()
     except ImportError:
         pass
 

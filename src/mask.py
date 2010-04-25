@@ -7,7 +7,7 @@ from multiprocessing import Pool
 DEFAULT_MUT_SETTINGS =  [20, 7, 20, 7, 20, 7, 20]
 
 #given a pdf this function will return a number of pdfs that are mutated
-def createMasks(args, settings):
+def createMasks(args, settings:
     increment = abs(settings["mutationincrement"] if "mutationincrement" in settings else 0.5)
     pdfpercent = settings["pdfpercent"] if "pdfpercent" in settings else 0.5
     inputranges = settings["inputranges"] if "inputranges" in settings else DEFAULT_MUT_SETTINGS

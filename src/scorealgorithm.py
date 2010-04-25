@@ -67,10 +67,11 @@ def getAMove(critter, world, settings):
         validmoves = list(set(dirconv)) #removes all duplicates in the list
         moves = [ (world.getCritterDest(critter, dirconv[move]), dirconv[move]) for move in critter.getMoves(senses) ]
         #Only keeping the good moves, avoiding filter() to keep psyco happy...
+        validmoves = []
         for x in moves:
-            if x[0] == None or x[1] == None or x[1] == -1:
-                moves.remove(x)
-        return moves
+            if x[0] != None and x[1] != None and x[1] != -1:
+                validmoves.append(x)
+        return validmoves
 
 def preyMakeMove(prey, settings, world):
         for destinationTile, directionMove in getAMove(prey, world, settings):
