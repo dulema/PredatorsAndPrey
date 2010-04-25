@@ -31,7 +31,7 @@ class Critter:
                 sum += probability
                 if r < sum:
                     moves.append(i)
-                    numpy.delete(pdf, i) #remove this option from the pdf
+                    pdf = numpy.delete(pdf, i) #remove this option from the pdf
                     pdf /= pdf.sum() #Renormalize the pdf
                     break
         return moves

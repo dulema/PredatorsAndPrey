@@ -57,7 +57,7 @@ def directionConverter(sensorydata):
 # In the order that they should be attempted
 # This really serves its self to be a co-routine but sadly
 # psyco can't compile those and so we're stuck trying to
-# get this to work otherwise. 
+# get this to work otherwise.
 #
 def getAMove(critter, world, settings):
         if world.getCritterXY(critter) == None:
@@ -65,20 +65,9 @@ def getAMove(critter, world, settings):
         senses = world.getSensoryData(critter, settings["sight"])
         dirconv = directionConverter(senses)
         validmoves = list(set(dirconv)) #removes all duplicates in the list
-        return [ (world.getCritterDest(dirconv[move]), dirconv[move]) for move in critter.getMoves(senses) ]
-
-#        while len(validmoves) > 0:
-#                destinationTile = None
-#                directionMove = -1
-#                while destinationTile == None or directionMove == -1 or directionMove == None or directionMove not in validmoves:
-#                        move = critter.getMoves(senses)
-#                        directionMove = dirconv[move]
-#                        destinationTile = world.getCritterDest(critter, directionMove)
-#                if directionMove in validmoves:
-#                        validmoves.remove(directionMove)
-#                else:
-#                        raise Exception("%d not in %s"%(directionMove, validmoves))
-#                yield destinationTile, directionMove
+        moves = [ (world.getCritterDest(critter, dirconv[move]), dirconv[move]) for move in critter.getMoves(senses) ]
+        moves = filter(lambda x: x[0] != None and x[1] != None and x[1] != -1, moves) #Only keep the good moves
+        return moves
 
 def preyMakeMove(prey, settings, world):
         for destinationTile, directionMove in getAMove(prey, world, settings):
