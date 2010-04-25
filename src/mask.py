@@ -1,5 +1,4 @@
 import numpy.random
-import copy
 
 DEFAULT_MUT_SETTINGS =  [20, 7, 20, 7, 20, 7, 20]
 
@@ -38,7 +37,6 @@ def createmask( x ):
     pdf, pdfsize, ranges, increment, choices  = x
     inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
     rangecount = len(inputranges)
-    newpdf = copy.deepcopy(pdf) #Make a new copy of the array to mess with
 
     start_random = time.time()
 
@@ -69,6 +67,7 @@ if __name__ == "__main__":
     pdf2 = {}
     settings = {"mutationincrement":0.3, "pdfpercent":0.01, "inputranges":[20, 7, 20, 7, 20, 7, 20], "choices":13 }
     for i in range(rounds):
+        print(" ==== ROUND %d ====")
         results1, results2 = createMasks( ((pdf1, 5), (pdf2, 3)), settings)
         pdf1 = random.choice(results1)
         pdf2 = random.choice(results2)
