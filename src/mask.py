@@ -33,7 +33,7 @@ def createmask( x ):
 
     start_random = time.time()
 
-    random_inputs = numpy.random.rand(pdfsize, rangecount) * inputranges
+    random_inputs  = numpy.column_stack( [numpy.random.randint(low=0, high=ceil, size=(pdfsize, 1)) for ceil in ranges] )
     histograms = [x/x.sum() for x in numpy.random.rand(pdfsize, choices)]
 
     mask = {}
