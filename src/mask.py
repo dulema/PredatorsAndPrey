@@ -39,16 +39,15 @@ def createmask( x ):
     inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
     rangecount = len(inputranges)
     newpdf = copy.deepcopy(pdf) #Make a new copy of the array to mess with
-    chunks = 100
 
     start_random = time.time()
-    mask = {}
-    for p in range(pdfsize//chunks):
-        random_input = numpy.random.rand(chunks, rangecount ) * inputranges
-        histograms = numpy.random.rand(chunks, choices)
 
-        for input, histogram in zip(random_input, histograms):
-            mask[tuple(input)] = histogram / histogram.sum()
+    random_inputs = numpy.random.rand(pdfsize, rangecount) * inputranges
+    histograms = [x/x.sum() for x in numpy.random.rand(pdfsize, choices)]
+
+    mask = {}
+    for ri,histogram in zip(random_inputs, histograms):
+        mask[tuple(ri)] = histogram
 
     random_time = time.time() - start_random
     total_time = time.time() - start_create
@@ -74,8 +73,6 @@ if __name__ == "__main__":
         results2 = results[5:]
         pdf1 = results[numpy.random.randint(5)]
         pdf2 = results[numpy.random.randint(3)]
-
-
 
 #    for n, r in enumerate(result):
 #        print(" == R %d of %d == "% (n, len(result)))
