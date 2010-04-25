@@ -1,13 +1,17 @@
 import numpy.random
+import numpy
 import copy
 import multiprocessing
 from multiprocessing import Pool
+from scipy import weave
 
+'''
 try:
     import psyco
     psyco.full()
 except ImportError:
     pass
+'''
 
 DEFAULT_MUT_SETTINGS =  [20, 7, 20, 7, 20, 7, 20]
 
@@ -45,15 +49,14 @@ def createmask( x ):
     inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
 
     newpdf = copy.deepcopy(pdf) #Make a new copy of the array to mess with
-    increments = numpy.random.uniform(-increment, increment, pdfsize) #Generate all of the random increments to be added to the pdfs
-    inputs = (numpy.random.uniform(0, 1, (pdfsize, len(inputranges))) * inputranges).astype('int') #generate all of the random inputs in one fell swoop
 
-    pdfs = numpy.random.uniform(0, 1, (pdfsize, choices) )
-    for p in pdfs: p /= p.sum()
+    #Lets use blitz to make this super fast
+    increments = numpy.random.uniform(-increment, increment, pdfsize)
+    inputs = (numpy.random.uniform(0, 1, (pdfsize, len(inputranges))) * inputranges).astype('int')
+    pdfs = numpy.apply_along_axis(lambda x: x/x.sum(), 1, numpy.random.uniform(0, 1, (pdfsize, choices)))
 
     mask = {}
-    for i,input in enumerate(inputs): 
-        mask[tuple(input)] = pdfs[i]
+    for i,input in enumerate(inputs): mask[tuple(input)] = pdfs[i]
     return mask
 
 
