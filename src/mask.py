@@ -21,7 +21,7 @@ def createMasks(args, settings):
             mapargs.append( (pdf, mutationcount, inputranges, increment, choices) )
 
     #Single threaded
-    results = map(createmask, mapargs)
+    results = [createmask(rgs) for rgs in mapargs]
 
     #Multithreaded
     #results = Pool().map(createmask, mapargs, 20000)
@@ -29,7 +29,7 @@ def createMasks(args, settings):
     count = 0
     pdfs = []
     for pdf,howmany in args:
-        pdfs.append(results[count:count + howmany])
+        pdfs.append(results[count : count+howmany])
         count += howmany
     return pdfs
 
