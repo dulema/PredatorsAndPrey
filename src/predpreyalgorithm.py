@@ -15,6 +15,7 @@ except ImportError:
 
 best_pred = {}
 best_prey = {}
+
 DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3, "maxhunger":20, "pdfpercent":0.01, "inputranges":(10,7,10,7,10,7,20), "mutationincrement":0.3}
 
 def reverse(direction):
@@ -112,8 +113,8 @@ def predMakeMove(pred, settings, world):
                      raise Exception("There is a predator case that is not accounted for: " + critterOnTile)
 
 def calcscore(x):
-    pred, pred_mask = x[0]
-    prey, prey_mask = x[1]
+    predpdf, pred_mask = x[0]
+    preypdf, prey_mask = x[1]
 
     settings = x[2] if len(x) > 2 else DEFAULT_SETTINGS
     mapsize = settings["mapsize"] if "mapsize" in settings else 20
@@ -128,10 +129,10 @@ def calcscore(x):
 
     world = Map(mapsize, vegpercent,plantbites)
     for _ in range(int((mapsize**2)*predpercent)):
-        world.setCritterAt(world.getRandomUntakenTile(), Critter(pred, pred_mask, critter.PREDATOR) )
+        world.setCritterAt(world.getRandomUntakenTile(), Critter(predpdf, pred_mask, critter.PREDATOR))
 
     for _ in range(int((mapsize**2)*preypercent)):
-        world.setCritterAt(world.getRandomUntakenTile(), Critter(prey, prey_mask, critter.PREY) )
+        world.setCritterAt(world.getRandomUntakenTile(), Critter(preypdf, prey_mask, critter.PREY))
 
     score = 0
     while len(world.getPredators()) > 0 and len(world.getPreys()) > 0:
@@ -216,7 +217,7 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
         progress(i, gens) #Update the progress
 
         #creats the masks. Masks hold the difference between the original critter and the new mutated one.
-        predmasks, preymasks = mutate.createMasks( ((best_pred, pred_clones_per_gen),  (best_prey, prey_clones_per_gen)) , settings)
+        predmasks, preymasks = mutate.createMasks(((best_pred, pred_clones_per_gen), (best_prey, prey_clones_per_gen)), settings)
 
         predmasks.append({}) #This is how we add the best_pred to the mix. The best_pred has an empty mask
         preymasks.append({}) #This is how we add the best_prey to the mix. The best_prey has an empty mask
