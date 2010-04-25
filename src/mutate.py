@@ -3,15 +3,12 @@ import numpy
 import copy
 import multiprocessing
 from multiprocessing import Pool
-from scipy import weave
 
-'''
 try:
     import psyco
     psyco.full()
 except ImportError:
     pass
-'''
 
 DEFAULT_MUT_SETTINGS =  [20, 7, 20, 7, 20, 7, 20]
 
