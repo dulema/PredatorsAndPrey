@@ -11,3 +11,43 @@ sys 0m7.304s
 real    12m50.851s
 user    12m41.560s
 sys 0m4.048s
+
+
+=== Using more precise measurements == 
+Total time: 742
+	Generation 0 took 1% of the total time
+		Masking took 88% of the total generation time
+		Scoring took 11% of the total generation time
+	Generation 1 took 2% of the total time
+		Masking took 90% of the total generation time
+		Scoring took 8% of the total generation time
+	Generation 2 took 4% of the total time
+		Masking took 93% of the total generation time
+		Scoring took 6% of the total generation time
+	Generation 3 took 5% of the total time
+		Masking took 95% of the total generation time
+		Scoring took 4% of the total generation time
+	Generation 4 took 7% of the total time
+		Masking took 96% of the total generation time
+		Scoring took 3% of the total generation time
+	Generation 5 took 10% of the total time
+		Masking took 97% of the total generation time
+		Scoring took 2% of the total generation time
+	Generation 6 took 13% of the total time
+		Masking took 97% of the total generation time
+		Scoring took 2% of the total generation time
+	Generation 7 took 15% of the total time
+		Masking took 98% of the total generation time
+		Scoring took 1% of the total generation time
+	Generation 8 took 18% of the total time
+		Masking took 98% of the total generation time
+		Scoring took 1% of the total generation time
+	Generation 9 took 20% of the total time
+		Masking took 98% of the total generation time
+		Scoring took 1% of the total generation time
+In total: 
+	Masking took 97% of the time
+	Scoring took 2% of the time
+
+== now with psyco ==
+
