@@ -3,7 +3,7 @@ import numpy.random
 DEFAULT_MUT_SETTINGS =  [20, 7, 20, 7, 20, 7, 20]
 
 #given a pdf this function will return a number of pdfs that are mutated
-def createMasks(args, settings):
+def createMasks(howmany, settings):
 
     increment = abs(settings["mutationincrement"] if "mutationincrement" in settings else 0.5)
     pdfpercent = settings["pdfpercent"] if "pdfpercent" in settings else 0.5
@@ -12,9 +12,8 @@ def createMasks(args, settings):
     mutationcount = int(pdfpercent*numpy.array(inputranges).prod())
 
     mapargs = []
-    for pdf,howmany in args:
-        for _ in range(howmany):
-            mapargs.append( (pdf, mutationcount, inputranges, increment, choices) )
+    for _ in range(howmany):
+        mapargs.append( (mutationcount, inputranges, increment, choices) )
 
     #Single threaded
     results = [createmask(rgs) for rgs in mapargs]
@@ -22,19 +21,13 @@ def createMasks(args, settings):
     #Multithreaded
     #results = Pool().map(createmask, mapargs, 20000)
 
-    count = 0
-    pdfs = []
-    for pdf,howmany in args:
-        pdfs.append(results[count : count+howmany])
-        count += howmany
-
-    return pdfs
+    return results
 
 
 def createmask( x ):
     import time
     start_create = time.time()
-    pdf, pdfsize, ranges, increment, choices  = x
+    pdfsize, ranges, increment, choices  = x
     inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
     rangecount = len(inputranges)
 
@@ -55,7 +48,6 @@ def createmask( x ):
 
 if __name__ == "__main__":
 
-    import random
     try:
         import psyco
         psyco.full()
@@ -63,14 +55,10 @@ if __name__ == "__main__":
         pass
 
     rounds = 10
-    pdf1 = {}
-    pdf2 = {}
     settings = {"mutationincrement":0.3, "pdfpercent":0.01, "inputranges":[20, 7, 20, 7, 20, 7, 20], "choices":13 }
     for i in range(rounds):
         print(" ==== ROUND %d ====" % i)
-        results1, results2 = createMasks( ((pdf1, 5), (pdf2, 3)), settings)
-        pdf1 = random.choice(results1)
-        pdf2 = random.choice(results2)
+        createMasks(1, settings)
 
 #    for n, r in enumerate(result):
 #        print(" == R %d of %d == "% (n, len(result)))
