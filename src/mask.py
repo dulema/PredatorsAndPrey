@@ -5,11 +5,11 @@ DEFAULT_MUT_SETTINGS =  [20, 7, 20, 7, 20, 7, 20]
 
 #given a pdf this function will return a number of pdfs that are mutated
 def createMasks(args, settings):
+
     increment = abs(settings["mutationincrement"] if "mutationincrement" in settings else 0.5)
     pdfpercent = settings["pdfpercent"] if "pdfpercent" in settings else 0.5
     inputranges = settings["inputranges"] if "inputranges" in settings else DEFAULT_MUT_SETTINGS
     choices = settings["choices"] if "choices" in settings else 13
-
     mutationcount = int(pdfpercent*numpy.array(inputranges).prod())
 
     mapargs = []
@@ -28,29 +28,35 @@ def createMasks(args, settings):
     for pdf,howmany in args:
         pdfs.append(results[count : count+howmany])
         count += howmany
+
     return pdfs
 
 
 def createmask( x ):
+    import time
+    start_create = time.time()
     pdf, pdfsize, ranges, increment, choices  = x
     inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
     rangecount = len(inputranges)
     newpdf = copy.deepcopy(pdf) #Make a new copy of the array to mess with
+    chunks = 100
 
+    start_random = time.time()
     mask = {}
-    for _ in range(pdfsize):
-        random_input = numpy.random.rand(rangecount)
-        random_input = (random_input * inputranges).astype(int)
+    for p in range(pdfsize//chunks):
+        random_input = numpy.random.rand(chunks, rangecount ) * inputranges
+        histograms = numpy.random.rand(chunks, choices)
 
-        histogram = numpy.random.rand(choices)
-        mask[tuple(random_input)] = histogram / histogram.sum()
+        for input, histogram in zip(random_input, histograms):
+            mask[tuple(input)] = histogram / histogram.sum()
 
+    random_time = time.time() - start_random
+    total_time = time.time() - start_create
+    print("For %d pdfs the total time is: %d seconds, %d (%d%%) of which where spent in random" % (pdfsize, total_time, random_time, int((random_time/float(total_time))*100) ))
     return mask
 
 
 if __name__ == "__main__":
-    pdf1 = {}
-    pdf2 = {}
 
     try:
         import psyco
@@ -58,10 +64,22 @@ if __name__ == "__main__":
     except ImportError:
         pass
 
-    result = createMasks( ((pdf1, 5), (pdf2, 3)), {"mutationincrement":0.3, "pdfpercent":0.5, "inputranges":[2, 3, 4] } )
-    for n, r in enumerate(result):
-        print(" == R %d of %d == "% (n, len(result)))
-        for i, x in enumerate(r):
-            print("\t == mutation %d ==" % (i))
-            for k,v in x.iteritems():
-                print("\t\t%s : %s" % (k, v) )
+    rounds = 10
+    pdf1 = {}
+    pdf2 = {}
+    settings = {"mutationincrement":0.3, "pdfpercent":0.01, "inputranges":[20, 7, 20, 7, 20, 7, 20], "choices":13 }
+    for i in range(rounds):
+        results = createMasks( ((pdf1, 5), (pdf2, 3)), settings)
+        results1 = results[:5]
+        results2 = results[5:]
+        pdf1 = results[numpy.random.randint(5)]
+        pdf2 = results[numpy.random.randint(3)]
+
+
+
+#    for n, r in enumerate(result):
+#        print(" == R %d of %d == "% (n, len(result)))
+#        for i, x in enumerate(r):
+#            print("\t == mutation %d ==" % (i))
+#            for k,v in x.iteritems():
+#                print("\t\t%s : %s" % (k, v) )
