@@ -44,13 +44,6 @@ def createmask( x ):
         s = sum(histogram)
         mask[tuple(random_input)] = [prob/s for prob in histogram]
 
-#   increments = numpy.random.uniform(-increment, increment, pdfsize)
-#   inputs = (numpy.random.uniform(0, 1, (pdfsize, len(inputranges))) * inputranges).astype('int')
-#   pdfs = numpy.apply_along_axis(lambda x: x/x.sum(), 1, numpy.random.uniform(0, 1, (pdfsize, choices)))
-#   print("end random")
-
-#    mask = {}
-#    for i,input in enumerate(inputs): mask[tuple(input)] = pdfs[i]
     return mask
 
 
