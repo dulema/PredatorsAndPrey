@@ -57,6 +57,7 @@ def createmask( x ):
 
 if __name__ == "__main__":
 
+    import random
     try:
         import psyco
         psyco.full()
@@ -71,8 +72,8 @@ if __name__ == "__main__":
         results = createMasks( ((pdf1, 5), (pdf2, 3)), settings)
         results1 = results[:5]
         results2 = results[5:]
-        pdf1 = results[numpy.random.randint(5)]
-        pdf2 = results[numpy.random.randint(3)]
+        pdf1 = random.choice(results1)
+        pdf2 = random.choice(results2)
 
 #    for n, r in enumerate(result):
 #        print(" == R %d of %d == "% (n, len(result)))
