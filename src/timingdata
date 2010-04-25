@@ -1,0 +1,10 @@
+
+
+== Just using python's random ===
+time python predpreyalgorithm.py
+How many generations?10
+How many predator clones per generation?4
+How many preys clones per generation?4
+real    13m52.276s
+user    13m40.075s
+sys 0m7.304s
