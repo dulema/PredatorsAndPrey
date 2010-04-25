@@ -112,8 +112,8 @@ def predMakeMove(pred, settings, world):
                      raise Exception("There is a predator case that is not accounted for: " + critterOnTile)
 
 def calcscore(x):
-    pred = x[0]
-    prey = x[1]
+    pred, pred_mask = x[0]
+    prey, prey_mask = x[1]
 
     settings = x[2] if len(x) > 2 else DEFAULT_SETTINGS
     mapsize = settings["mapsize"] if "mapsize" in settings else 20
@@ -128,10 +128,10 @@ def calcscore(x):
 
     world = Map(mapsize, vegpercent,plantbites)
     for _ in range(int((mapsize**2)*predpercent)):
-        world.setCritterAt(world.getRandomUntakenTile(), Critter(pred, critter.PREDATOR) )
+        world.setCritterAt(world.getRandomUntakenTile(), Critter(pred, pred_mask, critter.PREDATOR) )
 
     for _ in range(int((mapsize**2)*preypercent)):
-        world.setCritterAt(world.getRandomUntakenTile(), Critter(prey, critter.PREY) )
+        world.setCritterAt(world.getRandomUntakenTile(), Critter(prey, prey_mask, critter.PREY) )
 
     score = 0
     while len(world.getPredators()) > 0 and len(world.getPreys()) > 0:
@@ -186,10 +186,12 @@ def roundprogress(map, score):
 
 
 def getCalcScoreArgs(preds, preys, bpred, bprey, settings):
-    bpreyclones = [bprey for _ in preds]
-    bpredclones = [bpred for _ in preys]
+    bpreyclones = [ (bprey, {}) for _ in preds]
+    bpredclones = [ (bpred, {}) for _ in preys]
     settingsclones = [settings] * max(len(preds),len(preys))
-    predArgs = zip(preds, bpreyclones, settingsclones[:len(preds)])
+    preds = zip( [bpred]*len(preds), preds)
+    preys = zip( [bprey]*len(preys), preys)
+    predArgs = zip( preds, bpreyclones, settingsclones[:len(preds)])
     preyArgs = zip(bpredclones, preys, settingsclones[:len(preys)])
     return predArgs, preyArgs
 
@@ -211,20 +213,26 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
     import mutate
 
     for i in range(gens):
-        progress(i, gens)
+        progress(i, gens) #Update the progress
 
-        predpdfs, preypdfs = mutate.createMutations( ((best_pred, pred_clones_per_gen),  (best_prey, prey_clones_per_gen)) , settings)
+        #creats the masks. Masks hold the difference between the original critter and the new mutated one.
+        predmasks, preymasks = mutate.createMasks( ((best_pred, pred_clones_per_gen),  (best_prey, prey_clones_per_gen)) , settings)
 
-        predpdfs.append(best_pred)
-        preypdfs.append(best_prey)
+        predmasks.append({}) #This is how we add the best_pred to the mix. The best_pred has an empty mask
+        preymasks.append({}) #This is how we add the best_prey to the mix. The best_prey has an empty mask
 
-        predArgs, preyArgs = getCalcScoreArgs(predpdfs, preypdfs, best_pred, best_prey, settings)
+        predArgs, preyArgs = getCalcScoreArgs(predmasks, preymasks, best_pred, best_prey, settings)
 
         #predpdfscores, preypdfscores = getMultiProcessedResults(predArgs, preyArgs)
-        predpdfscores, preypdfscores = getResults(predArgs, preyArgs)
+        predscores, preyscores = getResults(predArgs, preyArgs)
 
-        best_prey = predpdfs[predpdfscores.index(max(predpdfscores))]
-        best_pred = preypdfs[preypdfscores.index(max(preypdfscores))]
+        #Pickout the best mask
+        best_pred_mask = predmasks[predscores.index(max(predscores))]
+        best_prey_mask = preymasks[preyscores.index(max(preyscores))]
+
+        #Merge the mask into the best pdf
+        for k,v in best_pred_mask.iteritems(): best_pred[k] = v
+        for k,v in best_prey_mask.iteritems(): best_prey[k] = v
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-import numpy.random
+import numpy
 
 PREDATOR = "predator"
 PREY = "prey"
@@ -7,21 +7,22 @@ PREY = "prey"
 #Naive implementation that currently just runs on python
 class Critter:
 
-    def __init__(self, pdfmatrix, type="No type defined", choices = 13):
+    def __init__(self, pdfmatrix, mask, type="No type defined", choices = 13):
         self.choices = 13
         self.status = {"hunger":0}
         self.type = ""
         self.type = type
         self.choices = choices
         self.pdfmatrix = pdfmatrix
+        self.mask = mask
 
     #Returns the move to make.
     def getMove(self, senses):
         pdf = self.getHistogram(senses)
-        r = numpy.random.random_sample()
+        r = numpy.random.uniform()
         sum = 0
-        for i in range(len(pdf)):
-            sum = sum + pdf[i]
+        for i,probability in enumerate(pdf):
+            sum += probability
             if r < sum:
                 return i
 
@@ -32,12 +33,15 @@ class Critter:
 
     def getHistogram(self, senses):
         input = senses + tuple(self.status.itervalues())
-        if input not in self.pdfmatrix:
-            self.pdfmatrix[input] = self.generatePDF()
-        return self.pdfmatrix[input]
-
-    def getPDFMatrix(self):
-        return self.pdfmatrix
+        if input not in self.mask:
+            if input not in self.pdfmatrix:
+                pdf = self.generatePDF()
+                self.pdfmatrix[input] = pdf
+                return pdf
+            else:
+                return self.pdfmatrix[input]
+        else:
+            return self.mask[input]
 
     def getStatus(self, name):
         return self.status[name]
@@ -54,19 +58,18 @@ class Critter:
         self.status["hunger"] = 0
 
 if __name__ == "__main__":
-    s = Critter({}, PREDATOR)
+    s = Critter({},{}, PREDATOR)
     input = (3, 4, 5)
     s.getMove(input)
 #    s.save(open("critters/deniz.predator", "w"))
 
-    c = Critter({}, PREY)
+    c = Critter({}, {}, PREY)
 #    c.load(open("critters/deniz.predator", "r"))
 
     c.setStatus("hunger", c.getStatus("hunger")/2)
     c.getMove((3, 4, 5))
     print("Histogram: %s" % c.getHistogram((3,4,5)))
 
-    print(c.getPDFMatrix())
     #for m in c.getMutations(2, 0.5, (6, 6, 6), 0.3): print(m.pdfmatrix)
     results = [ 0 for _ in range(c.choices)]
     for _ in range(10000):
