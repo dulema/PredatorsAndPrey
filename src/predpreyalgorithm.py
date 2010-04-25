@@ -2,7 +2,7 @@
 from predpreymap import Map
 import critter
 from critter import Critter
-import mutate
+import mask
 import scorealgorithm
 
 best_pred = {}
@@ -48,7 +48,7 @@ def getCalcScoreArgs(preds, preys, bpred, bprey, settings):
     return predArgs, preyArgs
 
 def getResults(predArgs, preyArgs):
-    return map(scorealorithm.calcscore, predArgs) if len(predArgs) > 1 else [0], map(scorealgorithm.calcscore, preyArgs) if len(preyArgs) > 1 else [0]
+    return map(scorealgorithm.calcscore, predArgs) if len(predArgs) > 1 else [0], map(scorealgorithm.calcscore, preyArgs) if len(preyArgs) > 1 else [0]
 
 def getMultiProcessedResults(predArgs, preyArgs):
     #Now comes the multiprocessing magic...
@@ -62,7 +62,6 @@ def getMultiProcessedResults(predArgs, preyArgs):
 
 def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETTINGS, progress=__printProgress): 
     global best_pred, best_prey
-    import mutate
 
     try:
         import psyco
@@ -77,7 +76,7 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
         progress(i, gens) #Update the progress
 
         #creats the masks. Masks hold the difference between the original critter and the new mutated one.
-        predmasks, preymasks = mutate.createMasks(((best_pred, pred_clones_per_gen), (best_prey, prey_clones_per_gen)), settings)
+        predmasks, preymasks = mask.createMasks(((best_pred, pred_clones_per_gen), (best_prey, prey_clones_per_gen)), settings)
 
         predmasks.append({}) #This is how we add the best_pred to the mix. The best_pred has an empty mask
         preymasks.append({}) #This is how we add the best_prey to the mix. The best_prey has an empty mask
