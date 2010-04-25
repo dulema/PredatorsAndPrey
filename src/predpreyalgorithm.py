@@ -6,13 +6,6 @@ from critter import Critter
 import critter
 import mutate
 
-try:
-    import psyco
-    psyco.full()
-except ImportError:
-    import sys
-    sys.stderr.write("Install Python Psyco For Increased Performance.\nAlgo\n")
-
 best_pred = {}
 best_prey = {}
 
@@ -212,6 +205,15 @@ def getMultiProcessedResults(predArgs, preyArgs):
 def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETTINGS, progress=__printProgress): 
     global best_pred, best_prey, calcscore
     import mutate
+
+    try:
+        import psyco
+        psyco.log()
+        psyco.full()
+        psyco.profile(0.05, memory=100)
+        psyco.profile(0.2)
+    except ImportError:
+        pass
 
     for i in range(gens):
         progress(i, gens) #Update the progress

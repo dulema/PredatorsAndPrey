@@ -4,12 +4,6 @@ import copy
 import multiprocessing
 from multiprocessing import Pool
 
-try:
-    import psyco
-    psyco.full()
-except ImportError:
-    pass
-
 DEFAULT_MUT_SETTINGS =  [20, 7, 20, 7, 20, 7, 20]
 
 #given a pdf this function will return a number of pdfs that are mutated
@@ -47,7 +41,6 @@ def createmask( x ):
 
     newpdf = copy.deepcopy(pdf) #Make a new copy of the array to mess with
 
-    #Lets use blitz to make this super fast
     increments = numpy.random.uniform(-increment, increment, pdfsize)
     inputs = (numpy.random.uniform(0, 1, (pdfsize, len(inputranges))) * inputranges).astype('int')
     pdfs = numpy.apply_along_axis(lambda x: x/x.sum(), 1, numpy.random.uniform(0, 1, (pdfsize, choices)))
@@ -60,6 +53,13 @@ def createmask( x ):
 if __name__ == "__main__":
     pdf1 = {}
     pdf2 = {}
+
+    try:
+        import psyco
+        psyco.full()
+    except ImportError:
+        pass
+
     result = createMasks( ((pdf1, 5), (pdf2, 3)), {"mutationincrement":0.3, "pdfpercent":0.5, "inputranges":[2, 3, 4] } )
     for n, r in enumerate(result):
         print(" == R %d of %d == "% (n, len(result)))

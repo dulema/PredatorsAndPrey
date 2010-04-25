@@ -2,5 +2,6 @@
 **.swp
 **.swo
 **log
+**log-psyco
 **.pyc
 src/critters/
