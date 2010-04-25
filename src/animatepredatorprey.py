@@ -64,6 +64,26 @@ def animate():
                 predpreyalgorithm.calcscore((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, predpreyalgorithm.DEFAULT_SETTINGS ,updatePlayingField))
                 draw_map()
 
+
+
+def critter_view():
+	bar = [20, 55, 12, 22, 60, 29]
+	critter_view_window = Tk()
+	critter_view_window.wm_title("Critter View")
+	graph = Canvas(critter_view_window)
+	graph.grid(row=0, column=0)
+	y_base = 200
+	j = 0
+	for i in range(len(bar)):
+		graph.create_polygon(10+j*20, y_base, 10+j*20, y_base - bar[i], 10+(j+1)*20, y_base - bar[i], 10+(j+1)*20, y_base, fill="red")
+		graph.create_text((j+1)*20, y_base - bar[i] - 10, text=str(bar[i]))
+		j = j + 2
+	
+	
+	critter_view_window.mainloop()
+	
+
+
 def README_display():
         webbrowser.open("../docs/help.html")
 
@@ -232,6 +252,8 @@ if __name__ == "__main__":
         max_hunger_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
         max_hunger_label = Label(root, text="Maximum Critter Hunger")
         max_hunger_slider.set("20")
+	
+	critter_view_button = Button(root, text="Critter View", command=critter_view)
 
         #Integer Input Section
         gen_num = StringVar()
@@ -278,7 +300,8 @@ if __name__ == "__main__":
         max_hunger_slider.grid(row=11, column=0, sticky=N)
         sight_range_label.grid(row=12, column=0, sticky=S)
         sight_range_slider.grid(row=13, column=0, sticky=N)
-        mutate_button.grid(row=17, column=0, sticky=N)
+        mutate_button.grid(row=15, column=0, sticky=N)
+	critter_view_button.grid(row=17, column=0)
         key_title_label.grid(row=0, column=4, sticky=E)
         key_pred_label.grid(row=1, column=4)
         key_prey_label.grid(row=2, column=4)
