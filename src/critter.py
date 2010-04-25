@@ -1,4 +1,5 @@
 import numpy
+import copy
 
 PREDATOR = "predator"
 PREY = "prey"
@@ -22,7 +23,7 @@ class Critter:
     # order that they should be attempted
     #
     def getMoves(self, senses):
-        pdf = self.getHistogram(senses).copy()
+        pdf = copy.deepcopy(self.getHistogram(senses))
         moves = []
         while len(pdf) > 0: #Keep going until the pdf is empty
             r = numpy.random.uniform() #Pick a random number [0,1)

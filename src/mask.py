@@ -1,13 +1,10 @@
 import numpy.random
-import numpy
 import copy
-import multiprocessing
-from multiprocessing import Pool
 
 DEFAULT_MUT_SETTINGS =  [20, 7, 20, 7, 20, 7, 20]
 
 #given a pdf this function will return a number of pdfs that are mutated
-def createMasks(args, settings:
+def createMasks(args, settings):
     increment = abs(settings["mutationincrement"] if "mutationincrement" in settings else 0.5)
     pdfpercent = settings["pdfpercent"] if "pdfpercent" in settings else 0.5
     inputranges = settings["inputranges"] if "inputranges" in settings else DEFAULT_MUT_SETTINGS
@@ -36,17 +33,26 @@ def createMasks(args, settings:
 
 def createmask( x ):
     pdf, pdfsize, ranges, increment, choices  = x
-
     inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
-
     newpdf = copy.deepcopy(pdf) #Make a new copy of the array to mess with
 
-    increments = numpy.random.uniform(-increment, increment, pdfsize)
-    inputs = (numpy.random.uniform(0, 1, (pdfsize, len(inputranges))) * inputranges).astype('int')
-    pdfs = numpy.apply_along_axis(lambda x: x/x.sum(), 1, numpy.random.uniform(0, 1, (pdfsize, choices)))
-
+    print("start random")
     mask = {}
-    for i,input in enumerate(inputs): mask[tuple(input)] = pdfs[i]
+    import random
+    for _ in range(pdfsize):
+        random_input = [random.randint(0,r) for r in ranges]
+        histogram = [random.random() for _ in range(choices) ]
+        s = sum(histogram)
+        mask[tuple(random_input)] = [prob/s for prob in histogram]
+    print("end random")
+
+#   increments = numpy.random.uniform(-increment, increment, pdfsize)
+#   inputs = (numpy.random.uniform(0, 1, (pdfsize, len(inputranges))) * inputranges).astype('int')
+#   pdfs = numpy.apply_along_axis(lambda x: x/x.sum(), 1, numpy.random.uniform(0, 1, (pdfsize, choices)))
+#   print("end random")
+
+#    mask = {}
+#    for i,input in enumerate(inputs): mask[tuple(input)] = pdfs[i]
     return mask
 
 

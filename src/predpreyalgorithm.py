@@ -72,12 +72,14 @@ def getMultiProcessedResults(predArgs, preyArgs):
 def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETTINGS, progress=__printProgress): 
     global best_pred, best_prey
 
-    try:
-        import psyco
-        psyco.log()
-        psyco.profile()
-    except ImportError:
-        pass
+
+#    try:
+#        import psyco
+#        psyco.log()
+#        psyco.profile()
+#    except ImportError:
+#        pass
+
 
     for i in range(gens):
         progress(i, gens) #Update the progress
