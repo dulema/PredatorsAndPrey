@@ -1,7 +1,4 @@
 #Does the work
-from predpreymap import Map
-import critter
-from critter import Critter
 import mask
 import scorealgorithm
 
@@ -61,7 +58,6 @@ def getResults(predArgs, preyArgs):
 
 def getMultiProcessedResults(predArgs, preyArgs):
     #Now comes the multiprocessing magic...
-    import multiprocessing
     from multiprocessing import Pool
     pool = Pool()
     predResults = pool.map_async(scorealgorithm.calcscore, predArgs, 20000) if len(predArgs) > 1 else None
@@ -80,20 +76,28 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
 #    except ImportError:
 #        pass
 
+    import time
+    mask_times = []
+    score_times = []
+    gen_time = []
+    start = time.time()
 
     for i in range(gens):
+        gen_start = time.time()
         progress(i, gens) #Update the progress
 
+        mask_start = time.time()
         #creats the masks. Masks hold the difference between the original critter and the new mutated one.
         predmasks, preymasks = mask.createMasks(((best_pred, pred_clones_per_gen), (best_prey, prey_clones_per_gen)), settings)
-
         predmasks.append({}) #This is how we add the best_pred to the mix. The best_pred has an empty mask
         preymasks.append({}) #This is how we add the best_prey to the mix. The best_prey has an empty mask
+        mask_times.append(time.time() - mask_start)
 
+        score_start = time.time()
         predArgs, preyArgs = getCalcScoreArgs(predmasks, preymasks, best_pred, best_prey, settings)
-
         #predpdfscores, preypdfscores = getMultiProcessedResults(predArgs, preyArgs)
         predscores, preyscores = getResults(predArgs, preyArgs)
+        score_times.append(time.time() - score_start)
 
         #Pickout the best mask
         best_pred_mask = predmasks[predscores.index(max(predscores))]
@@ -102,6 +106,19 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
         #Merge the mask into the best pdf
         for k,v in best_pred_mask.iteritems(): best_pred[k] = v
         for k,v in best_prey_mask.iteritems(): best_prey[k] = v
+        gen_time.append(time.time() - gen_start)
+
+    end = time.time()
+    totaltime = sum(gen_time)
+    print("\nTotal time: %d" % (totaltime) )
+    for i,masktime,scoretime,gentime in zip(range(gens), mask_times, score_times,gen_time):
+        print("\tGeneration %d took %d%% of the total time" % (i, int( (gentime/totaltime)*100 )))
+        print("\t\tMasking took %d%% of the total generation time" % (int( (masktime/float(gentime))* 100 )) )
+        print("\t\tScoring took %d%% of the total generation time" % (int( (scoretime/float(gentime))* 100 )) )
+
+    print("In total: ")
+    print("\tMasking took %d%% of the time" % int( (sum(mask_times) / float(totaltime)) * 100 ) )
+    print("\tScoring took %d%% of the time" % int( (sum(score_times) / float(totaltime)) * 100 ) )
 
 
 if __name__ == "__main__":
