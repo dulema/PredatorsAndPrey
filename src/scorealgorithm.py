@@ -8,7 +8,7 @@ try:
     psyco.full()
 except ImportError:
     import sys
-    sys.stderr.write("Install Python Psyco For Increased Performance.\nAlgo\n")
+    sys.stderr.write("Install Python Psyco For Increased Performance.\n")
 
 def reverse(direction):
     if direction == 0:
@@ -52,24 +52,33 @@ def directionConverter(sensorydata):
      right(toPred),   right(toPrey),   right(toPlant), 0  ]
     return allpossiblemoves
 
+#
+# This will return a list of all moves that should be attmempted
+# In the order that they should be attempted
+# This really serves its self to be a co-routine but sadly
+# psyco can't compile those and so we're stuck trying to
+# get this to work otherwise. 
+#
 def getAMove(critter, world, settings):
         if world.getCritterXY(critter) == None:
                 raise Exception("Critter isn't on the map!")
         senses = world.getSensoryData(critter, settings["sight"])
         dirconv = directionConverter(senses)
         validmoves = list(set(dirconv)) #removes all duplicates in the list
-        while len(validmoves) > 0:
-                destinationTile = None
-                directionMove = -1
-                while destinationTile == None or directionMove == -1 or directionMove == None or directionMove not in validmoves:
-                        move = critter.getMove(senses)
-                        directionMove = dirconv[move]
-                        destinationTile = world.getCritterDest(critter, directionMove)
-                if directionMove in validmoves:
-                        validmoves.remove(directionMove)
-                else:
-                        raise Exception("%d not in %s"%(directionMove, validmoves))
-                yield destinationTile, directionMove
+        return [ (world.getCritterDest(dirconv[move]), dirconv[move]) for move in critter.getMoves(senses) ]
+
+#        while len(validmoves) > 0:
+#                destinationTile = None
+#                directionMove = -1
+#                while destinationTile == None or directionMove == -1 or directionMove == None or directionMove not in validmoves:
+#                        move = critter.getMoves(senses)
+#                        directionMove = dirconv[move]
+#                        destinationTile = world.getCritterDest(critter, directionMove)
+#                if directionMove in validmoves:
+#                        validmoves.remove(directionMove)
+#                else:
+#                        raise Exception("%d not in %s"%(directionMove, validmoves))
+#                yield destinationTile, directionMove
 
 def preyMakeMove(prey, settings, world):
         for destinationTile, directionMove in getAMove(prey, world, settings):

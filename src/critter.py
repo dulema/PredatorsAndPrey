@@ -16,15 +16,25 @@ class Critter:
         self.pdfmatrix = pdfmatrix
         self.mask = mask
 
-    #Returns the move to make.
-    def getMove(self, senses):
-        pdf = self.getHistogram(senses)
-        r = numpy.random.uniform()
-        sum = 0
-        for i,probability in enumerate(pdf):
-            sum += probability
-            if r < sum:
-                return i
+    #
+    # Given a set of inputs this function will return
+    # All of the moves that should be attemped in the
+    # order that they should be attempted
+    #
+    def getMoves(self, senses):
+        pdf = self.getHistogram(senses).copy()
+        moves = []
+        while len(pdf) > 0: #Keep going until the pdf is empty
+            r = numpy.random.uniform() #Pick a random number [0,1)
+            sum = 0 #Track how high we are
+            for i,probability in enumerate(pdf): #For every i from 0 -> len(pdf) and every probability in the pdf
+                sum += probability
+                if r < sum:
+                    moves.append(i)
+                    numpy.delete(pdf, i) #remove this option from the pdf
+                    pdf /= pdf.sum() #Renormalize the pdf
+                    break
+        return moves
 
     def generatePDF(self):
         pdf = numpy.random.random_sample(self.choices)
