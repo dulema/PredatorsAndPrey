@@ -36,7 +36,6 @@ def createmask( x ):
     inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
     newpdf = copy.deepcopy(pdf) #Make a new copy of the array to mess with
 
-    print("start random")
     mask = {}
     import random
     for _ in range(pdfsize):
@@ -44,7 +43,6 @@ def createmask( x ):
         histogram = [random.random() for _ in range(choices) ]
         s = sum(histogram)
         mask[tuple(random_input)] = [prob/s for prob in histogram]
-    print("end random")
 
 #   increments = numpy.random.uniform(-increment, increment, pdfsize)
 #   inputs = (numpy.random.uniform(0, 1, (pdfsize, len(inputranges))) * inputranges).astype('int')
