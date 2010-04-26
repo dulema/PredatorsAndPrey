@@ -66,7 +66,7 @@ if __name__ == "__main__":
     settings = {"mutationincrement":0.3, "pdfpercent":0.01, "inputranges":[20, 7, 20, 7, 20, 7, 20], "choices":13 }
     for i in range(rounds):
         print(" ==== ROUND %d ====" % i)
-        createMasks(1, settings)
+        createMasks(5, settings)
 
 #    for n, r in enumerate(result):
 #        print(" == R %d of %d == "% (n, len(result)))

@@ -87,8 +87,10 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
 
         mask_start = time.time()
         #creats the masks. Masks hold the difference between the original critter and the new mutated one.
-        predmasks, preymasks = mask.createMasks(((best_pred, pred_clones_per_gen), (best_prey, prey_clones_per_gen)), settings)
+        masks = mask.createMasks(pred_clones_per_gen+prey_clones_per_gen, settings)
+        predmasks = masks[:pred_clones_per_gen]
         predmasks.append({}) #This is how we add the best_pred to the mix. The best_pred has an empty mask
+        preymasks = masks[pred_clones_per_gen:]
         preymasks.append({}) #This is how we add the best_prey to the mix. The best_prey has an empty mask
         mask_times.append(time.time() - mask_start)
 
