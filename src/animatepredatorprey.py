@@ -1,5 +1,6 @@
 import menu
 import predpreyalgorithm
+import scorealgorithm
 from Tkinter import *
 from tkFileDialog import *
 import webbrowser
@@ -25,13 +26,14 @@ def receive_mutate_parameters():
         elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
                 tkMessageBox.showwarning("Mutate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
         else:
-                #Use map_size.get(), pct_veg_slider.get(), pct_prey_slider.get(), pct_pred_slider.get(), sight_range.get(), tree_life_slider.get(), max_hunger_slider.get()-- be sure to int-ify it
+                #Use map_size.get(), pct_veg_slider.get(), pct_prey_slider.get(), pct_pred_slider.get(), sight_range.get(), tree_life_slider.get(), max_hunger_slider.get(), mutation_inc.get(), pct_pdf.get()-- be sure to int-ify it, they need to be percentified as well
                 pass
+
+
 
 #Erases playing_field and then loops through critter dictionary and plant
 #array and calls fill+map to place appropriate letter in appropriate
 #hexagon
-
 def scale_canvas():
         scale_factor = float(scale_slider.get())
         for i in canvas_items:
@@ -61,8 +63,46 @@ def animate():
         elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
                 tkMessageBox.showwarning("Animate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
         else:
-                predpreyalgorithm.calcscore((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, predpreyalgorithm.DEFAULT_SETTINGS ,updatePlayingField))
+                args = ( (predpreyalgorithm.best_pred, {}), (predpreyalgorithm.best_prey, {}), predpreyalgorithm.DEFAULT_SETTINGS, updatePlayingField )
+                scorealgorithm.calcscore(args)
                 draw_map()
+
+
+
+def critter_view():
+	bar = [20, 55, 12, 22, 60, 29, 70]
+	labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
+	labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
+	critter_view_window = Tk()
+	critter_view_window.wm_title("Critter View")
+	graph = Canvas(critter_view_window, width = 550, height = 250)
+	graph.grid(row=0, column=0, columnspan=15, padx=10)
+	y_base = 200
+	j = 10
+	for i in range(len(bar)):
+		graph.create_polygon(j, y_base,j, y_base - bar[i], j+30, y_base - bar[i],j+30, y_base, fill="red")
+		graph.create_text(j+15, y_base - bar[i] - 10, text=str(bar[i]))
+		graph.create_text(j+15,y_base + 10,text=labels_top[i])
+		graph.create_text(j+15,y_base + 20,text=labels_bottom[i])
+		j = j + 80
+	
+	pred_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	pred_dist.grid(row=1, column=0, sticky = N) 
+	pred_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	pred_dir.grid(row=1, column=2, sticky = N) 
+	prey_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	prey_dist.grid(row=1, column=4, sticky = N)
+	prey_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	prey_dir.grid(row=1, column=6, sticky = N) 
+	plant_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	plant_dist.grid(row=1, column=8, sticky = N) 
+	plant_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	plant_dir.grid(row=1, column=10, sticky = N) 
+	hunger = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	hunger.grid(row=1, column=12, sticky = N) 
+	critter_view_window.mainloop()
+	
+
 
 def README_display():
         webbrowser.open("../docs/help.html")
@@ -94,14 +134,18 @@ def save_prey():
 def reset():
         playing_field.delete(ALL)
         gen_num.set("10")
-        speed_slider.set(0)
+        speed_slider.set(50)
         pred_num.set("1")
         prey_num.set("20")
-        map_size.set("23")
-        pct_pred_slider.set("10")
-        pct_prey_slider.set("30")
+        map_size.set("20")
+        pct_pred_slider.set("1")
+        pct_prey_slider.set("2")
         prey_num.set("20")
-        pct_veg_slider.set("20")
+        pct_veg_slider.set("5")
+	pct_pdf_slider.set("40")
+	tree_life_slider.set("3")
+	max_hunger_slider.set("20")
+	sight_range_slider.set("10")
         draw_map()
 
 #Draw the map of hexagons on the playing_field
@@ -208,6 +252,7 @@ if __name__ == "__main__":
         #Slider Section
         speed_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
         speed_slider_label = Label(root, text="Speed of Animation")
+	speed_slider.set("50")
         scale_slider = Scale(root, from_=0.5, to=1.5, orient=HORIZONTAL, resolution=0.1)
         scale_label = Label(root, text="Scale of Playing Field")
         scale_slider.set("1.0")
@@ -232,6 +277,11 @@ if __name__ == "__main__":
         max_hunger_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
         max_hunger_label = Label(root, text="Maximum Critter Hunger")
         max_hunger_slider.set("20")
+	mutation_inc_slider = Scale(root, from_=1, to=25, orient=HORIZONTAL)
+        mutation_inc_label = Label(root, text="Mutation Increment")
+        mutation_inc_slider.set("10")
+	
+	critter_view_button = Button(root, text="Critter View", command=critter_view)
 
         #Integer Input Section
         gen_num = StringVar()
@@ -278,7 +328,10 @@ if __name__ == "__main__":
         max_hunger_slider.grid(row=11, column=0, sticky=N)
         sight_range_label.grid(row=12, column=0, sticky=S)
         sight_range_slider.grid(row=13, column=0, sticky=N)
-        mutate_button.grid(row=17, column=0, sticky=N)
+	mutation_inc_label.grid(row=14, column=0, sticky=S)
+        mutation_inc_slider.grid(row=15, column=0, sticky=N)
+        mutate_button.grid(row=16, column=0, sticky=N)
+	critter_view_button.grid(row=17, column=0)
         key_title_label.grid(row=0, column=4, sticky=E)
         key_pred_label.grid(row=1, column=4)
         key_prey_label.grid(row=2, column=4)
@@ -298,13 +351,6 @@ if __name__ == "__main__":
         prey_num_label.grid(row=9, column=4, sticky=S,columnspan=2)
         prey_num_input.grid(row=10, column=4, sticky=N,columnspan=2)
 
-        #animatepredatorprey.py = 22characters
-        
-        #guiLocation = []
-        #imagesLocation = []
-        #guiLocation = (__file__)
-        #imagesLocation = guiLocation[:-22]
-        #imagesLocation = guiLocation
 
         vegetation = []
         wolf = []
@@ -316,7 +362,7 @@ if __name__ == "__main__":
 
         for i in range(11):
                 j = i*10 + 50
-                
+
                 veglocation = location + "/PredPreyImages/PeterM_Tree" + str(j) + ".png"
                 wolflocation = location + "/PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png"
                 sheeplocation = location + "/PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png"
@@ -325,11 +371,10 @@ if __name__ == "__main__":
                 osblindveglocation = os.path.abspath(veglocation)
                 osblindwolflocation = os.path.abspath(wolflocation)
                 osblindsheeplocation = os.path.abspath(sheeplocation)
-                
+
                 vegetation.append(ImageTk.PhotoImage(file=osblindveglocation))
                 wolf.append(ImageTk.PhotoImage(file=osblindwolflocation))
                 sheep.append(ImageTk.PhotoImage(file=osblindsheeplocation))
-        
 
         wolf_canvas = Canvas(root,width=30,height=30)
         wolf_canvas.create_image(15,15, image=wolf[5])
