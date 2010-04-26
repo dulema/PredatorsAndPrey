@@ -1,5 +1,6 @@
 import menu
 import predpreyalgorithm
+import scorealgorithm
 from Tkinter import *
 from tkFileDialog import *
 import webbrowser
@@ -61,7 +62,8 @@ def animate():
         elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
                 tkMessageBox.showwarning("Animate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
         else:
-                predpreyalgorithm.calcscore((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, predpreyalgorithm.DEFAULT_SETTINGS ,updatePlayingField))
+                args = ( (predpreyalgorithm.best_pred, {}), (predpreyalgorithm.best_prey, {}), predpreyalgorithm.DEFAULT_SETTINGS, updatePlayingField )
+                scorealgorithm.calcscore(args)
                 draw_map()
 
 def README_display():
