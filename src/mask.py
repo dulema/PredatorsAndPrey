@@ -59,10 +59,12 @@ if __name__ == "__main__":
         pass
 
     rounds = 10
-    settings = {"mutationincrement":0.3, "pdfpercent":0.01, "inputranges":[20, 7, 20, 7, 20, 7, 20], "choices":13 }
+    settings = {"mutationincrement":0.3, "pdfpercent":0.01, "inputranges":[5, 70, 2], "choices":7 }
     for i in range(rounds):
         print(" ==== ROUND %d ====" % i)
-        createMasks(5, settings)
+        for i, mask in enumerate(createMasks(5, settings)):
+            print("\t === Mask %d ===" % i)
+            print mask
 
 #    for n, r in enumerate(result):
 #        print(" == R %d of %d == "% (n, len(result)))
