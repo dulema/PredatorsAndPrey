@@ -15,6 +15,9 @@ DEFAULT_SETTINGS = {"sight":20, "mapsize":20,
                     "distancechunks":4, "distanceincrement":3,
                     "hungerchunks":3, "hungerincrement":4 }
 
+#Basically input is (preddistance, preddireciton, preydistance, preydirection, vegdistance, vegdirection, hunger)
+#Input ranges is the number of different values possible for each entry
+DEFAULT_SETTINGS["inputranges"] = ([ DEFAULT_SETTINGS["distancechunks"], 7] * 3 ) + [ DEFAULT_SETTINGS["hungerchunks"] ]
 
 def __printProgress(num, total):
     width = 40
