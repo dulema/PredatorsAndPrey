@@ -360,12 +360,8 @@ if __name__ == "__main__":
         #This Gets Current Directory (Windows)
         location = sys.path[0]
 
-        cwd = os.getcwd() + os.path.sep
         for i in range(11):
                 j = i*10 + 50
-                vegetation.append(ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","PeterM_Tree"+str(j)+".png")))
-                wolf.append(      ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","Gerald_G_Wolf_Head_(Stylized)"+str(j)+".png")))
-                sheep.append(     ImageTk.PhotoImage(file= cwd + os.path.join("PredPreyImages","creohn_Sheep_in_gray"+str(j)+".png")))
 
                 veglocation = location + "/PredPreyImages/PeterM_Tree" + str(j) + ".png"
                 wolflocation = location + "/PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png"
