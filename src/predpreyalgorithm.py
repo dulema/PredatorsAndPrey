@@ -5,7 +5,15 @@ import scorealgorithm
 best_pred = {}
 best_prey = {}
 
-DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3, "maxhunger":20, "pdfpercent":0.01, "inputranges":(10,7,10,7,10,7,20), "mutationincrement":0.3}
+SIGHT = 20
+MAXHUNGER = 20
+
+DEFAULT_SETTINGS = {"sight":20, "mapsize":20,
+                    "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01,
+                    "plantbites":3, "maxhunger":20,
+                    "pdfpercent":0.01,"muttionincrement":0.3,
+                    "distancechunks":4, "distanceincrement":3,
+                    "hungerchunks":3, "hungerincrement":4 }
 
 
 def __printProgress(num, total):

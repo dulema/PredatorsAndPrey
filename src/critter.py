@@ -1,5 +1,4 @@
 import numpy
-import copy
 
 PREDATOR = "predator"
 PREY = "prey"
@@ -8,10 +7,9 @@ PREY = "prey"
 #Naive implementation that currently just runs on python
 class Critter:
 
-    def __init__(self, pdfmatrix, mask, type="No type defined", choices = 13):
-        self.choices = 13
+    def __init__(self, pdfmatrix, mask, type="No type defined", choices = 7):
+        self.choices = choices
         self.status = {"hunger":0}
-        self.type = ""
         self.type = type
         self.choices = choices
         self.pdfmatrix = pdfmatrix
@@ -23,24 +21,21 @@ class Critter:
     # order that they should be attempted
     #
     def getMoves(self, senses):
-        pdf = copy.deepcopy(self.getHistogram(senses))
+        pdf = self.getHistogram(senses).copy() #This is a numpy array
         moves = []
         while len(pdf) > 0: #Keep going until the pdf is empty
-            r = numpy.random.uniform() #Pick a random number [0,1)
+            r = numpy.random.randint(pdf.sum()) #Pick a random number
             sum = 0 #Track how high we are
             for i,probability in enumerate(pdf): #For every i from 0 -> len(pdf) and every probability in the pdf
                 sum += probability
                 if r < sum:
                     moves.append(i)
                     pdf = numpy.delete(pdf, i) #remove this option from the pdf
-                    pdf /= pdf.sum() #Renormalize the pdf
                     break
         return moves
 
     def generatePDF(self):
-        pdf = numpy.random.random_sample(self.choices)
-        pdf /= pdf.sum()
-        return pdf
+        return numpy.random.random_integers(low=0,high=255,size=7).astype(numpy.uint8)
 
     def getHistogram(self, senses):
         input = senses + tuple(self.status.itervalues())

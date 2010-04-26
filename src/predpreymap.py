@@ -1,6 +1,5 @@
 import random
 import critter
-import math
 from critter import Critter
 
 class Map:
@@ -49,9 +48,9 @@ class Map:
                 else:
                     self.plants[i] = j,k,l-1
                 return True
-            
+
         return False
-   
+
     def getCritterXY(self, critter):
         if critter in self.critters:
             return self.critters[critter]
@@ -317,21 +316,19 @@ class Map:
                                     # Changes To New Closest And Direction
                                     closest = checkdistance
                                     direction = self.getDirection(x,y,checkx,checky,radius)
-            
-        if direction != -1:    
+
+        if direction != -1:
                 return closest, direction
         else:
                 return 0, 0
 
     def getSensoryData(self,critter, radius):
-
         # Gets The X And Y Of Critter Or Plant And Checks For Closest
         # Predator, Prey or Plant
         (x,y) = self.getCritterXY(critter)
         preddistance,preddirection = self.getClosestPred(x, y, radius)
         preydistance,preydirection = self.getClosestPrey(x, y, radius)
         plantdistance,plantdirection = self.getClosestPlant(x, y, radius)
-
         return preddistance, preddirection, preydistance, preydirection,plantdistance,plantdirection
 
     def getRandomUntakenTile(self):

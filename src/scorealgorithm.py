@@ -10,71 +10,9 @@ except ImportError:
     import sys
     sys.stderr.write("Install Python Psyco For Increased Performance.\n")
 
-def reverse(direction):
-    if direction == 0:
-        return 0
-    if direction <= 3:
-        direction += 3
-    else:
-        direction -= 3
-    return direction
-
-def left(direction):
-    if direction == 0:
-        return 0
-    if direction == 1:
-        return 6
-    else:
-        return direction - 1
-
-def right(direction):
-    if direction == 0:
-        return 0
-    if direction == 6:
-        return 1
-    else:
-        return direction + 1
-
-#This converts for example "Move towards predator" to "Move left"
-#sensorydata holds the data from the map
-#move holds a direction like "Move towards predator"
-def directionConverter(sensorydata):
-    toPred = sensorydata[1]
-    toPrey = sensorydata[3]
-    toPlant = sensorydata[5]
-
-    toPred = 0 if toPred == None else toPred
-    toPrey = 0 if toPrey == None else toPrey
-    toPlant = 0 if toPlant == None else toPlant
-    allpossiblemoves = [toPred,  toPrey,  toPlant,
-     reverse(toPred), reverse(toPrey), reverse(toPlant),
-     left(toPred),    left(toPrey),    left(toPlant),
-     right(toPred),   right(toPrey),   right(toPlant), 0  ]
-    return allpossiblemoves
-
-#
-# This will return a list of all moves that should be attmempted
-# In the order that they should be attempted
-# This really serves its self to be a co-routine but sadly
-# psyco can't compile those and so we're stuck trying to
-# get this to work otherwise.
-#
-def getAMove(critter, world, settings):
-        if world.getCritterXY(critter) == None:
-                raise Exception("Critter isn't on the map!")
-        senses = world.getSensoryData(critter, settings["sight"])
-        dirconv = directionConverter(senses)
-        validmoves = list(set(dirconv)) #removes all duplicates in the list
-        moves = [ (world.getCritterDest(critter, dirconv[move]), dirconv[move]) for move in critter.getMoves(senses) ]
-        #Only keeping the good moves, avoiding filter() to keep psyco happy...
-        validmoves = []
-        for x in moves:
-            if x[0] != None and x[1] != None and x[1] != -1:
-                validmoves.append(x)
-        return validmoves
-
 def preyMakeMove(prey, settings, world):
-        for destinationTile, directionMove in getAMove(prey, world, settings):
+        for destinationTile, directionMove in prey.getMoves(world.getSensoryData(critter, settings["sight"])):
+                destinationTile = world.getCritterDest(directionMove)
                 critterOnTile = world.getCritterAt(destinationTile)
                 if critterOnTile == None:
                         world.moveCritter(prey, directionMove)
@@ -92,7 +30,7 @@ def preyMakeMove(prey, settings, world):
                      raise Exception("There is a prey case that is not accounted for: " + critterOnTile)
 
 def predMakeMove(pred, settings, world):
-        for destinationTile, directionMove in getAMove(pred, world, settings):
+        for destinationTile, directionMove in pred.getMoves(world.getSensoryData(critter, settings["sight"])):
                 critterOnTile = world.getCritterAt(destinationTile)
                 if critterOnTile == None:
                         world.moveCritter(pred, directionMove)
