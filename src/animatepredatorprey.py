@@ -66,6 +66,43 @@ def animate():
                 scorealgorithm.calcscore(args)
                 draw_map()
 
+
+
+def critter_view():
+	bar = [20, 55, 12, 22, 60, 29, 70]
+	labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
+	labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
+	critter_view_window = Tk()
+	critter_view_window.wm_title("Critter View")
+	graph = Canvas(critter_view_window, width = 550, height = 250)
+	graph.grid(row=0, column=0, columnspan=15, padx=10)
+	y_base = 200
+	j = 10
+	for i in range(len(bar)):
+		graph.create_polygon(j, y_base,j, y_base - bar[i], j+30, y_base - bar[i],j+30, y_base, fill="red")
+		graph.create_text(j+15, y_base - bar[i] - 10, text=str(bar[i]))
+		graph.create_text(j+15,y_base + 10,text=labels_top[i])
+		graph.create_text(j+15,y_base + 20,text=labels_bottom[i])
+		j = j + 80
+	
+	pred_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	pred_dist.grid(row=1, column=0, sticky = N) 
+	pred_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	pred_dir.grid(row=1, column=2, sticky = N) 
+	prey_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	prey_dist.grid(row=1, column=4, sticky = N)
+	prey_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	prey_dir.grid(row=1, column=6, sticky = N) 
+	plant_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	plant_dist.grid(row=1, column=8, sticky = N) 
+	plant_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	plant_dir.grid(row=1, column=10, sticky = N) 
+	hunger = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+	hunger.grid(row=1, column=12, sticky = N) 
+	critter_view_window.mainloop()
+	
+
+
 def README_display():
         webbrowser.open("../docs/help.html")
 
@@ -234,6 +271,8 @@ if __name__ == "__main__":
         max_hunger_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
         max_hunger_label = Label(root, text="Maximum Critter Hunger")
         max_hunger_slider.set("20")
+	
+	critter_view_button = Button(root, text="Critter View", command=critter_view)
 
         #Integer Input Section
         gen_num = StringVar()
@@ -280,7 +319,8 @@ if __name__ == "__main__":
         max_hunger_slider.grid(row=11, column=0, sticky=N)
         sight_range_label.grid(row=12, column=0, sticky=S)
         sight_range_slider.grid(row=13, column=0, sticky=N)
-        mutate_button.grid(row=17, column=0, sticky=N)
+        mutate_button.grid(row=15, column=0, sticky=N)
+	critter_view_button.grid(row=17, column=0)
         key_title_label.grid(row=0, column=4, sticky=E)
         key_pred_label.grid(row=1, column=4)
         key_prey_label.grid(row=2, column=4)
