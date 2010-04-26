@@ -31,10 +31,17 @@ def createmask( x ):
     inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
     rangecount = len(inputranges)
 
+    #Generate the random input
     start_random = time.time()
+    random_inputs = numpy.column_stack([numpy.random.randint(low=0,high=lim,size=(pdfsize)) for lim in inputranges])
+    input_time = time.time() - start_random
 
-    random_inputs  = numpy.column_stack( [numpy.random.randint(low=0, high=ceil, size=(pdfsize, 1)) for ceil in ranges] )
-    histograms = [x/x.sum() for x in numpy.random.rand(pdfsize, choices)]
+    #Generate the historgrams to go with them
+    hist_start = time.time()
+    histograms = numpy.random.uniform(low=0,high=1.0,size=(13,pdfsize))
+    s = numpy.reciprocal(histograms.sum(0))
+    histograms *= s
+    histo_time = time.time() - hist_start
 
     mask = {}
     for ri,histogram in zip(random_inputs, histograms):
@@ -43,6 +50,7 @@ def createmask( x ):
     random_time = time.time() - start_random
     total_time = time.time() - start_create
     print("For %d pdfs the total time is: %d seconds, %d (%d%%) of which where spent in random" % (pdfsize, total_time, random_time, int((random_time/float(total_time))*100) ))
+    print("\t%d seconds (%d%%) spent for inputs\n\t%d seconds (%d%%) spent for histograms" % (input_time, int((float(input_time)/random_time)*100) , histo_time, int((float(histo_time)/random_time)*100) ))
     return mask
 
 
