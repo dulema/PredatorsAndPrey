@@ -26,13 +26,14 @@ def receive_mutate_parameters():
         elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
                 tkMessageBox.showwarning("Mutate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
         else:
-                #Use map_size.get(), pct_veg_slider.get(), pct_prey_slider.get(), pct_pred_slider.get(), sight_range.get(), tree_life_slider.get(), max_hunger_slider.get()-- be sure to int-ify it
+                #Use map_size.get(), pct_veg_slider.get(), pct_prey_slider.get(), pct_pred_slider.get(), sight_range.get(), tree_life_slider.get(), max_hunger_slider.get(), mutation_inc.get(), pct_pdf.get()-- be sure to int-ify it, they need to be percentified as well
                 pass
+
+
 
 #Erases playing_field and then loops through critter dictionary and plant
 #array and calls fill+map to place appropriate letter in appropriate
 #hexagon
-
 def scale_canvas():
         scale_factor = float(scale_slider.get())
         for i in canvas_items:
@@ -276,9 +277,9 @@ if __name__ == "__main__":
         max_hunger_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
         max_hunger_label = Label(root, text="Maximum Critter Hunger")
         max_hunger_slider.set("20")
-	mutation_inc_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
+	mutation_inc_slider = Scale(root, from_=1, to=25, orient=HORIZONTAL)
         mutation_inc_label = Label(root, text="Mutation Increment")
-        mutation_inc_slider.set("20")
+        mutation_inc_slider.set("10")
 	
 	critter_view_button = Button(root, text="Critter View", command=critter_view)
 
