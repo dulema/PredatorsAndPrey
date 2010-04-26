@@ -133,14 +133,18 @@ def save_prey():
 def reset():
         playing_field.delete(ALL)
         gen_num.set("10")
-        speed_slider.set(0)
+        speed_slider.set(50)
         pred_num.set("1")
         prey_num.set("20")
-        map_size.set("23")
-        pct_pred_slider.set("10")
-        pct_prey_slider.set("30")
+        map_size.set("20")
+        pct_pred_slider.set("1")
+        pct_prey_slider.set("2")
         prey_num.set("20")
-        pct_veg_slider.set("20")
+        pct_veg_slider.set("5")
+	pct_pdf_slider.set("40")
+	tree_life_slider.set("3")
+	max_hunger_slider.set("20")
+	sight_range_slider.set("10")
         draw_map()
 
 #Draw the map of hexagons on the playing_field
@@ -247,6 +251,7 @@ if __name__ == "__main__":
         #Slider Section
         speed_slider = Scale(root, from_=1, to=100, orient=HORIZONTAL)
         speed_slider_label = Label(root, text="Speed of Animation")
+	speed_slider.set("50")
         scale_slider = Scale(root, from_=0.5, to=1.5, orient=HORIZONTAL, resolution=0.1)
         scale_label = Label(root, text="Scale of Playing Field")
         scale_slider.set("1.0")
@@ -271,6 +276,9 @@ if __name__ == "__main__":
         max_hunger_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
         max_hunger_label = Label(root, text="Maximum Critter Hunger")
         max_hunger_slider.set("20")
+	mutation_inc_slider = Scale(root, from_=1, to=50, orient=HORIZONTAL)
+        mutation_inc_label = Label(root, text="Mutation Increment")
+        mutation_inc_slider.set("20")
 	
 	critter_view_button = Button(root, text="Critter View", command=critter_view)
 
@@ -319,7 +327,9 @@ if __name__ == "__main__":
         max_hunger_slider.grid(row=11, column=0, sticky=N)
         sight_range_label.grid(row=12, column=0, sticky=S)
         sight_range_slider.grid(row=13, column=0, sticky=N)
-        mutate_button.grid(row=15, column=0, sticky=N)
+	mutation_inc_label.grid(row=14, column=0, sticky=S)
+        mutation_inc_slider.grid(row=15, column=0, sticky=N)
+        mutate_button.grid(row=16, column=0, sticky=N)
 	critter_view_button.grid(row=17, column=0)
         key_title_label.grid(row=0, column=4, sticky=E)
         key_pred_label.grid(row=1, column=4)
