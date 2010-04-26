@@ -102,7 +102,7 @@ def predMakeMove(pred, settings, world):
                         pred.setStatus("hunger", 0)
                         return
                 elif critterOnTile.type == critter.PREDATOR:
-                        continue                        
+                        continue
                 else:
                      raise Exception("There is a predator case that is not accounted for: " + critterOnTile)
 
