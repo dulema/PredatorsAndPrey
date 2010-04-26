@@ -26,6 +26,7 @@ def receive_mutate_parameters():
                 tkMessageBox.showwarning("Mutate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
         else:
                 #Use map_size.get(), pct_veg_slider.get(), pct_prey_slider.get(), pct_pred_slider.get(), sight_range.get(), tree_life_slider.get(), max_hunger_slider.get()-- be sure to int-ify it
+                Settings = {"mapsize": int(map_size.get()), "vegpercent": float(pct_veg_slider.get()), "preypercent": float(pct_prey_slider.get()), "predpercent": float(pct_pred_slider.get()), "sight": int(sight_range.get()), "plantbites": int(tree_life_slider.get()), "maxhunger": int(max_hunger_slider.get()), "pdfpercent":0.1, "inputranges":(10,6,10,6,10,6), "mutationincrement":0.3}
                 pass
 
 #Erases playing_field and then loops through critter dictionary and plant
@@ -61,7 +62,7 @@ def animate():
         elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
                 tkMessageBox.showwarning("Animate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
         else:
-                predpreyalgorithm.calcscore((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, predpreyalgorithm.DEFAULT_SETTINGS ,updatePlayingField))
+                predpreyalgorithm.calcscore((predpreyalgorithm.best_pred, predpreyalgorithm.best_prey, Settings ,updatePlayingField))
                 draw_map()
 
 
