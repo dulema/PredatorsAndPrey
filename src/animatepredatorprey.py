@@ -72,7 +72,11 @@ def animate():
                 #draw_map()
 
 
-def critter_view():
+def pred_view():
+	pass
+
+
+def prey_view():
         bar = [20, 55, 12, 22, 60, 29, 70]
         labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
         labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
@@ -198,6 +202,15 @@ def fill_map(thing, location):
         else:
                 photo = playing_field.create_image(1+12+x*24,20+y*29, image=picture)
                 canvas_items.append(photo)
+
+def display_conf():
+	if(os.name == "posix"):
+		os.system("gedit settings.txt")
+	elif(os.name == "nt"):
+		os.system("notepad settings.txt")
+	else:
+		print("No Good")
+
 
 def validate():
         wrongstuff = "\n"
@@ -328,7 +341,9 @@ if __name__ == "__main__":
         scale_slider.set("1.0")
         
         
-        critter_view_button = Button(root, text="Critter View", command=critter_view)
+        prey_view_button = Button(root, text="Best Prey View", command=prey_view)
+	pred_view_button = Button(root, text="Best Predator View", command=pred_view)
+	
 
         #Integer Input Section
         gen_num = StringVar()
@@ -355,33 +370,35 @@ if __name__ == "__main__":
         key_prey_label = Label(root, text="Prey =>")
         key_veg_label = Label(root, text="Vegetation =>")
         animate_button = Button(root, text="Animate", command=animate)
-
+	edit_conf_button = Button(root, text="Edit Mutate Settings", command=display_conf)
 
 
         #Grid Section
         #The following code tells each widget where to be placed on the root
         
         
-        mutate_button.grid(row=16, column=0, sticky=N)
-        critter_view_button.grid(row=17, column=0)
+        mutate_button.grid(row=10, column=0, sticky=N)
+	edit_conf_button.grid(row=8, column=0)
+        prey_view_button.grid(row=17, column=0)
+	pred_view_button.grid(row=16, column=0)
         key_title_label.grid(row=0, column=4, sticky=E)
         key_pred_label.grid(row=1, column=4)
         key_prey_label.grid(row=2, column=4)
         key_veg_label.grid(row=3, column=4)
         speed_slider_label.grid(row=13, column=4, sticky=S, columnspan=2)
         speed_slider.grid(row=14, column=4, sticky=N, columnspan=2)
-        map_size_label.grid(row=11, column=0, sticky=S)
-        map_size_input.grid(row=12, column=0, sticky=N)
+        map_size_label.grid(row=6, column=0, sticky=S)
+        map_size_input.grid(row=7, column=0, sticky=N)
         scale_label.grid(row=15,column=4, sticky=S, columnspan=2)
         scale_slider.grid(row=16,column=4, sticky=N, columnspan=2)
         animate_button.grid(row=17, column=4, sticky=N,columnspan=2)
         playing_field.grid(row=0, column=1, rowspan=17, padx=5)
-        gen_num_label.grid(row=5, column=0, sticky=S)
-        gen_num_input.grid(row=6, column=0, sticky=N)
-        pred_num_label.grid(row=7, column=0, sticky=S)
-        pred_num_input.grid(row=8, column=0, sticky=N)
-        prey_num_label.grid(row=9, column=0, sticky=S)
-        prey_num_input.grid(row=10, column=0, sticky=N)
+        gen_num_label.grid(row=0, column=0, sticky=S)
+        gen_num_input.grid(row=1, column=0, sticky=N)
+        pred_num_label.grid(row=2, column=0, sticky=S)
+        pred_num_input.grid(row=3, column=0, sticky=N)
+        prey_num_label.grid(row=4, column=0, sticky=S)
+        prey_num_input.grid(row=5, column=0, sticky=N)
 
 
         vegetation = []
