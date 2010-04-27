@@ -130,7 +130,7 @@ def mutate(gens, settings=DEFAULT_SETTINGS, progress=__printProgress):
         progress(i, gens) #Update the progress
 
         #preds, preys = MultiProcessMutateAndScore(predArgs, preyArgs, settings)
-        preds, preys = MutateAndScore(settings)
+        preds, preys = MutateAndScore()
 
         #Find the best Pred Mask
         best = 0
