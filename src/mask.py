@@ -15,7 +15,7 @@ def createMasks(howmany, settings):
         mapargs.append( (mutationcount, inputranges, increment, choices) )
 
     #Single threaded
-    results = [createmask(rgs) for rgs in mapargs]
+    #results = [createmask(rgs) for rgs in mapargs]
 
     #Multithreaded
     results = multiprocessing.Pool().map(createmask, mapargs)
