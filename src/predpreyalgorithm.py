@@ -83,7 +83,7 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
 
     try:
         import psyco
-        psyco.profile()
+        psyco.full()
     except ImportError:
         pass
 
@@ -108,8 +108,8 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
 
         score_start = time.time()
         predArgs, preyArgs = getCalcScoreArgs(predmasks, preymasks, best_pred, best_prey, settings)
-        #predpdfscores, preypdfscores = getMultiProcessedResults(predArgs, preyArgs)
-        predscores, preyscores = getResults(predArgs, preyArgs)
+        predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
+        #predscores, preyscores = getResults(predArgs, preyArgs)
         score_times.append(time.time() - score_start)
 
         #Pickout the best mask

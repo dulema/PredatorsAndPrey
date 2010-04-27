@@ -1,3 +1,4 @@
+import multiprocessing
 import numpy.random
 
 #given a pdf this function will return a number of pdfs that are mutated
@@ -17,7 +18,7 @@ def createMasks(howmany, settings):
     results = [createmask(rgs) for rgs in mapargs]
 
     #Multithreaded
-    #results = Pool().map(createmask, mapargs, 20000)
+    results = multiprocessing.Pool().map(createmask, mapargs)
 
     return results
 
