@@ -25,7 +25,7 @@ def preyMakeMove(prey, world):
                      raise Exception("There is a prey case that is not accounted for: " + critterOnTile)
 
 def predMakeMove(pred, world):
-        for directionMove in pred.getMoves(world.getSensoryData(pred, ppa.getSettings("sight"))):
+        for directionMove in pred.getMoves(world.getSensoryData(pred, ppa.getSetting("sight"))):
                 destinationTile = world.getCritterDest(pred, directionMove)
                 if destinationTile == None: continue
                 critterOnTile = world.getCritterAt(destinationTile)
