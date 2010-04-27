@@ -110,8 +110,8 @@ def createMaskAndScore(who=None):
 
 def MutateAndScore():
     dryrun = createMaskAndScore()
-    preds = [createMaskAndScore(critter.PREDATOR) for _ in getSetting("predmutations")]
-    preys = [createMaskAndScore(critter.PREY) for _ in getSetting("preymutations")]
+    preds = [createMaskAndScore(critter.PREDATOR) for _ in range(getSetting("predmutations")) ]
+    preys = [createMaskAndScore(critter.PREY) for _ in range(getSetting("preymutations")) ]
     preds.append(dryrun)
     preys.append(dryrun)
     return preds, preys
