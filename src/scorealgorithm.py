@@ -13,6 +13,7 @@ except ImportError:
 def preyMakeMove(prey, settings, world):
         for directionMove in prey.getMoves(world.getSensoryData(prey, settings["sight"])):
                 destinationTile = world.getCritterDest(prey, directionMove)
+                if destinationTile == None: continue
                 critterOnTile = world.getCritterAt(destinationTile)
                 if critterOnTile == None:
                         world.moveCritter(prey, directionMove)
@@ -32,6 +33,7 @@ def preyMakeMove(prey, settings, world):
 def predMakeMove(pred, settings, world):
         for directionMove in pred.getMoves(world.getSensoryData(pred, settings["sight"])):
                 destinationTile = world.getCritterDest(pred, directionMove)
+                if destinationTile == None: continue
                 critterOnTile = world.getCritterAt(destinationTile)
                 if critterOnTile == None:
                         world.moveCritter(pred, directionMove)

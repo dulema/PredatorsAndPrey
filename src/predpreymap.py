@@ -139,7 +139,7 @@ class Map:
 
         self.removeCritter(critter)
         self.setCritterAt(newloc, critter)
-        
+
     def bushbombplants(self, spot):
         del self.plants[spot]
 
