@@ -84,7 +84,7 @@ def getMultiProcessedResults(predArgs, preyArgs):
     preyResults = pool.map_async(scorealgorithm.calcscore, preyArgs, 20000) if len(preyArgs) > 1 else None
     return predResults.get() if predResults else [0], preyResults.get() if preyResults else [0]
 
-def createMaskAndScore(who):
+def createMaskAndScore(who=None):
     try:
         import psyco
         psyco.full()
