@@ -43,7 +43,7 @@ def predMakeMove(pred, settings, world):
 
 def calcscore(pred_mask, prey_mask, hooker=None):
     mapsize = ppa.getSetting("mapsize")
-    vegpercent = ppa.getSetting("vegpercent")
+    vegpercent = ppa.getSetting("plantpercent")
     plantbites = ppa.getSetting("plantbites")
     preypercent = ppa.getSetting("preypercent")
     predpercent = ppa.getSetting("predpercent")
