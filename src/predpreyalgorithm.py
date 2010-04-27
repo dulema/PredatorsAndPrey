@@ -5,8 +5,20 @@ import scorealgorithm
 best_pred = {}
 best_prey = {}
 
-DEFAULT_SETTINGS = {"mapsize":20, "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01, "sight":10, "plantbites":3, "maxhunger":20, "pdfpercent":0.01, "inputranges":(10,7,10,7,10,7,20), "mutationincrement":0.3}
+SIGHT = 20
+MAXHUNGER = 20
 
+DEFAULT_SETTINGS = {"sight":20, "mapsize":20,"plantpercent":0.05,
+                    "preypercent":0.02, "predpercent":0.01,
+                    "plantbites":3, "maxhunger":20,
+                    "pdfpercent":0.01,"muttionincrement":0.3,
+                    "distancechunks":[3,6,18],
+                    "hungerchunks":[3,6,18] }
+
+#Basically input is (preddistance, preddireciton, preydistance, preydirection, vegdistance, vegdirection, hunger)
+#Input ranges is the number of different values possible for each entry
+
+DEFAULT_SETTINGS["inputranges"] =( [ len(DEFAULT_SETTINGS["distancechunks"]), 7] * 3 ) + [ len(DEFAULT_SETTINGS["hungerchunks"]) ]
 
 def __printProgress(num, total):
     width = 40
@@ -71,7 +83,7 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
 
     try:
         import psyco
-        psyco.profile()
+        psyco.full()
     except ImportError:
         pass
 
@@ -96,8 +108,8 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
 
         score_start = time.time()
         predArgs, preyArgs = getCalcScoreArgs(predmasks, preymasks, best_pred, best_prey, settings)
-        #predpdfscores, preypdfscores = getMultiProcessedResults(predArgs, preyArgs)
-        predscores, preyscores = getResults(predArgs, preyArgs)
+        predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
+        #predscores, preyscores = getResults(predArgs, preyArgs)
         score_times.append(time.time() - score_start)
 
         #Pickout the best mask

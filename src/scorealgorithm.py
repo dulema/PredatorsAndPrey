@@ -10,71 +10,10 @@ except ImportError:
     import sys
     sys.stderr.write("Install Python Psyco For Increased Performance.\n")
 
-def reverse(direction):
-    if direction == 0:
-        return 0
-    if direction <= 3:
-        direction += 3
-    else:
-        direction -= 3
-    return direction
-
-def left(direction):
-    if direction == 0:
-        return 0
-    if direction == 1:
-        return 6
-    else:
-        return direction - 1
-
-def right(direction):
-    if direction == 0:
-        return 0
-    if direction == 6:
-        return 1
-    else:
-        return direction + 1
-
-#This converts for example "Move towards predator" to "Move left"
-#sensorydata holds the data from the map
-#move holds a direction like "Move towards predator"
-def directionConverter(sensorydata):
-    toPred = sensorydata[1]
-    toPrey = sensorydata[3]
-    toPlant = sensorydata[5]
-
-    toPred = 0 if toPred == None else toPred
-    toPrey = 0 if toPrey == None else toPrey
-    toPlant = 0 if toPlant == None else toPlant
-    allpossiblemoves = [toPred,  toPrey,  toPlant,
-     reverse(toPred), reverse(toPrey), reverse(toPlant),
-     left(toPred),    left(toPrey),    left(toPlant),
-     right(toPred),   right(toPrey),   right(toPlant), 0  ]
-    return allpossiblemoves
-
-#
-# This will return a list of all moves that should be attmempted
-# In the order that they should be attempted
-# This really serves its self to be a co-routine but sadly
-# psyco can't compile those and so we're stuck trying to
-# get this to work otherwise.
-#
-def getAMove(critter, world, settings):
-        if world.getCritterXY(critter) == None:
-                raise Exception("Critter isn't on the map!")
-        senses = world.getSensoryData(critter, settings["sight"])
-        dirconv = directionConverter(senses)
-        validmoves = list(set(dirconv)) #removes all duplicates in the list
-        moves = [ (world.getCritterDest(critter, dirconv[move]), dirconv[move]) for move in critter.getMoves(senses) ]
-        #Only keeping the good moves, avoiding filter() to keep psyco happy...
-        validmoves = []
-        for x in moves:
-            if x[0] != None and x[1] != None and x[1] != -1:
-                validmoves.append(x)
-        return validmoves
-
 def preyMakeMove(prey, settings, world):
-        for destinationTile, directionMove in getAMove(prey, world, settings):
+        for directionMove in prey.getMoves(world.getSensoryData(prey, settings["sight"])):
+                destinationTile = world.getCritterDest(prey, directionMove)
+                if destinationTile == None: continue
                 critterOnTile = world.getCritterAt(destinationTile)
                 if critterOnTile == None:
                         world.moveCritter(prey, directionMove)
@@ -92,7 +31,9 @@ def preyMakeMove(prey, settings, world):
                      raise Exception("There is a prey case that is not accounted for: " + critterOnTile)
 
 def predMakeMove(pred, settings, world):
-        for destinationTile, directionMove in getAMove(pred, world, settings):
+        for directionMove in pred.getMoves(world.getSensoryData(pred, settings["sight"])):
+                destinationTile = world.getCritterDest(pred, directionMove)
+                if destinationTile == None: continue
                 critterOnTile = world.getCritterAt(destinationTile)
                 if critterOnTile == None:
                         world.moveCritter(pred, directionMove)
@@ -110,7 +51,7 @@ def calcscore(x):
     predpdf, pred_mask = x[0]
     preypdf, prey_mask = x[1]
 
-    settings = x[2] if len(x) > 2 else DEFAULT_SETTINGS
+    settings = x[2]
     mapsize = settings["mapsize"] if "mapsize" in settings else 20
     vegpercent = settings["vegpercent"] if "vegpercent" in settings else 0.5
     plantbites = settings["plantbites"] if "plantbites" in settings else 3
@@ -121,7 +62,7 @@ def calcscore(x):
 
     hooker = x[3] if len(x) > 3 else None
 
-    world = Map(mapsize, vegpercent,plantbites)
+    world = Map(settings)
     for _ in range(int((mapsize**2)*predpercent)):
         world.setCritterAt(world.getRandomUntakenTile(), Critter(predpdf, pred_mask, critter.PREDATOR))
 

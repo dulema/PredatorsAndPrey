@@ -1,13 +1,12 @@
+import multiprocessing
 import numpy.random
-
-DEFAULT_MUT_SETTINGS =  [20, 7, 20, 7, 20, 7, 20]
 
 #given a pdf this function will return a number of pdfs that are mutated
 def createMasks(howmany, settings):
 
     increment = abs(settings["mutationincrement"] if "mutationincrement" in settings else 0.5)
     pdfpercent = settings["pdfpercent"] if "pdfpercent" in settings else 0.5
-    inputranges = settings["inputranges"] if "inputranges" in settings else DEFAULT_MUT_SETTINGS
+    inputranges = settings["inputranges"]
     choices = settings["choices"] if "choices" in settings else 13
     mutationcount = int(pdfpercent*numpy.array(inputranges).prod())
 
@@ -19,29 +18,27 @@ def createMasks(howmany, settings):
     results = [createmask(rgs) for rgs in mapargs]
 
     #Multithreaded
-    #results = Pool().map(createmask, mapargs, 20000)
+    results = multiprocessing.Pool().map(createmask, mapargs)
 
     return results
 
 
 def createmask( x ):
-#    import time
-#    start_create = time.time()
+#   import time
+#   start_create = time.time()
     pdfsize, ranges, increment, choices  = x
     inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
     rangecount = len(inputranges)
 
     #Generate the random input
-#    start_random = time.time()
-    random_inputs = numpy.column_stack([numpy.random.randint(low=0,high=lim,size=(pdfsize)) for lim in inputranges])
-#    input_time = time.time() - start_random
+#   start_random = time.time()
+    random_inputs = numpy.column_stack([numpy.random.randint(low=0,high=lim,size=(pdfsize)).astype(numpy.uint8) for lim in inputranges])
+#   input_time = time.time() - start_random
 
     #Generate the historgrams to go with them
-#    hist_start = time.time()
-    histograms = numpy.random.uniform(low=0,high=1.0,size=(13,pdfsize))
-    s = numpy.reciprocal(histograms.sum(0))
-    histograms *= s
-#    histo_time = time.time() - hist_start
+#   hist_start = time.time()
+    histograms = numpy.random.random_integers(low=1,high=255,size=(7,pdfsize)).astype(numpy.uint8)
+#   histo_time = time.time() - hist_start
 
     mask = {}
     for ri,histogram in zip(random_inputs, histograms):
@@ -63,10 +60,12 @@ if __name__ == "__main__":
         pass
 
     rounds = 10
-    settings = {"mutationincrement":0.3, "pdfpercent":0.01, "inputranges":[20, 7, 20, 7, 20, 7, 20], "choices":13 }
+    settings = {"mutationincrement":0.3, "pdfpercent":0.01, "inputranges":[5, 70, 2], "choices":7 }
     for i in range(rounds):
         print(" ==== ROUND %d ====" % i)
-        createMasks(5, settings)
+        for i, mask in enumerate(createMasks(5, settings)):
+            print("\t === Mask %d ===" % i)
+            print mask
 
 #    for n, r in enumerate(result):
 #        print(" == R %d of %d == "% (n, len(result)))
