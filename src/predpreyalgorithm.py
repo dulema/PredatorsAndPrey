@@ -85,6 +85,15 @@ def createMaskAndScore(who=None):
     s = scorealgorithm.calcscore(pred_mask, prey_mask)
     return s, m
 
+def MultiThreadedMutateAndScore():
+    from multiprocessing import Pool
+    p = Pool()
+    r0 = p.apply_async(createMaskAndScore)
+    r1 = p.map_async(createMaskAndScore, [critter.PREDATOR] * getSetting("predmutations") )
+    r2 = p.map_async(createMaskAndScore, [critter.PREY] * getSetting("preymutations") )
+    dry_result = r0.get()
+    return r1.get().append(dry_result), r2.get().append(dry_result)
+
 
 def MutateAndScore():
     dryrun = createMaskAndScore()
