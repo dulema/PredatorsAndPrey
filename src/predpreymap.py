@@ -2,29 +2,29 @@ import random
 import critter
 from critter import Critter
 
+dontmove = 0
+topleft = 1
+topright = 2
+right = 3
+bottomright = 4
+bottomleft = 5
+left = 6
+
 class Map:
 
-    def __init__(self, size, plantpercent,plantbites):
+    def __init__(self, settings):
         self.directions = []
         self.gooddirections = []
         self.critters = {}
         self.plants = []
-        self.dontmove = 0
-        self.topleft = 1
-        self.topright = 2
-        self.right = 3
-        self.bottomright = 4
-        self.bottomleft = 5
-        self.left = 6
-
-
-        self.size = size
-        self.plantbites = plantbites
+        self.size = settings["mapsize"]
+        self.plantbites = settings["plantbites"]
+        self.settings = settings
         #Fill the map with plants
-        for _ in range(int(plantpercent*size*size)):
-                loc = (random.randint(0, size-1), random.randint(0, size-1),self.plantbites)
+        for _ in range(int(self.plantpercent*self.size*self.size)):
+                loc = (random.randint(0, self.size-1), random.randint(0, self.size-1),self.plantbites)
                 while loc in self.plants:
-                        loc = (random.randint(0, size-1), random.randint(0, size-1),self.plantbites)
+                        loc = (random.randint(0, self.size-1), random.randint(0, self.size-1),self.plantbites)
                 self.plants.append(loc)
 
         #TEST REMOVE WHEN DONE
@@ -32,12 +32,12 @@ class Map:
         self.plants.append(ufa)
 
     def isPlant(self, location):
-        
+
         x,y = location
 
         # Goes Through Plants To See If Plant There
         # If So Plant Eaten And Returned True
-        
+
         for i in range (len(self.plants)):
             j,k,l = self.plants[i]
             if x == j and y == k:
@@ -77,7 +77,7 @@ class Map:
             return None
         if wheretogo == 0:
             return location
-        if wheretogo == self.topleft:
+        if wheretogo == topleft:
             if y == 0:
                 return None
             if x == 0 and y%2 == 0:
@@ -86,7 +86,7 @@ class Map:
                 return (x, y-1)
             else:
                 return (x-1, y-1)
-        if wheretogo == self.topright:
+        if wheretogo == topright:
             if y == 0:
                 return None
             if x == self.size-1 and y%2 == 1:
@@ -96,19 +96,19 @@ class Map:
             else:
                 return (x, y-1)
 
-        if wheretogo == self.right:
+        if wheretogo == right:
             if x == self.size - 1:
                 return (0, y)
             else:
                 return (x+1, y)
 
-        if wheretogo == self.left:
+        if wheretogo == left:
             if x == 0:
                 return (self.size-1, y)
             else:
                 return (x-1, y)
 
-        if wheretogo == self.bottomleft:
+        if wheretogo == bottomleft:
             if y == self.size - 1:
                 return None
             if x == 0 and y%2 == 0:
@@ -118,7 +118,7 @@ class Map:
             else:
                 return (x-1, y+1)
 
-        if wheretogo == self.bottomright:
+        if wheretogo == bottomright:
             if y == self.size -1:
                 return None
             if x == self.size-1 and y % 2 == 1:
@@ -198,18 +198,18 @@ class Map:
         if test1 == 0:
             if test2 == 0:
                 if disy > y:
-                    return self.topright
+                    return topright
 
                 else:
-                    return self.bottomleft
+                    return bottomleft
 
             # Small Vertical Difference Organ Is Right Of Scanner
             elif test2 == 1:
-                return self.right
+                return right
             
             # Small Vertical Difference Organ Is Left Of Scanner
             else:
-                return self.left
+                return left
 
         # Big Vertical Difference Organ Under Scanner
         # Uses Horizontal Difference For Bottom (Right Or Left)
@@ -217,9 +217,9 @@ class Map:
         
         elif test1 == 1:
             if test2 == 1:
-                return self.bottomright
+                return bottomright
             else:
-                return self.bottomleft
+                return bottomleft
 
         # Big Vertical Difference Organ Over Scanner
         # Uses Horizontal Difference For Top (Right Or Left)
@@ -227,9 +227,9 @@ class Map:
 
         elif test1 == 2:
             if test2 == 1:
-                return self.topright
+                return topright
             else:
-                return self.topleft
+                return topleft
 
     def getDistance(self, x, y, checkx, checky):
 
@@ -322,14 +322,20 @@ class Map:
         else:
                 return 0, 0
 
+    def getChunk(self, number):
+        for i,val in enumerate(self.settings["distancechunks"]):
+            if number < val:
+                return i
+        return len(self.settings["distancechunks"])
+
+    #Gets The X And Y Of Critter Or Plant And Checks For Closest
+    #Predator, Prey or Plant
     def getSensoryData(self,critter, radius):
-        # Gets The X And Y Of Critter Or Plant And Checks For Closest
-        # Predator, Prey or Plant
         (x,y) = self.getCritterXY(critter)
         preddistance,preddirection = self.getClosestPred(x, y, radius)
         preydistance,preydirection = self.getClosestPrey(x, y, radius)
         plantdistance,plantdirection = self.getClosestPlant(x, y, radius)
-        return preddistance, preddirection, preydistance, preydirection,plantdistance,plantdirection
+        return getChunk(preddistance), preddirection, getChunk(preydistance), preydirection, getChunk(plantdistance),plantdirection
 
     def getRandomUntakenTile(self):
         if len(self.critters) >= self.size**2:

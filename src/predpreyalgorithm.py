@@ -12,8 +12,8 @@ DEFAULT_SETTINGS = {"sight":20, "mapsize":20,
                     "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01,
                     "plantbites":3, "maxhunger":20,
                     "pdfpercent":0.01,"muttionincrement":0.3,
-                    "distancechunks":4, "distanceincrement":3,
-                    "hungerchunks":3, "hungerincrement":4 }
+                    "distancechunks":[3,6,18],
+                    "hungerchunks":[3,6,18]}
 
 #Basically input is (preddistance, preddireciton, preydistance, preydirection, vegdistance, vegdirection, hunger)
 #Input ranges is the number of different values possible for each entry
