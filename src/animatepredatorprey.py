@@ -82,7 +82,7 @@ def critter_view():
         critter_view_window = Tk()
         critter_view_window.wm_title("Critter View")
         graph = Canvas(critter_view_window, width = 550, height = 250)
-        graph.grid(row=0, column=0, columnspan=15, padx=10)#deniz, pack instead of grid, but no precision cuz u use anchors
+        graph.grid(row=0, column=0, columnspan=15, padx=10)
         y_base = 200
         j = 10
         for i in range(len(bar)):
@@ -305,9 +305,10 @@ if __name__ == "__main__":
         xscrollbar.config(command=playing_field.xview)
 
 	#progress bar section
-	pbar = Tk()
-	pbar.wm_title("Generation Progress Bar")
-	
+	pbarwindow = Tk()
+	pbarwindow.wm_title("Generation Progress Bar")
+	Label(pbarwindow, text='Insert Progress Bar Here...').pack(pady=10, side='top', fill='x', expand='no')
+
         #Menu Section
         menu = Menu(root)
         root.config(menu=menu)
