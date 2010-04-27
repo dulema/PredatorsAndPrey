@@ -304,6 +304,10 @@ if __name__ == "__main__":
         yscrollbar.config(command=playing_field.yview)
         xscrollbar.config(command=playing_field.xview)
 
+	#progress bar section
+	pbar = Tk()
+	pbar.wm_title("Generation Progress Bar")
+	
         #Menu Section
         menu = Menu(root)
         root.config(menu=menu)
