@@ -305,9 +305,9 @@ if __name__ == "__main__":
         xscrollbar.config(command=playing_field.xview)
 
 	#progress bar section
-	pbarwindow = Tk()
-	pbarwindow.wm_title("Generation Progress Bar")
-	Label(pbarwindow, text='Insert Progress Bar Here...').pack(pady=10, side='top', fill='x', expand='no')
+	#pbarwindow = Tk()
+	#pbarwindow.wm_title("Generation Progress Bar")
+	#Label(pbarwindow, text='Insert Progress Bar Here...').pack(pady=10, side='top', fill='x', expand='no')
 
         #Menu Section
         menu = Menu(root)
@@ -379,18 +379,18 @@ if __name__ == "__main__":
         key_veg_label.grid(row=3, column=4)
         speed_slider_label.grid(row=13, column=4, sticky=S, columnspan=2)
         speed_slider.grid(row=14, column=4, sticky=N, columnspan=2)
-        map_size_label.grid(row=11, column=4, sticky=S, columnspan=2)
-        map_size_input.grid(row=12, column=4, sticky=N, columnspan=2)
+        map_size_label.grid(row=11, column=0, sticky=S)
+        map_size_input.grid(row=12, column=0, sticky=N)
         scale_label.grid(row=15,column=4, sticky=S, columnspan=2)
         scale_slider.grid(row=16,column=4, sticky=N, columnspan=2)
         animate_button.grid(row=17, column=4, sticky=N,columnspan=2)
         playing_field.grid(row=0, column=1, rowspan=17, padx=5)
-        gen_num_label.grid(row=5, column=4, sticky=S,columnspan=2)
-        gen_num_input.grid(row=6, column=4, sticky=N,columnspan=2)
-        pred_num_label.grid(row=7, column=4, sticky=S,columnspan=2)
-        pred_num_input.grid(row=8, column=4, sticky=N,columnspan=2)
-        prey_num_label.grid(row=9, column=4, sticky=S,columnspan=2)
-        prey_num_input.grid(row=10, column=4, sticky=N,columnspan=2)
+        gen_num_label.grid(row=5, column=0, sticky=S)
+        gen_num_input.grid(row=6, column=0, sticky=N)
+        pred_num_label.grid(row=7, column=0, sticky=S)
+        pred_num_input.grid(row=8, column=0, sticky=N)
+        prey_num_label.grid(row=9, column=0, sticky=S)
+        prey_num_input.grid(row=10, column=0, sticky=N)
 
 
         vegetation = []
