@@ -36,7 +36,7 @@ def createmask( x ):
 
     #Generate the historgrams to go with them
 #   hist_start = time.time()
-    histograms = numpy.random.random_integers(low=0,high=255,size=(7,pdfsize)).astype(numpy.uint8)
+    histograms = numpy.random.random_integers(low=1,high=255,size=(7,pdfsize)).astype(numpy.uint8)
 #   histo_time = time.time() - hist_start
 
     mask = {}

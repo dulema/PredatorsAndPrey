@@ -24,6 +24,7 @@ class Critter:
         pdf = self.getHistogram(senses).copy() #This is a numpy array
         moves = []
         while len(pdf) > 0: #Keep going until the pdf is empty
+            if pdf.sum() == 0 : print(pdf)
             r = numpy.random.randint(pdf.sum()) #Pick a random number
             sum = 0 #Track how high we are
             for i,probability in enumerate(pdf): #For every i from 0 -> len(pdf) and every probability in the pdf
