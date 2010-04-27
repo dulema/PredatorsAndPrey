@@ -41,7 +41,7 @@ def predMakeMove(pred, world):
                 else:
                      raise Exception("There is a predator case that is not accounted for: " + critterOnTile)
 
-def calcscore(pred_mask, prey_mask, hooker=None):
+def calcscore(pred_mask={}, prey_mask={}, hooker=None):
     mapsize = ppa.getSetting("mapsize")
     vegpercent = ppa.getSetting("plantpercent")
     plantbites = ppa.getSetting("plantbites")

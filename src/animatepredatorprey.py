@@ -67,8 +67,7 @@ def animate():
         if validate() == 0:
                 pass
         else:
-                args = ( (predpreyalgorithm.best_pred, {}), (predpreyalgorithm.best_prey, {}), settings, updatePlayingField )
-                scorealgorithm.calcscore(args)
+                scorealgorithm.calcscore(hooker = updatePlayingField)
                 #draw_map()
 
 
