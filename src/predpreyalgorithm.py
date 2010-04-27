@@ -54,28 +54,6 @@ def roundprogress(map, score):
         #print("Progress at %s" % score)
     #   for critter in map.critters: print("%s at %s hunger:%s" % (critter.type, map.critters[critter], critter.getStatus("hunger")))
 
-
-def getCalcScoreArgs(preds, preys, bpred, bprey):
-    bpreyclones = [ (bprey, {}) for _ in preds]
-    bpredclones = [ (bpred, {}) for _ in preys]
-    preds = zip( [bpred]*len(preds), preds)
-    preys = zip( [bprey]*len(preys), preys)
-    predArgs = zip( preds, bpreyclones)
-    preyArgs = zip(bpredclones, preys)
-    return predArgs, preyArgs
-
-def getResults(predArgs, preyArgs):
-    predResults = [0]
-    preyResults = [0]
-
-    if len(predArgs) > 1:
-        predResults = [ scorealgorithm.calcscore(arg) for arg in predArgs ]
-
-    if len(preyArgs) > 1:
-        preyResults = [ scorealgorithm.calcscore(arg) for arg in preyArgs ]
-
-    return predResults, preyResults
-
 def getMultiProcessedResults(predArgs, preyArgs):
     #Now comes the multiprocessing magic...
     from multiprocessing import Pool
