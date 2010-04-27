@@ -19,6 +19,7 @@ class Map:
         self.plants = []
         self.size = settings["mapsize"]
         self.plantbites = settings["plantbites"]
+        self.plantpercent = settings["plantpercent"]
         self.settings = settings
         #Fill the map with plants
         for _ in range(int(self.plantpercent*self.size*self.size)):
