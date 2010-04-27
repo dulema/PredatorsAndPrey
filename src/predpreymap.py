@@ -321,10 +321,11 @@ class Map:
                 return 0, 0
 
     def getChunk(self, number):
-        for i,val in enumerate(self.settings["distancechunks"]):
+        chunks  = ppa.getSetting("distancechunks")
+        for i,val in enumerate(chunks):
             if number < val:
                 return i
-        return len( self.settings["distancechunks"] )
+        return len(chunks)
 
     #Gets The X And Y Of Critter Or Plant And Checks For Closest
     #Predator, Prey or Plant
