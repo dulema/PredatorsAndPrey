@@ -92,7 +92,11 @@ def MultiThreadedMutateAndScore():
     r1 = p.map_async(createMaskAndScore, [critter.PREDATOR] * getSetting("predmutations") )
     r2 = p.map_async(createMaskAndScore, [critter.PREY] * getSetting("preymutations") )
     dry_result = r0.get()
-    return r1.get().append(dry_result), r2.get().append(dry_result)
+    preds = r1.get()
+    preds.append(dry_result)
+    preys = r2.get()
+    preys.append(dry_result)
+    return preds, preys
 
 
 def MutateAndScore():
@@ -116,8 +120,8 @@ def mutate(gens, settings=DEFAULT_SETTINGS, progress=__printProgress):
     for i in range(gens):
         progress(i, gens) #Update the progress
 
-        #preds, preys = MultiProcessMutateAndScore(predArgs, preyArgs, settings)
-        preds, preys = MutateAndScore()
+        #preds, preys = MutateAndScore()
+        preds, preys = MultiThreadedMutateAndScore()
 
         #Find the best Pred Mask
         best = 0
