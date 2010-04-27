@@ -4,8 +4,8 @@ from critter import Critter
 import critter
 import predpreyalgorithm as ppa
 
-def preyMakeMove(prey, settings, world):
-        for directionMove in prey.getMoves(world.getSensoryData(prey, settings["sight"])):
+def preyMakeMove(prey, world):
+        for directionMove in prey.getMoves(world.getSensoryData(prey, ppa.getSetting("sight"))):
                 destinationTile = world.getCritterDest(prey, directionMove)
                 if destinationTile == None: continue
                 critterOnTile = world.getCritterAt(destinationTile)
@@ -24,8 +24,8 @@ def preyMakeMove(prey, settings, world):
                 else:
                      raise Exception("There is a prey case that is not accounted for: " + critterOnTile)
 
-def predMakeMove(pred, settings, world):
-        for directionMove in pred.getMoves(world.getSensoryData(pred, settings["sight"])):
+def predMakeMove(pred, world):
+        for directionMove in pred.getMoves(world.getSensoryData(pred, ppa.getSettings("sight"))):
                 destinationTile = world.getCritterDest(pred, directionMove)
                 if destinationTile == None: continue
                 critterOnTile = world.getCritterAt(destinationTile)
@@ -68,12 +68,12 @@ def calcscore(pred_mask, prey_mask, hooker=None):
                 if world.getCritterXY(c) == None: continue
                 c.incrementStatus("hunger", 1)
                 if c.type == critter.PREY:
-                        preyMakeMove(c, settings, world)
+                        preyMakeMove(c, world)
                 elif c.type == critter.PREDATOR:
-                        predMakeMove(c, settings, world)
+                        predMakeMove(c, world)
                 else:
                         raise Exception("Something that is not a critter is in the map: " + c)
-                if c.getStatus("hunger") >= settings["maxhunger"] and world.getCritterXY(c) != None:
+                if c.getStatus("hunger") >= ppa.getSetting("maxhunger") and world.getCritterXY(c) != None:
                         world.removeCritter(c)
                 if hooker != None:
                         hooker(world, score)
