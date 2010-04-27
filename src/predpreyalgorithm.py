@@ -1,6 +1,7 @@
 #Does the work
 import mask
 import scorealgorithm
+import critter
 
 best_pred = {}
 best_prey = {}
@@ -9,7 +10,8 @@ SIGHT = 20
 MAXHUNGER = 20
 
 #These are user definable
-DEFAULT_SETTINGS = {"sight":20, "mapsize":20,"plantpercent":0.05,
+DEFAULT_SETTINGS = {"predmutations":4, "preymutations":4, "mutations":10,
+                    "sight":20, "mapsize":20,"plantpercent":0.05,
                     "preypercent":0.02, "predpercent":0.01,
                     "plantbites":3, "maxhunger":20,
                     "pdfpercent":0.01,"mutationincrement":0.3,
@@ -21,6 +23,11 @@ DEFAULT_SETTINGS = {"sight":20, "mapsize":20,"plantpercent":0.05,
 
 DEFAULT_SETTINGS["inputranges"] =( [ len(DEFAULT_SETTINGS["distancechunks"]), 7] * 3 ) + [ len(DEFAULT_SETTINGS["hungerchunks"]) ]
 DEFAULT_SETTINGS["choices"] = 7
+
+settings = {}
+
+def getSetting(setting):
+    return settings[setting] if setting in settings else DEFAULT_SETTINGS[setting]
 
 def __printProgress(num, total):
     width = 40
@@ -48,14 +55,13 @@ def roundprogress(map, score):
     #   for critter in map.critters: print("%s at %s hunger:%s" % (critter.type, map.critters[critter], critter.getStatus("hunger")))
 
 
-def getCalcScoreArgs(preds, preys, bpred, bprey, settings):
+def getCalcScoreArgs(preds, preys, bpred, bprey):
     bpreyclones = [ (bprey, {}) for _ in preds]
     bpredclones = [ (bpred, {}) for _ in preys]
-    settingsclones = [settings] * max(len(preds),len(preys))
     preds = zip( [bpred]*len(preds), preds)
     preys = zip( [bprey]*len(preys), preys)
-    predArgs = zip( preds, bpreyclones, settingsclones[:len(preds)])
-    preyArgs = zip(bpredclones, preys, settingsclones[:len(preys)])
+    predArgs = zip( preds, bpreyclones)
+    preyArgs = zip(bpredclones, preys)
     return predArgs, preyArgs
 
 def getResults(predArgs, preyArgs):
@@ -78,10 +84,41 @@ def getMultiProcessedResults(predArgs, preyArgs):
     preyResults = pool.map_async(scorealgorithm.calcscore, preyArgs, 20000) if len(preyArgs) > 1 else None
     return predResults.get() if predResults else [0], preyResults.get() if preyResults else [0]
 
+def createMaskAndScore(who):
+    try:
+        import psyco
+        psyco.full()
+    except ImportError:
+        pass
 
-def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETTINGS, progress=__printProgress): 
+    if who == critter.PREDATOR:
+        m = mask.createmask()
+        pred_mask = m
+        prey_mask = {}
+    elif who == critter.PREY:
+        m = mask.createmask()
+        pred_mask = {}
+        prey_mask = m
+    else:
+        m = {}
+        pred_mask = {}
+        prey_mask = {}
+
+    s = scorealgorithm.calcscore(pred_mask, prey_mask)
+    return s, m
+
+
+def MutateAndScore():
+    dryrun = createMaskAndScore()
+    preds = [createMaskAndScore(critter.PREDATOR) for _ in getSetting("predmutations")]
+    preys = [createMaskAndScore(critter.PREY) for _ in getSetting("preymutations")]
+    preds.append(dryrun)
+    preys.append(dryrun)
+    return preds, preys
+
+
+def mutate(gens, settings=DEFAULT_SETTINGS, progress=__printProgress):
     global best_pred, best_prey
-
 
     try:
         import psyco
@@ -89,56 +126,37 @@ def mutate(gens, pred_clones_per_gen, prey_clones_per_gen, settings=DEFAULT_SETT
     except ImportError:
         pass
 
-    import time
-    mask_times = []
-    score_times = []
-    gen_time = []
-    start = time.time()
-
     for i in range(gens):
-        gen_start = time.time()
         progress(i, gens) #Update the progress
 
-        mask_start = time.time()
-        #creats the masks. Masks hold the difference between the original critter and the new mutated one.
-        masks = mask.createMasks(pred_clones_per_gen+prey_clones_per_gen, settings)
-        predmasks = masks[:pred_clones_per_gen]
-        predmasks.append({}) #This is how we add the best_pred to the mix. The best_pred has an empty mask
-        preymasks = masks[pred_clones_per_gen:]
-        preymasks.append({}) #This is how we add the best_prey to the mix. The best_prey has an empty mask
-        mask_times.append(time.time() - mask_start)
+        #preds, preys = MultiProcessMutateAndScore(predArgs, preyArgs, settings)
+        preds, preys = MutateAndScore(settings)
 
-        score_start = time.time()
-        predArgs, preyArgs = getCalcScoreArgs(predmasks, preymasks, best_pred, best_prey, settings)
-        predscores, preyscores = getMultiProcessedResults(predArgs, preyArgs)
-        #predscores, preyscores = getResults(predArgs, preyArgs)
-        score_times.append(time.time() - score_start)
+        #Find the best Pred Mask
+        best = 0
+        best_pred_mask = {}
+        for s, mask in preds:
+            if s > best:
+                best = s
+                best_pred_mask = mask
 
-        #Pickout the best mask
-        best_pred_mask = predmasks[predscores.index(max(predscores))]
-        best_prey_mask = preymasks[preyscores.index(max(preyscores))]
+        #Find the best Prey Mask
+        best = 0
+        best_prey_mask = {}
+        for s, mask in preys:
+            if s > best:
+                best = s
+                best_prey_mask = mask
 
-        #Merge the mask into the best pdf
+        #Smash the mask into the best pdf
         for k,v in best_pred_mask.iteritems(): best_pred[k] = v
         for k,v in best_prey_mask.iteritems(): best_prey[k] = v
-        gen_time.append(time.time() - gen_start)
-
-    end = time.time()
-    totaltime = sum(gen_time)
-    print("\nTotal time: %d" % (totaltime) )
-    for i,masktime,scoretime,gentime in zip(range(gens), mask_times, score_times,gen_time):
-        print("\tGeneration %d took %d%% of the total time" % (i, int( (gentime/totaltime)*100 )))
-        print("\t\tMasking took %d%% of the total generation time" % (int( (masktime/float(gentime))* 100 )) )
-        print("\t\tScoring took %d%% of the total generation time" % (int( (scoretime/float(gentime))* 100 )) )
-
-    print("In total: ")
-    print("\tMasking took %d%% of the time" % int( (sum(mask_times) / float(totaltime)) * 100 ) )
-    print("\tScoring took %d%% of the time" % int( (sum(score_times) / float(totaltime)) * 100 ) )
 
 
 if __name__ == "__main__":
-    gens = input("How many generations?")
-    preds = input("How many predator clones per generation?")
-    preys = input("How many preys clones per generation?")
-    mutate(gens, preds, preys)
+    gens = input("How many generations would you like calculated?")
+    DEFAULT_SETTINGS["predmutations"] = input("How many predator clones per generation?")
+    DEFAULT_SETTINGS["preymutations"] = input("How many prey clones per generation?")
+    mutate(gens)
     __clearProgress()
+

@@ -1,4 +1,5 @@
 import numpy
+import predpreyalgorithm as ppa
 
 PREDATOR = "predator"
 PREY = "prey"
@@ -7,12 +8,11 @@ PREY = "prey"
 #Naive implementation that currently just runs on python
 class Critter:
 
-    def __init__(self, pdfmatrix, mask, type="No type defined", choices = 7):
-        self.choices = choices
+    def __init__(self, mask, type="No type defined"):
+        self.choices = ppa.getSetting("choices")
         self.status = {"hunger":0}
         self.type = type
-        self.choices = choices
-        self.pdfmatrix = pdfmatrix
+        self.pdfmatrix = ppa.best_pred if self.type == PREDATOR else ppa.best_prey
         self.mask = mask
 
     #

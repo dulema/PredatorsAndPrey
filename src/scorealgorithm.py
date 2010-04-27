@@ -2,13 +2,7 @@ import random
 from predpreymap import Map
 from critter import Critter
 import critter
-
-try:
-    import psyco
-    psyco.full()
-except ImportError:
-    import sys
-    sys.stderr.write("Install Python Psyco For Increased Performance.\n")
+import predpreyalgorithm as ppa
 
 def preyMakeMove(prey, settings, world):
         for directionMove in prey.getMoves(world.getSensoryData(prey, settings["sight"])):
@@ -47,27 +41,21 @@ def predMakeMove(pred, settings, world):
                 else:
                      raise Exception("There is a predator case that is not accounted for: " + critterOnTile)
 
-def calcscore(x):
-    predpdf, pred_mask = x[0]
-    preypdf, prey_mask = x[1]
+def calcscore(pred_mask, prey_mask, hooker):
+    mapsize = ppa.getSetting("mapsize")
+    vegpercent = ppa.getSetting("vegpercent")
+    plantbites = ppa.getSetting("plantbites")
+    preypercent = ppa.getSetting("preypercent")
+    predpercent = ppa.getSetting("predpercent")
+    maxhunger = ppa.getSetting("maxhunger")
+    sight = ppa.getSetting("sight")
 
-    settings = x[2]
-    mapsize = settings["mapsize"] if "mapsize" in settings else 20
-    vegpercent = settings["vegpercent"] if "vegpercent" in settings else 0.5
-    plantbites = settings["plantbites"] if "plantbites" in settings else 3
-    preypercent = settings["preypercent"] if "preypercent" in settings else 0.1
-    predpercent = settings["predpercent"] if "predpercent" in settings else 0.1
-    maxhunger = settings["maxhunger"] if "maxhunger" in settings else 20
-    sight = settings["sight"] if "sight" in settings else 20
-
-    hooker = x[3] if len(x) > 3 else None
-
-    world = Map(settings)
+    world = Map()
     for _ in range(int((mapsize**2)*predpercent)):
-        world.setCritterAt(world.getRandomUntakenTile(), Critter(predpdf, pred_mask, critter.PREDATOR))
+        world.setCritterAt(world.getRandomUntakenTile(), Critter(pred_mask, critter.PREDATOR))
 
     for _ in range(int((mapsize**2)*preypercent)):
-        world.setCritterAt(world.getRandomUntakenTile(), Critter(preypdf, prey_mask, critter.PREY))
+        world.setCritterAt(world.getRandomUntakenTile(), Critter(prey_mask, critter.PREY))
 
     score = 0
     while len(world.getPredators()) > 0 and len(world.getPreys()) > 0:

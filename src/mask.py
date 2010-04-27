@@ -1,32 +1,13 @@
-import multiprocessing
 import numpy.random
+import predpreyalgorithm
 
-#given a pdf this function will return a number of pdfs that are mutated
-def createMasks(howmany, settings):
-
-    increment = settings["mutationincrement"]
-    pdfpercent = settings["pdfpercent"]
-    inputranges = settings["inputranges"]
-    choices = settings["choices"]
-    mutationcount = int(pdfpercent*numpy.array(inputranges).prod())
-
-    mapargs = []
-    for _ in range(howmany):
-        mapargs.append( (mutationcount, inputranges, increment, choices) )
-
-    #Single threaded
-    #results = [createmask(rgs) for rgs in mapargs]
-
-    #Multithreaded
-    results = multiprocessing.Pool().map(createmask, mapargs)
-
-    return results
-
-
-def createmask( x ):
-    pdfsize, ranges, increment, choices  = x
+def createmask():
+    ranges = predpreyalgorithm.getSetting("inputranges")
     inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
+    pdfsize = inputranges.prod() * predpreyalgorithm.getSetting("pdfpercent")
     rangecount = len(inputranges)
+    choices = predpreyalgorithm.getSetting("choices")
+    increment = predpreyalgorithm.getSetting("mutationincrement")
 
     #Generate the random input
     random_inputs = (numpy.random.random((pdfsize, rangecount))*inputranges).astype(numpy.uint8)
