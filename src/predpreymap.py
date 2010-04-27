@@ -327,7 +327,7 @@ class Map:
         for i,val in enumerate(self.settings["distancechunks"]):
             if number < val:
                 return i
-        return len(self.settings["distancechunks"])
+        return len( self.settings["distancechunks"] )
 
     #Gets The X And Y Of Critter Or Plant And Checks For Closest
     #Predator, Prey or Plant
@@ -336,7 +336,7 @@ class Map:
         preddistance,preddirection = self.getClosestPred(x, y, radius)
         preydistance,preydirection = self.getClosestPrey(x, y, radius)
         plantdistance,plantdirection = self.getClosestPlant(x, y, radius)
-        return getChunk(preddistance), preddirection, getChunk(preydistance), preydirection, getChunk(plantdistance),plantdirection
+        return self.getChunk(preddistance), preddirection, self.getChunk(preydistance), preydirection, self.getChunk(plantdistance),plantdirection
 
     def getRandomUntakenTile(self):
         if len(self.critters) >= self.size**2:
