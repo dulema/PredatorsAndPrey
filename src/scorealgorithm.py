@@ -48,7 +48,7 @@ def calcscore(x):
     predpdf, pred_mask = x[0]
     preypdf, prey_mask = x[1]
 
-    settings = x[2] if len(x) > 2 else DEFAULT_SETTINGS
+    settings = x[2]
     mapsize = settings["mapsize"] if "mapsize" in settings else 20
     vegpercent = settings["vegpercent"] if "vegpercent" in settings else 0.5
     plantbites = settings["plantbites"] if "plantbites" in settings else 3
@@ -59,7 +59,7 @@ def calcscore(x):
 
     hooker = x[3] if len(x) > 3 else None
 
-    world = Map(mapsize, vegpercent,plantbites)
+    world = Map(mapsize, settings)
     for _ in range(int((mapsize**2)*predpercent)):
         world.setCritterAt(world.getRandomUntakenTile(), Critter(predpdf, pred_mask, critter.PREDATOR))
 
