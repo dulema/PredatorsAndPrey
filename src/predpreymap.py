@@ -137,15 +137,12 @@ class Map:
         if newloc == None or newloc == (-1, -1):
             raise Exception("Can't move in that direction: %d"%move)
 
-        oldsize = len(self.getCritters())
         self.removeCritter(critter)
         self.setCritterAt(newloc, critter)
-        if len(self.getCritters())!=oldsize:
-            print("Map size changed in move")
-
+        
     def bushbombplants(self, spot):
         del self.plants[spot]
-            
+
     def removeCritter(self, critter):
         del self.critters[critter]
 
