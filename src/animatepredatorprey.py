@@ -23,9 +23,10 @@ settings = predpreyalgorithm.DEFAULT_SETTINGS
 def receive_mutate_parameters():
         if validate() == 0:
                 pass
-        elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
-                tkMessageBox.showwarning("Mutate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
         else:
+		pbar = Tk()
+		pbar.wm_title("Generation Progress Bar")
+		Label(pbar, text='Insert Progress Bar Here...').pack(pady=10, side='left', fill='x', expand='no')
                 #Use map_size.get(), pct_veg_slider.get(), pct_prey_slider.get(), pct_pred_slider.get(), sight_range.get(), tree_life_slider.get(), max_hunger_slider.get()-- be sure to int-ify it
                 settings = {"mapsize": int(map_size.get()), "plantpercent": float(pct_veg_slider.get()), 
                             "preypercent": float(pct_prey_slider.get()), "predpercent": float(pct_pred_slider.get()),
@@ -34,7 +35,6 @@ def receive_mutate_parameters():
                             "mutationincrement":0.3, "hungerchunks":[3,6,18], "distancechunks":[3,6,8]
                            }
                 pass
-
 
 
 #Erases playing_field and then loops through critter dictionary and plant
@@ -66,13 +66,10 @@ def updatePlayingField(world, round_score):
 def animate():
         if validate() == 0:
                 pass
-        elif pct_pred_slider.get()+pct_prey_slider.get() > 100:
-                tkMessageBox.showwarning("Animate Error!","The total percentages of predators and prey covering the map add up to over 100%.")
         else:
                 args = ( (predpreyalgorithm.best_pred, {}), (predpreyalgorithm.best_prey, {}), settings, updatePlayingField )
                 scorealgorithm.calcscore(args)
                 #draw_map()
-
 
 
 def critter_view():
@@ -108,7 +105,6 @@ def critter_view():
         hunger.grid(row=1, column=12, sticky = N) 
         critter_view_window.mainloop()
         
-
 
 def README_display():
         webbrowser.open("../docs/help.html")
@@ -303,11 +299,6 @@ if __name__ == "__main__":
         playing_field.scale(playing_field,.1,.1,10,10)
         yscrollbar.config(command=playing_field.yview)
         xscrollbar.config(command=playing_field.xview)
-
-	#progress bar section
-	#pbarwindow = Tk()
-	#pbarwindow.wm_title("Generation Progress Bar")
-	#Label(pbarwindow, text='Insert Progress Bar Here...').pack(pady=10, side='top', fill='x', expand='no')
 
         #Menu Section
         menu = Menu(root)

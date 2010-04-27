@@ -143,12 +143,14 @@ Here are some common questions answered...
 	there is a square (a 2 by 2 figure) with four pdf's in it at the corners. At each of the
 	corners of the square there is a pdf, represented by a histogram (basically a vertical bar
 	graph). The histogram at the top left has let's say 3 bars, the left bar representing "move
-	towards food" and has a height of 0.2, the middle bar representing "move away from food"
-	and has a height of 0.3, and the right bar representing "don't move anywhere" and has a 
-	height of 0.5. In a pdf, the sum of the heights of the bars in its histogram must add up
-	to 1. The histograms at each of the corners of the square have three bars as well that add
-	up to 1, but the height of each bar is different. Therefore the square represents all the
-	possible combinations of sensory input.
+	top left" and has a height of 0.2, the middle bar representing "move left" and has a height
+	of 0.3, and the right bar representing "don't move anywhere" and has a 	height of 0.5. In a
+	pdf, the sum of the heights of the bars in its histogram must add up to 1. The histograms
+	at each of the corners of the square have three bars as well that add up to 1, but the 
+	height of each bar is different. Therefore the square represents all the possible
+	combinations of sensory input. Remember that our hexagonal shaped tiles have only 7 possible
+	valid moves: top left, top right, right, bottom right, bottom left, left, and don't move.
+	Also remember that this a simplified example.
 
 	00---01
 	|     |
@@ -163,7 +165,7 @@ Here are some common questions answered...
 	0.3		||           ||
 			||	     ||
 	0.2_||__________||___________||____
-	   away       towards     no moving
+	   top left    left      no moving
 	
 	The program then takes a weighted choice of which action to execute. While there is a chance that
 	ANY of the actions may get executed, the MOST LIKELY one the get executed is the action with the
