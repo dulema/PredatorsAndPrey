@@ -59,7 +59,7 @@ def calcscore(x):
 
     hooker = x[3] if len(x) > 3 else None
 
-    world = Map(mapsize, settings)
+    world = Map(settings)
     for _ in range(int((mapsize**2)*predpercent)):
         world.setCritterAt(world.getRandomUntakenTile(), Critter(predpdf, pred_mask, critter.PREDATOR))
 
