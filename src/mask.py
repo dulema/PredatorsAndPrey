@@ -6,6 +6,7 @@ def createMasks(howmany, settings):
     increment = abs(settings["mutationincrement"] if "mutationincrement" in settings else 0.5)
     pdfpercent = settings["pdfpercent"] if "pdfpercent" in settings else 0.5
     inputranges = settings["inputranges"]
+    print(inputranges)
     choices = settings["choices"] if "choices" in settings else 13
     mutationcount = int(pdfpercent*numpy.array(inputranges).prod())
 

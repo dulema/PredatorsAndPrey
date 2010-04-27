@@ -13,11 +13,12 @@ DEFAULT_SETTINGS = {"sight":20, "mapsize":20,
                     "plantbites":3, "maxhunger":20,
                     "pdfpercent":0.01,"muttionincrement":0.3,
                     "distancechunks":[3,6,18],
-                    "hungerchunks":[3,6,18]}
+                    "hungerchunks":[3,6,18] }
 
 #Basically input is (preddistance, preddireciton, preydistance, preydirection, vegdistance, vegdirection, hunger)
 #Input ranges is the number of different values possible for each entry
-DEFAULT_SETTINGS["inputranges"] = ([ DEFAULT_SETTINGS["distancechunks"], 7] * 3 ) + [ DEFAULT_SETTINGS["hungerchunks"] ]
+
+DEFAULT_SETTINGS["inputranges"] =( [ len(DEFAULT_SETTINGS["distancechunks"]), 7] * 3 ) + [ len(DEFAULT_SETTINGS["hungerchunks"]) ]
 
 def __printProgress(num, total):
     width = 40
