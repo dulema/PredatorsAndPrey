@@ -54,11 +54,4 @@ if __name__ == "__main__":
         print(" ==== ROUND %d ====" % i)
         for i, mask in enumerate(createMasks(5, settings)):
             print("\t === Mask %d ===" % i)
-            print mask
-
-#    for n, r in enumerate(result):
-#        print(" == R %d of %d == "% (n, len(result)))
-#        for i, x in enumerate(r):
-#            print("\t == mutation %d ==" % (i))
-#            for k,v in x.iteritems():
-#                print("\t\t%s : %s" % (k, v) )
+            for k,v in mask.iteritems(): print("\t\t%s -> %s" % (k,v))
