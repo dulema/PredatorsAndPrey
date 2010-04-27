@@ -35,7 +35,7 @@ class Critter:
         return moves
 
     def generatePDF(self):
-        return numpy.random.random_integers(low=0,high=255,size=7).astype(numpy.uint8)
+        return numpy.random.random_integers(low=1,high=255,size=7).astype(numpy.uint8)
 
     def getHistogram(self, senses):
         input = senses + tuple(self.status.itervalues())
