@@ -331,8 +331,8 @@ class Map:
 
     #Gets The X And Y Of Critter Or Plant And Checks For Closest
     #Predator, Prey or Plant
-    def getSensoryData(self,critter, radius):
-        (x,y) = self.getCritterXY(critter)
+    def getSensoryData(self, crit, radius):
+        (x,y) = self.getCritterXY(crit)
         preddistance,preddirection = self.getClosestPred(x, y, radius)
         preydistance,preydirection = self.getClosestPrey(x, y, radius)
         plantdistance,plantdirection = self.getClosestPlant(x, y, radius)

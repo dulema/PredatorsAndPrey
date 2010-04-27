@@ -11,8 +11,8 @@ except ImportError:
     sys.stderr.write("Install Python Psyco For Increased Performance.\n")
 
 def preyMakeMove(prey, settings, world):
-        for destinationTile, directionMove in prey.getMoves(world.getSensoryData(critter, settings["sight"])):
-                destinationTile = world.getCritterDest(directionMove)
+        for directionMove in prey.getMoves(world.getSensoryData(prey, settings["sight"])):
+                destinationTile = world.getCritterDest(prey, directionMove)
                 critterOnTile = world.getCritterAt(destinationTile)
                 if critterOnTile == None:
                         world.moveCritter(prey, directionMove)
@@ -30,7 +30,8 @@ def preyMakeMove(prey, settings, world):
                      raise Exception("There is a prey case that is not accounted for: " + critterOnTile)
 
 def predMakeMove(pred, settings, world):
-        for destinationTile, directionMove in pred.getMoves(world.getSensoryData(critter, settings["sight"])):
+        for directionMove in pred.getMoves(world.getSensoryData(pred, settings["sight"])):
+                destinationTile = world.getCritterDest(pred, directionMove)
                 critterOnTile = world.getCritterAt(destinationTile)
                 if critterOnTile == None:
                         world.moveCritter(pred, directionMove)
