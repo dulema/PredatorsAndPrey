@@ -8,8 +8,8 @@ best_prey = {}
 SIGHT = 20
 MAXHUNGER = 20
 
-DEFAULT_SETTINGS = {"sight":20, "mapsize":20,"plantpercent":0.5,
-                    "vegpercent":0.05, "preypercent":0.02, "predpercent":0.01,
+DEFAULT_SETTINGS = {"sight":20, "mapsize":20,"plantpercent":0.05,
+                    "preypercent":0.02, "predpercent":0.01,
                     "plantbites":3, "maxhunger":20,
                     "pdfpercent":0.01,"muttionincrement":0.3,
                     "distancechunks":[3,6,18],
