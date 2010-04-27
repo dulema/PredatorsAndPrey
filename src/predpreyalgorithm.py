@@ -8,10 +8,11 @@ best_prey = {}
 SIGHT = 20
 MAXHUNGER = 20
 
+#These are user definable
 DEFAULT_SETTINGS = {"sight":20, "mapsize":20,"plantpercent":0.05,
                     "preypercent":0.02, "predpercent":0.01,
                     "plantbites":3, "maxhunger":20,
-                    "pdfpercent":0.01,"muttionincrement":0.3,
+                    "pdfpercent":0.01,"mutationincrement":0.3,
                     "distancechunks":[3,6,18],
                     "hungerchunks":[3,6,18] }
 
@@ -19,6 +20,7 @@ DEFAULT_SETTINGS = {"sight":20, "mapsize":20,"plantpercent":0.05,
 #Input ranges is the number of different values possible for each entry
 
 DEFAULT_SETTINGS["inputranges"] =( [ len(DEFAULT_SETTINGS["distancechunks"]), 7] * 3 ) + [ len(DEFAULT_SETTINGS["hungerchunks"]) ]
+DEFAULT_SETTINGS["choices"] = 7
 
 def __printProgress(num, total):
     width = 40
