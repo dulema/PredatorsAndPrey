@@ -1,6 +1,7 @@
 import random
 import critter
 from critter import Critter
+import predpreyalgorithm as ppa
 
 dontmove = 0
 topleft = 1
@@ -12,15 +13,14 @@ left = 6
 
 class Map:
 
-    def __init__(self, settings):
+    def __init__(self):
         self.directions = []
         self.gooddirections = []
         self.critters = {}
         self.plants = []
-        self.size = settings["mapsize"]
-        self.plantbites = settings["plantbites"]
-        self.plantpercent = settings["plantpercent"]
-        self.settings = settings
+        self.size = ppa.getSetting("mapsize")
+        self.plantbites = ppa.getSetting("plantbites")
+        self.plantpercent = ppa.getSetting("plantpercent")
         #Fill the map with plants
         for _ in range(int(self.plantpercent*self.size*self.size)):
                 loc = (random.randint(0, self.size-1), random.randint(0, self.size-1),self.plantbites)
@@ -355,9 +355,6 @@ class Map:
 
 #Only run this code if this one file is being run a python program
 if __name__ == "__main__":
-        import critter
-        from critter import Critter
-
         map1 = Map(100, 0.005,10)
 
         pred1 = Critter(critter.PREDATOR)
