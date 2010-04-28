@@ -44,14 +44,17 @@ def receive_mutate_parameters():
 		pbar.mainloop()#I guess there can be more than one blah.mainloop()
 		#ccccccccccc
 
-                #Use map_size.get(), pct_veg_slider.get(), pct_prey_slider.get(), pct_pred_slider.get(), sight_range.get(), tree_life_slider.get(), max_hunger_slider.get()-- be sure to int-ify it
-                settings = {"mapsize": int(map_size.get()), "plantpercent": float(pct_veg_slider.get()), 
-                            "preypercent": float(pct_prey_slider.get()), "predpercent": float(pct_pred_slider.get()),
-                            "sight": int(sight_range.get()), "plantbites": int(tree_life_slider.get()),
-                            "maxhunger": int(max_hunger_slider.get()), "pdfpercent":0.1, "inputranges":(10,6,10,6,10,6),
-                            "mutationincrement":0.3, "hungerchunks":[3,6,18], "distancechunks":[3,6,8]
-                           }
-                pass
+		tempStr = []
+		try:
+                        settingsFile = open('settings.txt', 'r')
+                except IOError:
+                        print 'Cannot Open Settings'
+                else:
+                        for line in settingsFile:
+                                tempStr.append(line)
+                        settingsStr = ''.join(tempStr)
+                        settings = eval(settingsStr)
+                        pass
 
 
 #Erases playing_field and then loops through critter dictionary and plant
