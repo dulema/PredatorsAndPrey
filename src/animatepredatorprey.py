@@ -30,7 +30,7 @@ def receive_mutate_parameters():
 		#ccccccccccc
 		pbar = Tk()
 		pbar.wm_title("Generation Progress Bar")
-		pbar.geometry("310x25+0+0")#width 300 and height 100, pixels, no offsets
+		pbar.geometry("405x25+0+0")#widthxheightxoffsetxoffset, pixels
 
 		space = " "#what gets added every increment
 		s = ""#original progress bar
