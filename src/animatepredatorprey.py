@@ -93,7 +93,7 @@ def pred_view():
 
 
 def prey_view():
-        pass
+        import critter_view
 
 
 def README_display():

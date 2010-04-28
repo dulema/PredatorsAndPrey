@@ -15,10 +15,11 @@ from functools import partial
 def best_prey_loop():
 	labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
         labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
-	graph.delete(ALL)
 	#bar = [20, 55, 12, 22, 60, 29, 70]
+	graph.delete(ALL)
 	y_base = 200
         j = 10
+	print(critter_attr)
         for i in range(len(critter_attr)):
                 graph.create_polygon(j, y_base,j, y_base - critter_attr[i], j+30, y_base - critter_attr[i],j+30, y_base, fill="red")
                 graph.create_text(j+15, y_base - critter_attr[i] - 10, text=str(critter_attr[i]))
@@ -31,10 +32,13 @@ def best_prey_loop():
 
 
 
+critter_attr = []
+for i in range(7):
+	critter_attr.append(i)
 
 labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
 labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
-critter_view_window = Toplevel(root)
+critter_view_window = Tk()
 critter_view_window.wm_title("Critter View")
 graph = Canvas(critter_view_window, width = 550, height = 250)
 graph.grid(row=0, column=0, columnspan=15, padx=10)
