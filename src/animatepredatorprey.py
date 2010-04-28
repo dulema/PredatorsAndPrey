@@ -10,6 +10,7 @@ import re
 import tkMessageBox
 import os
 import sys
+from functools import partial
 
 try:
         import psyco
@@ -76,38 +77,53 @@ def pred_view():
 
 
 def prey_view():
-        bar = [20, 55, 12, 22, 60, 29, 70]
         labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
         labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
-        critter_view_window = Tk()
+        critter_view_window = Toplevel(root)
         critter_view_window.wm_title("Critter View")
         graph = Canvas(critter_view_window, width = 550, height = 250)
         graph.grid(row=0, column=0, columnspan=15, padx=10)
-        y_base = 200
+        pred_dist = Scale(critter_view_window,from_=1, to=3, orient=VERTICAL)
+        pred_dist.grid(row=1, column=0, sticky = N)
+	pred_dist.set("1")
+        pred_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+        pred_dir.grid(row=1, column=2, sticky = N)
+	pred_dir.set("10") 
+        prey_dist = Scale(critter_view_window,from_=1, to=3, orient=VERTICAL)
+        prey_dist.grid(row=1, column=4, sticky = N)
+	prey_dist.set("1")
+        prey_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+        prey_dir.grid(row=1, column=6, sticky = N)
+	prey_dir.set("10") 
+        plant_dist = Scale(critter_view_window,from_=1, to=3, orient=VERTICAL)
+        plant_dist.grid(row=1, column=8, sticky = N)
+	plant_dist.set("1") 
+        plant_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
+        plant_dir.grid(row=1, column=10, sticky = N)
+	plant_dir.set("10") 
+        hunger = Scale(critter_view_window,from_=1, to=3, orient=VERTICAL)
+        hunger.grid(row=1, column=12, sticky = N)
+	hunger.set("1")
+	display = Button(critter_view_window, text="Display Graph", command=partial(best_prey_loop, graph))
+	display.grid(row=1, column= 13, sticky=S+E)
+        critter_view_window.mainloop()
+        
+
+def best_prey_loop(graph):
+	labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
+        labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
+	graph.delete(ALL)
+	bar = [20, 55, 12, 22, 60, 29, 70]
+	y_base = 200
         j = 10
+	bar[0] = int(map_size.get())
         for i in range(len(bar)):
                 graph.create_polygon(j, y_base,j, y_base - bar[i], j+30, y_base - bar[i],j+30, y_base, fill="red")
                 graph.create_text(j+15, y_base - bar[i] - 10, text=str(bar[i]))
-                graph.create_text(j+15,y_base + 10,text=labels_top[i])
+		graph.create_text(j+15,y_base + 10,text=labels_top[i])
                 graph.create_text(j+15,y_base + 20,text=labels_bottom[i])
                 j = j + 80
-        
-        pred_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
-        pred_dist.grid(row=1, column=0, sticky = N) 
-        pred_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
-        pred_dir.grid(row=1, column=2, sticky = N) 
-        prey_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
-        prey_dist.grid(row=1, column=4, sticky = N)
-        prey_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
-        prey_dir.grid(row=1, column=6, sticky = N) 
-        plant_dist = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
-        plant_dist.grid(row=1, column=8, sticky = N) 
-        plant_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
-        plant_dir.grid(row=1, column=10, sticky = N) 
-        hunger = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
-        hunger.grid(row=1, column=12, sticky = N) 
-        critter_view_window.mainloop()
-        
+
 
 def README_display():
         webbrowser.open("../docs/help.html")
