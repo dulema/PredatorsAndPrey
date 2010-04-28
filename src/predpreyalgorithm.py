@@ -10,24 +10,29 @@ SIGHT = 20
 MAXHUNGER = 20
 
 #These are user definable
-DEFAULT_SETTINGS = {"predmutations":4, "preymutations":4, "mutations":10,
+DEFAULT_SETTINGS = {"predmutations":4, "preymutations":4, "mutations":10,"choices":7,
                     "sight":20, "mapsize":20,"plantpercent":0.05,
                     "preypercent":0.02, "predpercent":0.01,
                     "plantbites":3, "maxhunger":20,
                     "pdfpercent":0.01,"mutationincrement":0.3,
-                    "distancechunks":[3,6,18],
-                    "hungerchunks":[3,6,18] }
+                    "distancechunks":[3,9,18],
+                    "hungerchunks":[3,9,18] }
 
 #Basically input is (preddistance, preddireciton, preydistance, preydirection, vegdistance, vegdirection, hunger)
 #Input ranges is the number of different values possible for each entry
 
 DEFAULT_SETTINGS["inputranges"] =( [ len(DEFAULT_SETTINGS["distancechunks"]), 7] * 3 ) + [ len(DEFAULT_SETTINGS["hungerchunks"]) ]
-DEFAULT_SETTINGS["choices"] = 7
 
 settings = {}
 
 def getSetting(setting):
     return settings[setting] if setting in settings else DEFAULT_SETTINGS[setting]
+
+def setSetting(setting, value):
+    settings[setting] = value
+
+def resetSetting(setting):
+    del settings[setting]
 
 def __printProgress(num, total):
     width = 40
