@@ -18,6 +18,7 @@ try:
 except ImportError:
         print("Install Python Psyco For Increased Performance.\nAnimate\n")
 
+
 canvas_items = []
 settings = predpreyalgorithm.DEFAULT_SETTINGS
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
@@ -33,7 +34,7 @@ def receive_mutate_parameters():
 
 		space = " "#what gets added every increment
 		s = ""#original progress bar
-		label = tk.Label(pbar, text=s, bg='green3')#fill in blank text's background as green, looks like a bar
+		label = Label(pbar, text=s, bg='green3')#fill in blank text's background as green, looks like a bar
 		label.pack(anchor='nw')#anchor the stuff to the northwest corner, it's "sticky"
 
 		for k in range(100):
@@ -92,52 +93,7 @@ def pred_view():
 
 
 def prey_view():
-        labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
-        labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
-        critter_view_window = Toplevel(root)
-        critter_view_window.wm_title("Critter View")
-        graph = Canvas(critter_view_window, width = 550, height = 250)
-        graph.grid(row=0, column=0, columnspan=15, padx=10)
-        pred_dist = Scale(critter_view_window,from_=1, to=3, orient=VERTICAL)
-        pred_dist.grid(row=1, column=0, sticky = N)
-	pred_dist.set("1")
-        pred_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
-        pred_dir.grid(row=1, column=2, sticky = N)
-	pred_dir.set("10") 
-        prey_dist = Scale(critter_view_window,from_=1, to=3, orient=VERTICAL)
-        prey_dist.grid(row=1, column=4, sticky = N)
-	prey_dist.set("1")
-        prey_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
-        prey_dir.grid(row=1, column=6, sticky = N)
-	prey_dir.set("10") 
-        plant_dist = Scale(critter_view_window,from_=1, to=3, orient=VERTICAL)
-        plant_dist.grid(row=1, column=8, sticky = N)
-	plant_dist.set("1") 
-        plant_dir = Scale(critter_view_window,from_=1, to=25, orient=VERTICAL)
-        plant_dir.grid(row=1, column=10, sticky = N)
-	plant_dir.set("10") 
-        hunger = Scale(critter_view_window,from_=1, to=3, orient=VERTICAL)
-        hunger.grid(row=1, column=12, sticky = N)
-	hunger.set("1")
-	display = Button(critter_view_window, text="Display Graph", command=partial(best_prey_loop, graph))
-	display.grid(row=1, column= 13, sticky=S+E)
-        critter_view_window.mainloop()
-        
-
-def best_prey_loop(graph):
-	labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
-        labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
-	graph.delete(ALL)
-	bar = [20, 55, 12, 22, 60, 29, 70]
-	y_base = 200
-        j = 10
-	bar[0] = int(map_size.get())
-        for i in range(len(bar)):
-                graph.create_polygon(j, y_base,j, y_base - bar[i], j+30, y_base - bar[i],j+30, y_base, fill="red")
-                graph.create_text(j+15, y_base - bar[i] - 10, text=str(bar[i]))
-		graph.create_text(j+15,y_base + 10,text=labels_top[i])
-                graph.create_text(j+15,y_base + 20,text=labels_bottom[i])
-                j = j + 80
+        pass
 
 
 def README_display():
