@@ -18,7 +18,6 @@ def best_prey_loop(x):
         labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
 	graph.delete(ALL)
 	critter_tuple = int(pred_dist.get()), int(pred_dir.get()), int(prey_dist.get()), int(prey_dir.get()), int(plant_dist.get()), int(plant_dir.get()), int(hunger.get())
-	print(ppa.best_prey)
 	if critter_tuple in ppa.best_prey:
 		critter_attr = ppa.best_prey[critter_tuple]
 		normalize = sum(critter_attr)
