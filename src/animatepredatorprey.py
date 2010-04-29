@@ -11,7 +11,7 @@ import tkMessageBox
 import os
 import sys
 from functools import partial
-#from blah import ProgressBar
+
 
 try:
         import psyco
@@ -23,11 +23,7 @@ except ImportError:
 canvas_items = []
 settings = predpreyalgorithm.DEFAULT_SETTINGS#sandro keep this in mind
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
-
-pbar = None
-root = None
 mutate_button = None
-pb = None
 def change_to_progress_bar(currentgen,totalgens):
 	if currentgen == totalgens:
 		mutate_button.config(state = NORMAL)
@@ -36,28 +32,9 @@ def change_to_progress_bar(currentgen,totalgens):
 		mutate_button.config(text = "Current/Total Generations\n" + str(currentgen) + "/" + str(totalgens))
 
 def receive_mutate_parameters():
-	global pbar
         if validate() == 0:
                 pass
         else:
-                #deniz progress bar area, yell at me, no classes HAH
-                #ccccccccccc
-                pbar = Tk()
-                pbar.wm_title("Generation Progress Bar")
-                pbar.geometry("405x25+0+0")#widthxheightxoffsetxoffset, pixels
-
-                space = " "#what gets added every increment
-                s = ""#original progress bar
-                label = Label(pbar, text=s, bg='green3')#fill in blank text's background as green, looks like a bar
-                label.pack(anchor='nw')#anchor the stuff to the northwest corner, it's "sticky"
-
-                for k in range(100):
-                        s += space
-                        label.after(100,label.config(text=s))#increments every 100 milliseconds
-                        label.update()#needed for some strange reason
-                pbar.mainloop()#I guess there can be more than one blah.mainloop()
-                #ccccccccccc
-
 		tempStr = []
 		try:
                         settingsFile = open('settings.txt', 'r')
