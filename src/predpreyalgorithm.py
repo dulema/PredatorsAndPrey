@@ -154,6 +154,5 @@ if __name__ == "__main__":
     DEFAULT_SETTINGS["predmutations"] = input("How many predator clones per generation?")
     DEFAULT_SETTINGS["preymutations"] = input("How many prey clones per generation?")
     mutate(gens)
-    print(best_pred)
     __clearProgress()
 

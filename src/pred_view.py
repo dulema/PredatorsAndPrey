@@ -12,7 +12,7 @@ import sys
 from functools import partial
 
 
-def best_prey_loop():
+def best_pred_loop(x):
 	critter_attr = []
 	labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
         labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
@@ -21,11 +21,15 @@ def best_prey_loop():
 	print(ppa.best_pred)
 	if critter_tuple in ppa.best_pred:
 		critter_attr = ppa.best_pred[critter_tuple]
+		normalize = sum(critter_attr)
 		y_base = 200
         	j = 10
         	for i in range(len(critter_attr)):
-                	graph.create_polygon(j, y_base,j, y_base - critter_attr[i], j+30, y_base - critter_attr[i],j+30, y_base, fill="red")
-                	graph.create_text(j+15, y_base - critter_attr[i] - 10, text=str(critter_attr[i]))
+			bar = (float(critter_attr[i])/float(normalize))*100
+			bar = int(bar)
+			
+                	graph.create_polygon(j, y_base,j, y_base - bar, j+30, y_base - bar,j+30, y_base, fill="red")
+                	graph.create_text(j+15, y_base - bar - 10, text=str(bar))
 			graph.create_text(j+15,y_base + 10,text=labels_top[i])
                 	graph.create_text(j+15,y_base + 20,text=labels_bottom[i])
                 	j = j + 80
@@ -38,33 +42,34 @@ def best_prey_loop():
 
 labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
 labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
-critter_view_window = Tk()
-critter_view_window.wm_title("Best Predator View")
-graph = Canvas(critter_view_window, width = 550, height = 250)
+pred_view_window = Tk()
+pred_view_window.wm_title("Best Predator View")
+graph = Canvas(pred_view_window, width = 550, height = 250)
 graph.grid(row=0, column=0, columnspan=15, padx=10)
-pred_dist = Scale(critter_view_window,from_=0, to=2, orient=VERTICAL)
+pred_dist = Scale(pred_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["distancechunks"]), orient=VERTICAL, command=best_pred_loop)
 pred_dist.grid(row=1, column=0, sticky = N)
 pred_dist.set("1")
-pred_dir = Scale(critter_view_window,from_=0, to=6, orient=VERTICAL)
+pred_dir = Scale(pred_view_window,from_=0, to=6, orient=VERTICAL, command=best_pred_loop)
 pred_dir.grid(row=1, column=2, sticky = N)
 pred_dir.set("3") 
-prey_dist = Scale(critter_view_window,from_=0, to=2, orient=VERTICAL)
+prey_dist = Scale(pred_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["distancechunks"]), orient=VERTICAL, command=best_pred_loop)
 prey_dist.grid(row=1, column=4, sticky = N)
 prey_dist.set("3")
-prey_dir = Scale(critter_view_window,from_=0, to=6, orient=VERTICAL)
+prey_dir = Scale(pred_view_window,from_=0, to=6, orient=VERTICAL, command=best_pred_loop)
 prey_dir.grid(row=1, column=6, sticky = N)
 prey_dir.set("3") 
-plant_dist = Scale(critter_view_window,from_=0, to=2, orient=VERTICAL)
+plant_dist = Scale(pred_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["distancechunks"]), orient=VERTICAL, command=best_pred_loop)
 plant_dist.grid(row=1, column=8, sticky = N)
 plant_dist.set("1") 
-plant_dir = Scale(critter_view_window,from_=0, to=6, orient=VERTICAL)
+plant_dir = Scale(pred_view_window,from_=0, to=6, orient=VERTICAL, command=best_pred_loop)
 plant_dir.grid(row=1, column=10, sticky = N)
 plant_dir.set("3") 
-hunger = Scale(critter_view_window,from_=0, to=2, orient=VERTICAL)
+hunger = Scale(pred_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["hungerchunks"]), orient=VERTICAL, command=best_pred_loop)
 hunger.grid(row=1, column=12, sticky = N)
 hunger.set("1")
-display = Button(critter_view_window, text="Display Graph", command=best_prey_loop)
-display.grid(row=1, column= 15, sticky=S+E)
+exit_button = Button(pred_view_window, text="Quit", command=pred_view_window.destroy)
+exit_button.grid(row=1, column=15)
+
+pred_view_window.mainloop()
 
 
-critter_view_window.mainloop()
