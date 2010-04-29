@@ -11,7 +11,7 @@ import tkMessageBox
 import os
 import sys
 from functools import partial
-
+from subprocess import call
 
 try:
         import psyco
@@ -25,18 +25,18 @@ settings = predpreyalgorithm.DEFAULT_SETTINGS#sandro keep this in mind
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
 #mutate_button = None
 def change_to_progress_bar(currentgen,totalgens):
-	if currentgen == totalgens:
-		mutate_button.config(state = NORMAL)
-		mutate_button.config(text = "Mutate")
-	else:
-		mutate_button.config(text = "Current/Total Generations\n" + str(currentgen) + "/" + str(totalgens))
+        if currentgen == totalgens:
+                mutate_button.config(state = NORMAL)
+                mutate_button.config(text = "Mutate")
+        else:
+                mutate_button.config(text = "Current/Total Generations\n" + str(currentgen) + "/" + str(totalgens))
 
 def receive_mutate_parameters():
         if validate() == 0:
                 pass
         else:
-		tempStr = []
-		try:
+                tempStr = []
+                try:
                         settingsFile = open('settings.txt', 'r')
                 except IOError:
                         print 'Cannot Open Settings'
@@ -47,10 +47,10 @@ def receive_mutate_parameters():
                         settings = eval(settingsStr)
                         pass
                 
-		#total number of gens, settings, hooker(function u want to run after every mutation)
-		mutate_button.config(state = DISABLED)
-		import thread
-		thread.start_new_thread(predpreyalgorithm.mutate,(int(gen_num.get()),{}, change_to_progress_bar))
+                #total number of gens, settings, hooker(function u want to run after every mutation)
+                mutate_button.config(state = DISABLED)
+                import thread
+                thread.start_new_thread(predpreyalgorithm.mutate,(int(gen_num.get()),{}, change_to_progress_bar))
 
 
 #Erases playing_field and then loops through critter dictionary and plant
@@ -89,13 +89,13 @@ def animate():
 
 def pred_view():
         import pred_view
-	pred_view.button_run()
+        pred_view.button_run()
 
 
 def prey_view():
         import prey_view
-	prey_view.button_run()
-	 
+        prey_view.button_run()
+         
 
 
 def README_display():
@@ -195,7 +195,7 @@ def display_conf():
         if(os.name == "posix"):
                 os.system("gedit settings.txt")
         elif(os.name == "nt"):
-                os.system("notepad settings.txt")
+                call(["notepad", "settings.txt"])
         else:
                 print("No Good")
 
@@ -267,7 +267,7 @@ if __name__ == "__main__":
         
 
         #Integer Input Section
-	#global mutate_button
+        #global mutate_button
         gen_num = StringVar()
         pred_num = StringVar()
         prey_num = StringVar()
