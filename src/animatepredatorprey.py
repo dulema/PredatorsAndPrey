@@ -11,6 +11,7 @@ import tkMessageBox
 import os
 import sys
 from functools import partial
+from blah import ProgressBar
 
 try:
         import psyco
@@ -20,9 +21,22 @@ except ImportError:
 
 
 canvas_items = []
-settings = predpreyalgorithm.DEFAULT_SETTINGS
+settings = predpreyalgorithm.DEFAULT_SETTINGS#sandro keep this in mind
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
+
+pbar = None
+root = None
+mutate_button = None
+pb = None
+def change_to_progress_bar(currentgen,totalgens):
+	if currentgen == totalgens:
+		mutate_button.config(state = NORMAL)
+		mutate_button.config(text = "Mutate")
+	else:
+		mutate_button.config(text = "Current/Total Generations\n" + str(currentgen) + "/" + str(totalgens))
+
 def receive_mutate_parameters():
+	global pbar
         if validate() == 0:
                 pass
         else:
@@ -55,6 +69,11 @@ def receive_mutate_parameters():
                         settingsStr = ''.join(tempStr)
                         settings = eval(settingsStr)
                         pass
+                
+		#total number of gens, settings, hooker(function u want to run after every mutation)
+		mutate_button.config(state = DISABLED)
+		import thread
+		thread.start_new_thread(predpreyalgorithm.mutate,(int(gen_num.get()),{}, change_to_progress_bar))
 
 
 #Erases playing_field and then loops through critter dictionary and plant
@@ -269,6 +288,7 @@ if __name__ == "__main__":
         
 
         #Integer Input Section
+	global mutate_button
         gen_num = StringVar()
         pred_num = StringVar()
         prey_num = StringVar()
