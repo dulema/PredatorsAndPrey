@@ -89,11 +89,11 @@ def animate():
 
 
 def pred_view():
-	pass
+	import pred_view
 
 
 def prey_view():
-        import critter_view
+        import prey_view
 
 
 def README_display():
