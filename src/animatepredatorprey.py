@@ -26,23 +26,23 @@ def receive_mutate_parameters():
         if validate() == 0:
                 pass
         else:
-		#deniz progress bar area, yell at me, no classes HAH
-		#ccccccccccc
-		pbar = Tk()
-		pbar.wm_title("Generation Progress Bar")
-		pbar.geometry("405x25+0+0")#widthxheightxoffsetxoffset, pixels
+                #deniz progress bar area, yell at me, no classes HAH
+                #ccccccccccc
+                pbar = Tk()
+                pbar.wm_title("Generation Progress Bar")
+                pbar.geometry("405x25+0+0")#widthxheightxoffsetxoffset, pixels
 
-		space = " "#what gets added every increment
-		s = ""#original progress bar
-		label = Label(pbar, text=s, bg='green3')#fill in blank text's background as green, looks like a bar
-		label.pack(anchor='nw')#anchor the stuff to the northwest corner, it's "sticky"
+                space = " "#what gets added every increment
+                s = ""#original progress bar
+                label = Label(pbar, text=s, bg='green3')#fill in blank text's background as green, looks like a bar
+                label.pack(anchor='nw')#anchor the stuff to the northwest corner, it's "sticky"
 
-		for k in range(100):
-			s += space
-			label.after(100,label.config(text=s))#increments every 100 milliseconds
-			label.update()#needed for some strange reason
-		pbar.mainloop()#I guess there can be more than one blah.mainloop()
-		#ccccccccccc
+                for k in range(100):
+                        s += space
+                        label.after(100,label.config(text=s))#increments every 100 milliseconds
+                        label.update()#needed for some strange reason
+                pbar.mainloop()#I guess there can be more than one blah.mainloop()
+                #ccccccccccc
 
                 #Use map_size.get(), pct_veg_slider.get(), pct_prey_slider.get(), pct_pred_slider.get(), sight_range.get(), tree_life_slider.get(), max_hunger_slider.get()-- be sure to int-ify it
                 settings = {"mapsize": int(map_size.get()), "plantpercent": float(pct_veg_slider.get()), 
@@ -89,7 +89,7 @@ def animate():
 
 
 def pred_view():
-	import pred_view
+        import pred_view
 
 
 
@@ -191,12 +191,12 @@ def fill_map(thing, location):
                 canvas_items.append(photo)
 
 def display_conf():
-	if(os.name == "posix"):
-		os.system("gedit settings.txt")
-	elif(os.name == "nt"):
-		os.system("notepad settings.txt")
-	else:
-		print("No Good")
+        if(os.name == "posix"):
+                os.system("gedit settings.txt")
+        elif(os.name == "nt"):
+                os.system("notepad settings.txt")
+        else:
+                print("No Good")
 
 
 def validate():
@@ -262,8 +262,8 @@ if __name__ == "__main__":
         
         
         prey_view_button = Button(root, text="Best Prey View", command=prey_view)
-	pred_view_button = Button(root, text="Best Predator View", command=pred_view)
-	
+        pred_view_button = Button(root, text="Best Predator View", command=pred_view)
+        
 
         #Integer Input Section
         gen_num = StringVar()
@@ -290,7 +290,7 @@ if __name__ == "__main__":
         key_prey_label = Label(root, text="Prey =>")
         key_veg_label = Label(root, text="Vegetation =>")
         animate_button = Button(root, text="Animate", command=animate)
-	edit_conf_button = Button(root, text="Edit Mutate Settings", command=display_conf)
+        edit_conf_button = Button(root, text="Edit Mutate Settings", command=display_conf)
 
 
         #Grid Section
@@ -298,9 +298,9 @@ if __name__ == "__main__":
         
         
         mutate_button.grid(row=10, column=0, sticky=N)
-	edit_conf_button.grid(row=8, column=0)
+        edit_conf_button.grid(row=8, column=0)
         prey_view_button.grid(row=17, column=0)
-	pred_view_button.grid(row=16, column=0)
+        pred_view_button.grid(row=16, column=0)
         key_title_label.grid(row=0, column=4, sticky=E)
         key_pred_label.grid(row=1, column=4)
         key_prey_label.grid(row=2, column=4)
