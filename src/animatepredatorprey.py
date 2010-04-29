@@ -23,7 +23,7 @@ except ImportError:
 canvas_items = []
 settings = predpreyalgorithm.DEFAULT_SETTINGS#sandro keep this in mind
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
-mutate_button = None
+#mutate_button = None
 def change_to_progress_bar(currentgen,totalgens):
 	if currentgen == totalgens:
 		mutate_button.config(state = NORMAL)
@@ -267,7 +267,7 @@ if __name__ == "__main__":
         
 
         #Integer Input Section
-	global mutate_button
+	#global mutate_button
         gen_num = StringVar()
         pred_num = StringVar()
         prey_num = StringVar()
