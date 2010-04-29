@@ -38,39 +38,40 @@ def best_prey_loop(x):
 
 
 
+def button_run():
+	global graph, pred_dist, pred_dir, prey_dist, prey_dir, plant_dist, plant_dir, hunger 
+	labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
+	labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
+	prey_view_window = Tk()
+	prey_view_window.wm_title("Best Prey View")
+	graph = Canvas(prey_view_window, width = 550, height = 250)
+	graph.grid(row=0, column=0, columnspan=15, padx=10)
+	pred_dist = Scale(prey_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["distancechunks"]), orient=VERTICAL, command=best_prey_loop)
+	pred_dist.grid(row=1, column=0, sticky = N)
+	pred_dist.set("1")
+	pred_dir = Scale(prey_view_window,from_=0, to=6, orient=VERTICAL, command=best_prey_loop)
+	pred_dir.grid(row=1, column=2, sticky = N)
+	pred_dir.set("3") 
+	prey_dist = Scale(prey_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["distancechunks"]), orient=VERTICAL, command=best_prey_loop)
+	prey_dist.grid(row=1, column=4, sticky = N)
+	prey_dist.set("3")
+	prey_dir = Scale(prey_view_window,from_=0, to=6, orient=VERTICAL, command=best_prey_loop)
+	prey_dir.grid(row=1, column=6, sticky = N)
+	prey_dir.set("3") 
+	plant_dist = Scale(prey_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["distancechunks"]), orient=VERTICAL, command=best_prey_loop)
+	plant_dist.grid(row=1, column=8, sticky = N)
+	plant_dist.set("1") 
+	plant_dir = Scale(prey_view_window,from_=0, to=6, orient=VERTICAL, command=best_prey_loop)
+	plant_dir.grid(row=1, column=10, sticky = N)
+	plant_dir.set("3") 
+	hunger = Scale(prey_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["hungerchunks"]), orient=VERTICAL, command=best_prey_loop)
+	hunger.grid(row=1, column=12, sticky = N)
+	hunger.set("1")
+	exit_button = Button(prey_view_window, text="Quit", command=prey_view_window.destroy)
+	exit_button.grid(row=1, column=15)
 
-labels_top = ["pred", "pred", "prey", "prey", "plant", "plant", "hunger"]
-labels_bottom = ["distance", "direction", "distance", "direction","distance", "direction",""]
-prey_view_window = Tk()
-prey_view_window.wm_title("Best Prey View")
-graph = Canvas(prey_view_window, width = 550, height = 250)
-graph.grid(row=0, column=0, columnspan=15, padx=10)
-pred_dist = Scale(prey_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["distancechunks"]), orient=VERTICAL, command=best_prey_loop)
-pred_dist.grid(row=1, column=0, sticky = N)
-pred_dist.set("1")
-pred_dir = Scale(prey_view_window,from_=0, to=6, orient=VERTICAL, command=best_prey_loop)
-pred_dir.grid(row=1, column=2, sticky = N)
-pred_dir.set("3") 
-prey_dist = Scale(prey_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["distancechunks"]), orient=VERTICAL, command=best_prey_loop)
-prey_dist.grid(row=1, column=4, sticky = N)
-prey_dist.set("3")
-prey_dir = Scale(prey_view_window,from_=0, to=6, orient=VERTICAL, command=best_prey_loop)
-prey_dir.grid(row=1, column=6, sticky = N)
-prey_dir.set("3") 
-plant_dist = Scale(prey_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["distancechunks"]), orient=VERTICAL, command=best_prey_loop)
-plant_dist.grid(row=1, column=8, sticky = N)
-plant_dist.set("1") 
-plant_dir = Scale(prey_view_window,from_=0, to=6, orient=VERTICAL, command=best_prey_loop)
-plant_dir.grid(row=1, column=10, sticky = N)
-plant_dir.set("3") 
-hunger = Scale(prey_view_window,from_=0, to=len(ppa.DEFAULT_SETTINGS["hungerchunks"]), orient=VERTICAL, command=best_prey_loop)
-hunger.grid(row=1, column=12, sticky = N)
-hunger.set("1")
-exit_button = Button(prey_view_window, text="Quit", command=prey_view_window.destroy)
-exit_button.grid(row=1, column=15)
 
 
-
-prey_view_window.mainloop()
+#prey_view_window.mainloop()
 
 

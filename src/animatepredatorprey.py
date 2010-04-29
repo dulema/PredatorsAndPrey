@@ -11,7 +11,7 @@ import tkMessageBox
 import os
 import sys
 from functools import partial
-from blah import ProgressBar
+#from blah import ProgressBar
 
 try:
         import psyco
@@ -112,11 +112,13 @@ def animate():
 
 def pred_view():
         import pred_view
-
+	pred_view.button_run()
 
 
 def prey_view():
         import prey_view
+	prey_view.button_run()
+	 
 
 
 def README_display():
