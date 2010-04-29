@@ -20,38 +20,41 @@ except ImportError:
 
 
 canvas_items = []
-settings = predpreyalgorithm.DEFAULT_SETTINGS
+settings = predpreyalgorithm.DEFAULT_SETTINGS#sandro keep this in mind
 #Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
+
+pbar = None
+root = None
+def update_progress_bar(currentgen,totalgens):
+	#print("I ARE HERE in update")
+	#pbar.config(text = str(currentgen))
+	#pbar.update()
+	root.title(str(currentgen))
+
 def receive_mutate_parameters():
+	global pbar
         if validate() == 0:
                 pass
         else:
-		#deniz progress bar area, yell at me, no classes HAH
+		#deniz progress bar area
 		#ccccccccccc
-		pbar = Tk()
-		pbar.wm_title("Generation Progress Bar")
-		pbar.geometry("405x25+0+0")#widthxheightxoffsetxoffset, pixels
-
-		space = " "#what gets added every increment
-		s = ""#original progress bar
-		label = Label(pbar, text=s, bg='green3')#fill in blank text's background as green, looks like a bar
-		label.pack(anchor='nw')#anchor the stuff to the northwest corner, it's "sticky"
-
-		for k in range(100):
-			s += space
-			label.after(100,label.config(text=s))#increments every 100 milliseconds
-			label.update()#needed for some strange reason
-		pbar.mainloop()#I guess there can be more than one blah.mainloop()
+		#pbar = Label(root, text="", bd=1, relief=SUNKEN, anchor=W)
+		#pbar.pack(side=BOTTOM, fill=X)
 		#ccccccccccc
 
                 #Use map_size.get(), pct_veg_slider.get(), pct_prey_slider.get(), pct_pred_slider.get(), sight_range.get(), tree_life_slider.get(), max_hunger_slider.get()-- be sure to int-ify it
+		'''
                 settings = {"mapsize": int(map_size.get()), "plantpercent": float(pct_veg_slider.get()), 
                             "preypercent": float(pct_prey_slider.get()), "predpercent": float(pct_pred_slider.get()),
                             "sight": int(sight_range.get()), "plantbites": int(tree_life_slider.get()),
                             "maxhunger": int(max_hunger_slider.get()), "pdfpercent":0.1, "inputranges":(10,6,10,6,10,6),
                             "mutationincrement":0.3, "hungerchunks":[3,6,18], "distancechunks":[3,6,8]
                            }
-                pass
+		'''
+		print("After settings")
+		#total number of gens, settings, hooker(function u want to run after every mutation)
+		import thread
+		thread.start_new_thread(predpreyalgorithm.mutate,(int(gen_num.get()),{}, update_progress_bar))
 
 
 #Erases playing_field and then loops through critter dictionary and plant
@@ -221,6 +224,7 @@ def validate():
 
 #Main part of program. This section instantiates and places everything on the root
 if __name__ == "__main__":
+	global root
         root = Tk()
         root.wm_title("Pred/Prey Animator")
         yscrollbar = Scrollbar(root, orient=VERTICAL)
