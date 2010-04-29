@@ -38,8 +38,15 @@ class Critter:
     def generatePDF(self):
         return numpy.random.random_integers(low=1,high=255,size=7).astype(numpy.uint8)
 
+    def _getHungerChunk(self):
+        hunger = self.status["hunger"]
+        for i, chunk in enumerate(ppa.getSetting("hungerchunks")):
+            if hunger <= chunk:
+                return i
+        return len(ppa.getSetting("hungerchunks"))
+
     def getHistogram(self, senses):
-        input = senses + tuple(self.status.itervalues())
+        input = senses + (self._getHungerChunk(),)
         if input not in self.mask:
             if input not in self.pdfmatrix:
                 pdf = self.generatePDF()
