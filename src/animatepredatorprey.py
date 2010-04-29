@@ -11,6 +11,7 @@ import tkMessageBox
 import os
 import sys
 from functools import partial
+from blah import ProgressBar
 
 try:
         import psyco
@@ -25,23 +26,20 @@ settings = predpreyalgorithm.DEFAULT_SETTINGS#sandro keep this in mind
 
 pbar = None
 root = None
-def update_progress_bar(currentgen,totalgens):
-	#print("I ARE HERE in update")
-	#pbar.config(text = str(currentgen))
-	#pbar.update()
-	root.title(str(currentgen))
+mutate_button = None
+pb = None
+def change_to_progress_bar(currentgen,totalgens):
+	if currentgen == totalgens:
+		mutate_button.config(state = NORMAL)
+		mutate_button.config(text = "Mutate")
+	else:
+		mutate_button.config(text = "Current/Total Generations\n" + str(currentgen) + "/" + str(totalgens))
 
 def receive_mutate_parameters():
 	global pbar
         if validate() == 0:
                 pass
         else:
-		#deniz progress bar area
-		#ccccccccccc
-		#pbar = Label(root, text="", bd=1, relief=SUNKEN, anchor=W)
-		#pbar.pack(side=BOTTOM, fill=X)
-		#ccccccccccc
-
                 #Use map_size.get(), pct_veg_slider.get(), pct_prey_slider.get(), pct_pred_slider.get(), sight_range.get(), tree_life_slider.get(), max_hunger_slider.get()-- be sure to int-ify it
 		'''
                 settings = {"mapsize": int(map_size.get()), "plantpercent": float(pct_veg_slider.get()), 
@@ -51,10 +49,10 @@ def receive_mutate_parameters():
                             "mutationincrement":0.3, "hungerchunks":[3,6,18], "distancechunks":[3,6,8]
                            }
 		'''
-		print("After settings")
 		#total number of gens, settings, hooker(function u want to run after every mutation)
+		mutate_button.config(state = DISABLED)
 		import thread
-		thread.start_new_thread(predpreyalgorithm.mutate,(int(gen_num.get()),{}, update_progress_bar))
+		thread.start_new_thread(predpreyalgorithm.mutate,(int(gen_num.get()),{}, change_to_progress_bar))
 
 
 #Erases playing_field and then loops through critter dictionary and plant
@@ -224,7 +222,6 @@ def validate():
 
 #Main part of program. This section instantiates and places everything on the root
 if __name__ == "__main__":
-	global root
         root = Tk()
         root.wm_title("Pred/Prey Animator")
         yscrollbar = Scrollbar(root, orient=VERTICAL)
@@ -269,6 +266,7 @@ if __name__ == "__main__":
 	
 
         #Integer Input Section
+	global mutate_button
         gen_num = StringVar()
         pred_num = StringVar()
         prey_num = StringVar()

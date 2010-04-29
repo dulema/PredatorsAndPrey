@@ -147,7 +147,7 @@ def mutate(gens, settings=DEFAULT_SETTINGS, progress=__printProgress):
         #Smash the mask into the best pdf
         for k,v in best_pred_mask.iteritems(): best_pred[k] = v
         for k,v in best_prey_mask.iteritems(): best_prey[k] = v
-
+    progress(gens,gens)#deniz was here
 
 if __name__ == "__main__":
     gens = input("How many generations would you like calculated?")
