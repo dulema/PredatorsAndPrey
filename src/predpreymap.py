@@ -153,22 +153,26 @@ class Map:
     def getCritters(self):
         return self.critters.keys()
 
+    #Goes Through Critters And Returns Only The Preys
     def getPreys(self):
         return [p for p in filter(lambda c : c.type == "prey", self.critters)]
 
+    #Goes Through Critters And Returns Only The Preds
     def getPredators(self):
         return [p for p in filter(lambda c : c.type == "predator", self.critters)]
 
+    #Uses New X,Y And Compares It To Old X,Y To Get The Direction From The Old To The New
     def getDirection(self,x,y,disx,disy,radius):
 
         test1 = -1
         test2 = -1
 
         # Predator Or Prey On A Plant
+        #No Direction Needed
         if disx == x and disy == y:
                 return 0
 
-        # Tests To See If Organy Is Much Different Than
+        # Tests To See If Organism Is Much Different Than
         # Self Y, If Not That Much, Basically Only
         # Left And Right
         # Test1 Is Y Difference
@@ -183,6 +187,9 @@ class Map:
         elif disy < y:
             test1 = 2
 
+        # Tests Old And NewX
+        #If Old Left Of New, Then New Right Of Left Else
+        #Vis Vera
         if disx > x:
             test2 = 1
 
@@ -244,7 +251,8 @@ class Map:
         ysq = ysq * ysq
         sq = xsq + ysq
         distance = pow(sq,.5)
-        
+
+        #Round Answer, And Int-ify
         return int(round(distance))
 
     def getClosestPlant(self, x, y, radius):
@@ -257,16 +265,20 @@ class Map:
         for critter in self.plants:
             checkx = critter[0]
             checky = critter[1]
+            
+            #Gets Distance To Plant
             checkdistance = self.getDistance(x,y,checkx,checky)
 
-            # That It Is Closer Than The Previous Closest
-            # That It is Closer Than Scan Radius
+            # If It Is Closer Than The Previous Closest
+            # If It is Closer Than Scan Radius
             if checkdistance < closest:
                     if checkdistance < radius:
                             # Changes To New Closest And Direction
                             closest = checkdistance
                             direction = self.getDirection(x,y,checkx,checky,radius)
 
+        #If No New Direction Nothing There Return 0
+        #Else Return The Closest And Direction
         if direction != -1:    
                 return closest, direction
         else:
@@ -281,6 +293,7 @@ class Map:
         # Goes Through All Preds
         for critter in self.getPredators():
             checkx,checky = (self.getCritterXY(critter))
+            #Gets Distance To Critter
             checkdistance = self.getDistance(x,y,checkx,checky)
 
             # Sees If Pred Distance Is Not 0
@@ -292,7 +305,9 @@ class Map:
                                     # Changes To New Closest And Direction
                                     closest = checkdistance
                                     direction = self.getDirection(x,y,checkx,checky,radius)
-            
+
+        #If No New Direction Nothing There Return 0
+        #Else Return The Closest And Direction 
         if direction != -1:    
                 return closest, direction
         else:
@@ -307,6 +322,7 @@ class Map:
         # Goes Through All Preys
         for critter in self.getPreys():
             checkx,checky = (self.getCritterXY(critter))
+            #Gets Distance To Critter
             checkdistance = self.getDistance(x,y,checkx,checky)
             
             # Sees If Prey Distance Is Not 0
@@ -319,6 +335,8 @@ class Map:
                                     closest = checkdistance
                                     direction = self.getDirection(x,y,checkx,checky,radius)
 
+        #If No New Direction Nothing There Return 0
+        #Else Return The Closest And Direction 
         if direction != -1:
                 return closest, direction
         else:
