@@ -112,7 +112,7 @@ def open_pred():
 
 #Save a set of Predators
 def save_pred():
-        save_pred_file = asksaveasfilename(defaultextension=".pred",initialdir="critters/", mode = "w")
+        save_pred_file = asksaveasfilename(defaultextension=".pred",initialdir="critters/")
         import pickle
 	pickle.dump(predpreyalgorithm.best_pred, file(save_pred_file, 'w'))
 
@@ -124,7 +124,7 @@ def open_prey():
 
 #Save a set of Prey
 def save_prey():
-        save_prey_file = asksaveasfilename(defaultextension=".prey",initialdir="critters/", mode = "w")
+        save_prey_file = asksaveasfilename(defaultextension=".prey",initialdir="critters/")
         import pickle
 	pickle.dump(predpreyalgorithm.best_prey, file(save_prey_file, 'w'))
 
@@ -136,14 +136,8 @@ def reset():
         pred_num.set("1")
         prey_num.set("20")
         map_size.set("20")
-        pct_pred_slider.set("1")
-        pct_prey_slider.set("2")
         prey_num.set("20")
-        pct_veg_slider.set("5")
-        pct_pdf_slider.set("40")
-        tree_life_slider.set("3")
-        max_hunger_slider.set("20")
-        sight_range_slider.set("10")
+	scale_slider.set("1.0")
         draw_map()
 
 #Draw the map of hexagons on the playing_field
