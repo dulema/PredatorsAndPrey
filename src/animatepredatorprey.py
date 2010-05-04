@@ -12,6 +12,7 @@ import os
 import sys
 from functools import partial
 from subprocess import call
+import pickle
 
 try:
         import psyco
@@ -41,10 +42,7 @@ def receive_mutate_parameters():
                 except IOError:
                         print 'Cannot Open Settings'
                 else:
-                        for line in settingsFile:
-                                tempStr.append(line)
-                        settingsStr = ''.join(tempStr)
-                        settings = eval(settingsStr)
+                        settings = pickle.load(settingsFile)
                         pass
                 
                 #total number of gens, settings, hooker(function u want to run after every mutation)
@@ -107,25 +105,21 @@ def About_display():
 #Open pre-saved set of Predators
 def open_pred():
         open_pred_file = askopenfilename(initialdir="critters/")        
-        import pickle
 	predpreyalgorithm.best_pred = pickle.load(file(open_pred_file, 'r'))
 
 #Save a set of Predators
 def save_pred():
         save_pred_file = asksaveasfilename(defaultextension=".pred",initialdir="critters/")
-        import pickle
 	pickle.dump(predpreyalgorithm.best_pred, file(save_pred_file, 'w'))
 
 #Open a re-saved set of prey
 def open_prey():
         open_prey_file = askopenfilename(initialdir="critters/")	
-        import pickle
 	predpreyalgorithm.best_prey = pickle.load(file(open_prey_file, 'r')) 
 
 #Save a set of Prey
 def save_prey():
         save_prey_file = asksaveasfilename(defaultextension=".prey",initialdir="critters/")
-        import pickle
 	pickle.dump(predpreyalgorithm.best_prey, file(save_prey_file, 'w'))
 
 #Reset all values to default and clear the Playing Field
