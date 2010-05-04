@@ -129,7 +129,7 @@ def save_prey():
 	pickle.dump(predpreyalgorithm.best_prey, file(save_prey_file, 'w'))
 
 #Reset all values to default and clear the Playing Field
-def reset():
+def reset_settings():
         playing_field.delete(ALL)
         gen_num.set("10")
         speed_slider.set(50)
@@ -139,6 +139,14 @@ def reset():
         prey_num.set("20")
 	scale_slider.set("1.0")
         draw_map()
+
+def reset_best_pred():
+	predpreyalgorithm.best_pred = {}
+
+def reset_best_prey():
+	predpreyalgorithm.best_prey = {}
+
+
 
 #Draw the map of hexagons on the playing_field
 def draw_map():
@@ -237,7 +245,9 @@ if __name__ == "__main__":
         root.config(menu=menu)
         file_menu = Menu(menu)
         menu.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="Reset", command=reset)
+        file_menu.add_command(label="Reset Settings", command=reset_settings)
+	file_menu.add_command(label="Reset Best Predators", command=reset_best_pred)
+	file_menu.add_command(label="Reset Best Prey", command=reset_best_prey)
         file_menu.add_separator()
         file_menu.add_command(label="Open Predators", command=open_pred)
         file_menu.add_command(label="Open Prey", command=open_prey)
