@@ -19,6 +19,7 @@ class Map:
         self.critters = {}
         self.plants = []
         self.size = ppa.getSetting("mapsize")
+        #print(self.size)
         self.plantbites = ppa.getSetting("plantbites")
         self.plantpercent = ppa.getSetting("plantpercent")
         #Fill the map with plants

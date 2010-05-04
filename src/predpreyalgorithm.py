@@ -11,9 +11,9 @@ MAXHUNGER = 20
 
 #These are user definable
 DEFAULT_SETTINGS = {"predmutations":4, "preymutations":4, "mutations":10,"choices":7,
-                    "sight":20, "mapsize":20,"plantpercent":0.05,
-                    "preypercent":0.02, "predpercent":0.01,
-                    "plantbites":3, "maxhunger":20,
+                    "sight":20, "mapsize":5,"plantpercent":0.05,
+                    "preypercent":0.20, "predpercent":0.04,
+                    "plantbites":3, "maxhunger":5,
                     "pdfpercent":0.01,"mutationincrement":0.3,
                     "distancechunks":[3,9,18],
                     "hungerchunks":[3,9,18] }

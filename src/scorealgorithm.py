@@ -69,15 +69,17 @@ def calcscore(pred_mask={}, prey_mask={}, hooker=None):
                 c.incrementStatus("hunger", 1)
                 if c.type == critter.PREY:
                         preyMakeMove(c, world)
+                        print("Prey Move")
                 elif c.type == critter.PREDATOR:
                         predMakeMove(c, world)
+                        print("Pred Move")
                 else:
                         raise Exception("Something that is not a critter is in the map: " + c)
                 if c.getStatus("hunger") >= ppa.getSetting("maxhunger") and world.getCritterXY(c) != None:
                         world.removeCritter(c)
                 if hooker != None:
                         hooker(world, score)
-
+        print("Next")
     if hooker != None:
         hooker(world, score)
 
