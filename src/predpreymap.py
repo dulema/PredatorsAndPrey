@@ -3,6 +3,8 @@ import critter
 from critter import Critter
 import predpreyalgorithm as ppa
 
+#HardCoded Move Values
+#Done For Coder Easyness
 dontmove = 0
 topleft = 1
 topright = 2
@@ -14,43 +16,42 @@ left = 6
 class Map:
 
     def __init__(self):
+        
         self.directions = []
         self.gooddirections = []
         self.critters = {}
         self.plants = []
+
+        #Gets Mapsize, PlantBites and PlantPercent Setting From Algorithm
         self.size = ppa.getSetting("mapsize")
-        #print(self.size)
         self.plantbites = ppa.getSetting("plantbites")
         self.plantpercent = ppa.getSetting("plantpercent")
-        #Fill the map with plants
+        
+        #Fill The Map With Plants Using Percentage
         for _ in range(int(self.plantpercent*self.size*self.size)):
+                #Puts Plant In Random Location
                 loc = (random.randint(0, self.size-1), random.randint(0, self.size-1),self.plantbites)
                 while loc in self.plants:
                         loc = (random.randint(0, self.size-1), random.randint(0, self.size-1),self.plantbites)
                 self.plants.append(loc)
 
-        #TEST REMOVE WHEN DONE
-        ufa = (50,40,1)
-        self.plants.append(ufa)
-
     def isPlant(self, location):
 
         x,y = location
-
         # Goes Through Plants To See If Plant There
         # If So Plant Eaten And Returned True
-
         for i in range (len(self.plants)):
             j,k,l = self.plants[i]
             if x == j and y == k:
                 #If True Then Plant Is Eaten
-                #If One Left None Else Decrease 1
+                #If Plant Life Is 1 Then 1-1=0 And Plant Is BushedBombed
                 if l == 1:
                     self.bushbombplants(i)
                 else:
+                    #Plant Life > 1 and Its Life Decreased By One
                     self.plants[i] = j,k,l-1
                 return True
-
+        #No Plant At Location
         return False
 
     def getCritterXY(self, critter):
