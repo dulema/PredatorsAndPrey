@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Help</title>
+<title>Software Engineering Design Project - Help</title>
 </head>
 <body>
 <h1>Software Engineering Final Design Project!</h1>
@@ -46,26 +46,38 @@ Once the program window is open you will see areas to:</pre><font face="Courier 
 	<ul><li>Input the number of generations</li>
 		<li>Input the number of predators per generation</li>
 		<li>Input the number of prey per generation</li>
-		<li>Adjust how much of the map is filled with predators</li>
-		<li>Adjust how much of the map is filled with prey</li>
-		<li>Adjust how much of the map is filled with vegetation</li>
-		<li>Adjust how many of the pdf's are mutated each generation</li>
-		<li>Apply the mutation</li>
+		<li>Adjust the size of the map</li>
+		<li>Adjust particular details of the map such as:</li>
+			<ul><li>Sight range</li>
+			<li>Map size</li>
+			<li>Percentage of map covered by plants</li>
+			<li>Percentage of map covered by prey</li>
+			<li>Percentage of map covered by predators</li>
+			<li>How many bites can be taken from a plant before it dissapears</li>
+			<li>Maximum hunger value of the critters</li>
+			<li>Percentage of the pdf you'd like to manipulate due to mutations</li>
+			<li>The value of how much you'd like mutations to increment</li>
+			<li>Chunks of distance(i.e. 3 represents near, middle, far)</li>
+			<li>Chunks of hunger(i.e. 3 represents starving, hungry, sated)</li>
+			</ul>
+		<li>Apply the mutation (This will change into a progress bar.</li>
+		<li>View the histogram of the current best predator</li>
+		<li>View the histogram of the current best prey</li
 	</ul>
 	<li>Right area</li>
 	<ul><li>Legend</li>
-		<li>Adjust the speed of the current round's progress</li>
-		<li>Adjust the size of the map</li>
-		<li>Run the animation</li>
+		<li>Adjust the speed of the current animation</li>
+		<li>Adjust the viewing size of the map (zooms in and out)</li>
+		<li>Run an animation of the current round</li>
 	</ul>
 </font></ul><pre>
 If you do not wish to adjust anything and simply run the program, there are default
 values set, so you may simply click mutate and/or animate.
 
 Note: If you are typing into one of the input fields (number of predators per generation,
-number of prey per generation, number of generations, size of map) and your keystrokes are
-not doing anything, you are probably typing invalid input otherwise known as things that
-aren't numbers. The program automatically checks if you are properly entering valid data.
+number of prey per generation, number of generations, size of map) in the main windows
+be sure to enter valid data. The program automatically checks if you are properly 
+entering valid data though, just in case.
 
 <a href="#top">Back to table of contents</a>
 ----
@@ -74,20 +86,28 @@ This program was written in the Python programming language, version 2.6.
 It is designed to take advantage of multi-core machines, due to some of the
 calculations being extremely intensive.
 
+Required Features:
+	Python 2.6
+	Python Tk
+	Python Tk-image
+
+Optional feature(s):
+	psyco (only availiable on 32-bit OS's, but will greatly increase program performance)
+
 Installation Instructions
 On Windows:
 	Please visit <a target="_blank" href="http://www.python.org/download/">http://www.python.org/download/</a>
 	Click the first link, "Python 2.6.5 Windows installer"
 	Download it, follow the instructions
-	Double click the blah.py file to start the program
+	Double click the animatepredatorprey.py file to start the program
 
 On Linux:
 	Open a terminal
 	Type "sudo-apt get install python" without the "'s
-	Type "python blah.py"
+	Type "python animatepredatorprey.py"
 
 On Mac:
-	Noooo noo no...
+	Something something dark side, something something complete
 
 <a href="#top">Back to table of contents</a>
 ----
@@ -181,8 +201,8 @@ Here are some common questions answered...
 
 
 
-</font>
-<marquee>&#169;2010, SB AD CE CP DU</marquee>
-</pre>
+</font><center>
+&#169;2010, SB AD CE CP DU
+</center></pre>
 </body>
 </html>
