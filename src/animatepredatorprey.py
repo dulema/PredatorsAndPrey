@@ -108,25 +108,25 @@ def About_display():
 def open_pred():
         open_pred_file = askopenfilename(initialdir="critters/")        
         import pickle
-	predpreyalgorithm.best_pred = pickle.load(open_pred_file)
+	predpreyalgorithm.best_pred = pickle.load(file(open_pred_file, 'r'))
 
 #Save a set of Predators
 def save_pred():
         save_pred_file = asksaveasfilename(defaultextension=".pred",initialdir="critters/", mode = "w")
         import pickle
-	pickle.dump(predpreyalgorithm.best_pred, save_pred_file)
+	pickle.dump(predpreyalgorithm.best_pred, file(save_pred_file, 'w'))
 
 #Open a re-saved set of prey
 def open_prey():
         open_prey_file = askopenfilename(initialdir="critters/")	
         import pickle
-	predpreyalgorithm.best_prey = pickle.load(open_prey_file) 
+	predpreyalgorithm.best_prey = pickle.load(file(open_prey_file, 'r')) 
 
 #Save a set of Prey
 def save_prey():
         save_prey_file = asksaveasfilename(defaultextension=".prey",initialdir="critters/", mode = "w")
         import pickle
-	pickle.dump(predpreyalgorithm.best_prey, save_prey_file)
+	pickle.dump(predpreyalgorithm.best_prey, file(save_prey_file, 'w'))
 
 #Reset all values to default and clear the Playing Field
 def reset():
