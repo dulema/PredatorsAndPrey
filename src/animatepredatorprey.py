@@ -84,7 +84,11 @@ def animate():
                 pass
         else:
                 scorealgorithm.calcscore(hooker = updatePlayingField)
-                #draw_map()
+		time.sleep(5)
+		playing_field.delete(ALL)
+                draw_map()
+		scale_canvas()	
+		root.update()
 
 
 def pred_view():
