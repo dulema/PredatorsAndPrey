@@ -154,5 +154,10 @@ if __name__ == "__main__":
     DEFAULT_SETTINGS["predmutations"] = input("How many predator clones per generation?")
     DEFAULT_SETTINGS["preymutations"] = input("How many prey clones per generation?")
     mutate(gens)
+    import pickle
+    preyf = file("best_prey.prey", "w")
+    pickle.dump(best_prey, preyf)
+    predf = file("best_pred.pred", "w")
+    pickle.dump(best_pred, predf)
     __clearProgress()
 
