@@ -1,5 +1,5 @@
-{"sight":20, "mapsize":5,"plantpercent":0.05,
-                    "preypercent":0.16, "predpercent":0.04,
+{"sight":20, "mapsize":20,"plantpercent":0.05,
+                    "preypercent":0.05, "predpercent":0.025,
                     "plantbites":3, "maxhunger":20,
                     "pdfpercent":0.01,"mutationincrement":0.3,
                     "distancechunks":[3,6,18],

@@ -213,7 +213,7 @@ def validate():
                 prey_num.set("20")
         if re.match("^[0-9]+$",map_size.get()) == None:
                 wrongstuff = wrongstuff + "Size of map\n"
-                map_size.set("5")
+                map_size.set("20")
         if len(wrongstuff) > 1:
                 tkMessageBox.showwarning("Fix Input","Fix the following:\n" + wrongstuff)
                 return 0
@@ -284,7 +284,7 @@ if __name__ == "__main__":
         mutate_button = Button(root, text="Mutate", command=receive_mutate_parameters)
         map_size_label = Label(root, text="Size of Map")
         map_size_input = Entry(root, textvariable=map_size, width=10)
-        map_size.set("5")
+        map_size.set("20")
 
         #Playing_Field Legend Section
         key_title_label = Label(root, text="Map Icon Key")
