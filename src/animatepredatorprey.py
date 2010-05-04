@@ -105,22 +105,22 @@ def About_display():
 #Open pre-saved set of Predators
 def open_pred():
         open_pred_file = askopenfilename(initialdir="critters/")        
-	predpreyalgorithm.best_pred = pickle.load(open_pred_file)
+	predpreyalgorithm.best_pred = pickle.load(file(open_pred_file, 'r'))
 
 #Save a set of Predators
 def save_pred():
-        save_pred_file = asksaveasfilename(defaultextension=".pred",initialdir="critters/", mode = "w")
-	pickle.dump(predpreyalgorithm.best_pred, save_pred_file)
+        save_pred_file = asksaveasfilename(defaultextension=".pred",initialdir="critters/")
+	pickle.dump(predpreyalgorithm.best_pred, file(save_pred_file, 'w'))
 
 #Open a re-saved set of prey
 def open_prey():
         open_prey_file = askopenfilename(initialdir="critters/")	
-	predpreyalgorithm.best_prey = pickle.load(open_prey_file) 
+	predpreyalgorithm.best_prey = pickle.load(file(open_prey_file, 'r')) 
 
 #Save a set of Prey
 def save_prey():
-        save_prey_file = asksaveasfilename(defaultextension=".prey",initialdir="critters/", mode = "w")
-	pickle.dump(predpreyalgorithm.best_prey, save_prey_file)
+        save_prey_file = asksaveasfilename(defaultextension=".prey",initialdir="critters/")
+	pickle.dump(predpreyalgorithm.best_prey, file(save_prey_file, 'w'))
 
 #Reset all values to default and clear the Playing Field
 def reset():
@@ -130,14 +130,8 @@ def reset():
         pred_num.set("1")
         prey_num.set("20")
         map_size.set("20")
-        pct_pred_slider.set("1")
-        pct_prey_slider.set("2")
         prey_num.set("20")
-        pct_veg_slider.set("5")
-        pct_pdf_slider.set("40")
-        tree_life_slider.set("3")
-        max_hunger_slider.set("20")
-        sight_range_slider.set("10")
+	scale_slider.set("1.0")
         draw_map()
 
 #Draw the map of hexagons on the playing_field
