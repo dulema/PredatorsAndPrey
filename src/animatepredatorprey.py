@@ -12,6 +12,7 @@ import os
 import sys
 from functools import partial
 from subprocess import call
+import tkSimpleDialog
 
 try:
         import psyco
@@ -191,13 +192,77 @@ def fill_map(thing, location):
                 photo = playing_field.create_image(1+12+x*24,20+y*29, image=picture)
                 canvas_items.append(photo)
 
+#deniz
+class MyDialog(tkSimpleDialog.Dialog):
+    def body(self, master):
+
+        Label(master, text="sight").grid(row=0)
+        Label(master, text="mapsize:").grid(row=1)
+	Label(master, text="plantpercent:").grid(row=2)
+	Label(master, text="preypercent:").grid(row=3)
+	Label(master, text="predpercent:").grid(row=4)
+	Label(master, text="plantbites:").grid(row=5)
+	Label(master, text="maxhunger:").grid(row=6)
+	Label(master, text="pdfpercent:").grid(row=7)
+	Label(master, text="mutationincrement:").grid(row=8)
+	Label(master, text="distancechunks:").grid(row=9)
+	Label(master, text="hungerchunks:").grid(row=10)
+
+        self.e1 = Entry(master)
+        self.e2 = Entry(master)
+	self.e3 = Entry(master)
+	self.e4 = Entry(master)
+	self.e5 = Entry(master)
+	self.e6 = Entry(master)
+	self.e7 = Entry(master)
+	self.e8 = Entry(master)
+	self.e9 = Entry(master)
+	self.e10 = Entry(master)
+	self.e11 = Entry(master)
+	
+        self.e1.grid(row=0, column=1)
+        self.e2.grid(row=1, column=1)
+	self.e3.grid(row=2, column=1)
+	self.e4.grid(row=3, column=1)
+	self.e5.grid(row=4, column=1)
+	self.e6.grid(row=5, column=1)
+	self.e7.grid(row=6, column=1)
+	self.e8.grid(row=7, column=1)
+	self.e9.grid(row=8, column=1)
+	self.e10.grid(row=9, column=1)
+	self.e11.grid(row=10, column=1)
+
+        return self.e1 # initial focus
+
+    def apply(self):
+        settings["sight"] = self.e1.get()
+        settings["mapsize"] = self.e2.get()
+	settings["plantpercent"] = self.e3.get()
+	settings["preypercent"] = self.e4.get()
+	settings["predpercent"] = self.e5.get()
+	settings["plantbites"] = self.e6.get()
+	settings["maxhunger"] = self.e7.get()
+	settings["pdfpercent"] = self.e8.get()
+	settings["mutationincrement"] = self.e9.get()
+
+	rawdistancechunks = self.e10.get()
+	rawhungerchunks = self.e11.get()
+	settings["distancechunks"] = map(lambda x : int(x), rawdistancechunks.split(','))
+	settings["hungerchunks"] = map(lambda x : int(x), rawhungerchunks.split(','))
+
+	import pickle
+	pickle.dump(settings, file("settings.txt", 'w'))
+
 def display_conf():
+	d = MyDialog(root)
+	'''
         if(os.name == "posix"):
                 os.system("gedit settings.txt")
         elif(os.name == "nt"):
                 call(["notepad", "settings.txt"])
         else:
                 print("No Good")
+	'''
 
 
 def validate():
