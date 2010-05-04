@@ -1,6 +1,69 @@
-{"sight":20, "mapsize":20,"plantpercent":0.05,
-                    "preypercent":0.05, "predpercent":0.025,
-                    "plantbites":3, "maxhunger":20,
-                    "pdfpercent":0.01,"mutationincrement":0.3,
-                    "distancechunks":[3,6,18],
-                    "hungerchunks":[3,6,18] }
+(dp0
+S'plantbites'
+p1
+S'6'
+p2
+sS'predmutations'
+p3
+I4
+sS'mutations'
+p4
+I10
+sS'hungerchunks'
+p5
+(lp6
+I4
+aI5
+aI6
+asS'preypercent'
+p7
+S'0.06'
+p8
+sS'inputranges'
+p9
+(lp10
+I3
+aI7
+aI3
+aI7
+aI3
+aI7
+aI3
+asS'sight'
+p11
+g2
+sS'preymutations'
+p12
+I4
+sS'plantpercent'
+p13
+S'0.05'
+p14
+sS'mutationincrement'
+p15
+S'0.3'
+p16
+sS'mapsize'
+p17
+g2
+sS'choices'
+p18
+I7
+sS'distancechunks'
+p19
+(lp20
+I1
+aI2
+aI3
+asS'pdfpercent'
+p21
+S'0.06'
+p22
+sS'maxhunger'
+p23
+g2
+sS'predpercent'
+p24
+S'0.06'
+p25
+s.
