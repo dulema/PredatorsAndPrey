@@ -142,9 +142,11 @@ class Map:
         self.removeCritter(critter)
         self.setCritterAt(newloc, critter)
 
+    #Gets Rid Of Plant On That Spot
     def bushbombplants(self, spot):
         del self.plants[spot]
 
+    #Gets Rid Of Critter At That Spot
     def removeCritter(self, critter):
         del self.critters[critter]
 
