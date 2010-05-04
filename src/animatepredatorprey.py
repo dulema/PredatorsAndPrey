@@ -13,6 +13,7 @@ import sys
 from functools import partial
 from subprocess import call
 import tkSimpleDialog
+import pickle
 
 try:
         import psyco
@@ -42,10 +43,7 @@ def receive_mutate_parameters():
                 except IOError:
                         print 'Cannot Open Settings'
                 else:
-                        for line in settingsFile:
-                                tempStr.append(line)
-                        settingsStr = ''.join(tempStr)
-                        settings = eval(settingsStr)
+                        settings = pickle.load(settingsFile)
                         pass
                 
                 #total number of gens, settings, hooker(function u want to run after every mutation)
@@ -108,40 +106,42 @@ def About_display():
 #Open pre-saved set of Predators
 def open_pred():
         open_pred_file = askopenfilename(initialdir="critters/")        
-        return open_pred_file
+	predpreyalgorithm.best_pred = pickle.load(file(open_pred_file, 'r'))
 
 #Save a set of Predators
 def save_pred():
         save_pred_file = asksaveasfilename(defaultextension=".pred",initialdir="critters/")
-        return save_pred_file
+	pickle.dump(predpreyalgorithm.best_pred, file(save_pred_file, 'w'))
 
 #Open a re-saved set of prey
 def open_prey():
-        open_prey_file = askopenfilename(initialdir="critters/")
-        return open_prey_file
+        open_prey_file = askopenfilename(initialdir="critters/")	
+	predpreyalgorithm.best_prey = pickle.load(file(open_prey_file, 'r')) 
 
 #Save a set of Prey
 def save_prey():
         save_prey_file = asksaveasfilename(defaultextension=".prey",initialdir="critters/")
-        return save_prey_file
+	pickle.dump(predpreyalgorithm.best_prey, file(save_prey_file, 'w'))
 
 #Reset all values to default and clear the Playing Field
-def reset():
+def reset_settings():
         playing_field.delete(ALL)
         gen_num.set("10")
         speed_slider.set(50)
         pred_num.set("1")
         prey_num.set("20")
         map_size.set("20")
-        pct_pred_slider.set("1")
-        pct_prey_slider.set("2")
         prey_num.set("20")
-        pct_veg_slider.set("5")
-        pct_pdf_slider.set("40")
-        tree_life_slider.set("3")
-        max_hunger_slider.set("20")
-        sight_range_slider.set("10")
+	scale_slider.set("1.0")
         draw_map()
+
+def reset_best_pred():
+	predpreyalgorithm.best_pred = {}
+
+def reset_best_prey():
+	predpreyalgorithm.best_prey = {}
+
+
 
 #Draw the map of hexagons on the playing_field
 def draw_map():
@@ -250,7 +250,6 @@ class MyDialog(tkSimpleDialog.Dialog):
 	settings["distancechunks"] = map(lambda x : int(x), rawdistancechunks.split(','))
 	settings["hungerchunks"] = map(lambda x : int(x), rawhungerchunks.split(','))
 
-	import pickle
 	pickle.dump(settings, file("settings.txt", 'w'))
 
 def display_conf():
@@ -304,7 +303,9 @@ if __name__ == "__main__":
         root.config(menu=menu)
         file_menu = Menu(menu)
         menu.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="Reset", command=reset)
+        file_menu.add_command(label="Reset Settings", command=reset_settings)
+	file_menu.add_command(label="Reset Best Predators", command=reset_best_pred)
+	file_menu.add_command(label="Reset Best Prey", command=reset_best_prey)
         file_menu.add_separator()
         file_menu.add_command(label="Open Predators", command=open_pred)
         file_menu.add_command(label="Open Prey", command=open_prey)
