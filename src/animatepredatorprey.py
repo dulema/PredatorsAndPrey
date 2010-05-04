@@ -196,10 +196,8 @@ def fill_map(thing, location):
                 photo = playing_field.create_image(1+12+x*24,20+y*29, image=picture)
                 canvas_items.append(photo)
 
-#deniz
 class MyDialog(tkSimpleDialog.Dialog):
     def body(self, master):
-
         Label(master, text="sight").grid(row=0)
         Label(master, text="mapsize:").grid(row=1)
 	Label(master, text="plantpercent:").grid(row=2)
@@ -258,15 +256,6 @@ class MyDialog(tkSimpleDialog.Dialog):
 
 def display_conf():
 	d = MyDialog(root)
-	'''
-        if(os.name == "posix"):
-                os.system("gedit settings.txt")
-        elif(os.name == "nt"):
-                call(["notepad", "settings.txt"])
-        else:
-                print("No Good")
-	'''
-
 
 def validate():
         wrongstuff = "\n"
