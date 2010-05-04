@@ -23,9 +23,10 @@ except ImportError:
 
 
 canvas_items = []
-settings = predpreyalgorithm.DEFAULT_SETTINGS#sandro keep this in mind
-#Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
-#mutate_button = None
+settings = predpreyalgorithm.DEFAULT_SETTINGS
+
+
+#Changes the Mutate Button into a progress indicator
 def change_to_progress_bar(currentgen,totalgens):
         if currentgen == totalgens:
                 mutate_button.config(state = NORMAL)
@@ -33,6 +34,7 @@ def change_to_progress_bar(currentgen,totalgens):
         else:
                 mutate_button.config(text = "Current/Total Generations\n" + str(currentgen) + "/" + str(totalgens))
 
+#Grock mutate parameters from settings file and call predpreyalgo to start mutation
 def receive_mutate_parameters():
         if validate() == 0:
                 pass
@@ -46,21 +48,18 @@ def receive_mutate_parameters():
                         settings = pickle.load(settingsFile)
                         pass
                 
-                #total number of gens, settings, hooker(function u want to run after every mutation)
                 mutate_button.config(state = DISABLED)
                 import thread
                 thread.start_new_thread(predpreyalgorithm.mutate,(int(gen_num.get()),{}, change_to_progress_bar))
 
 
-#Erases playing_field and then loops through critter dictionary and plant
-#array and calls fill+map to place appropriate letter in appropriate
-#hexagon
+#Scales the canvas from 50% to 150% of its original state
 def scale_canvas():
         scale_factor = float(scale_slider.get())
         for i in canvas_items:
                 playing_field.scale(i,0,0,scale_factor,scale_factor)
 
-
+#Function that receives current state of the map from Critter.py and calls fill_map to draw appropriate playing_field
 def updatePlayingField(world, round_score):
         global canvas_items
         canvas_items = []
@@ -76,7 +75,7 @@ def updatePlayingField(world, round_score):
         time.sleep(speed)
 
 
-#Command intiated by clicking the Animate button. Calls score in PredPreyAlgo
+#Command intiated by clicking the Animate button. Calls score in PredPreyAlgo to
 #update the playing_field.
 def animate():
         if validate() == 0:
@@ -89,12 +88,12 @@ def animate():
 		scale_canvas()	
 		root.update()
 
-
+#Instatiates the Predator version of Critter View
 def pred_view():
         import pred_view
         pred_view.button_run()
 
-
+#Instatiates the Prey version of Critter View 
 def prey_view():
         import prey_view
         prey_view.button_run()
@@ -139,12 +138,13 @@ def reset_settings():
 	scale_slider.set("1.0")
         draw_map()
 
+#Resets the best_pred dictionary in predpreyalgo
 def reset_best_pred():
 	predpreyalgorithm.best_pred = {}
 
+#Resets the best_prey dictionary in predpreyalgo
 def reset_best_prey():
 	predpreyalgorithm.best_prey = {}
-
 
 
 #Draw the map of hexagons on the playing_field
@@ -169,7 +169,7 @@ def draw_map():
                 y = y + 29
 
 
-#Given an x and y coordixnate and text, this can draw the text on the map
+#Given an x and y coordixnate and text, this places the pictures on the map
 def fill_map(thing, location):
         x=location[0]
         y=location[1]
