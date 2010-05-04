@@ -37,7 +37,7 @@ class Critter:
                     pdf = numpy.insert(pdf, (i+1),0) #insert a zero removes acutally number under
                     pdf = numpy.delete(pdf, i) #remove this option from the pdf
                     break
-        print(moves)
+        #print(moves)
         return moves
 
     def generatePDF(self):
