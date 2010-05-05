@@ -26,7 +26,7 @@ class Critter:
         ufa = 7
         while ufa > 0: #Keep going until the pdf is empty
             #print(pdf)
-            if pdf.sum() == 0 : print(pdf)
+            if pdf.sum() <= 0 : print("Error, sum <= 0:", pdf, pdf.sum())
             r = numpy.random.randint(pdf.sum()) #Pick a random number
             sum = 0 #Track how high we are
             for i,probability in enumerate(pdf): #For every i from 0 -> len(pdf) and every probability in the pdf
