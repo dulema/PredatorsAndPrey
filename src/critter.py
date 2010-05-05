@@ -23,21 +23,17 @@ class Critter:
     def getMoves(self, senses):
         pdf = self.getHistogram(senses).copy() #This is a numpy array
         moves = []
-        ufa = 7
-        while ufa > 0: #Keep going until the pdf is empty
-            #print(pdf)
-            if pdf.sum() <= 0 : print("Error, sum <= 0:", pdf, pdf.sum())
+        while len(moves) < 7: #Keep going until the pdf is empty
+            if pdf.sum() <= 0 : 
+                raise Exception("Error sum <= 0: pdf=%s, sum=%d " % (pdf, pdf.sum()) )
             r = numpy.random.randint(pdf.sum()) #Pick a random number
             sum = 0 #Track how high we are
             for i,probability in enumerate(pdf): #For every i from 0 -> len(pdf) and every probability in the pdf
                 sum += probability
                 if r < sum:
                     moves.append(i)
-                    ufa = ufa - 1
-                    pdf = numpy.insert(pdf, (i+1),0) #insert a zero removes acutally number under
-                    pdf = numpy.delete(pdf, i) #remove this option from the pdf
+                    pdf[i] = 0
                     break
-        #print(moves)
         return moves
 
     def generatePDF(self):
