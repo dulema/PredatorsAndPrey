@@ -12,6 +12,8 @@ import os
 import sys
 from functools import partial
 from subprocess import call
+import tkSimpleDialog
+import pickle
 
 try:
         import psyco
@@ -21,9 +23,10 @@ except ImportError:
 
 
 canvas_items = []
-settings = predpreyalgorithm.DEFAULT_SETTINGS#sandro keep this in mind
-#Grock Mutate Parameters, i.e. Number of Generations, Predators and Prey
-#mutate_button = None
+settings = predpreyalgorithm.DEFAULT_SETTINGS
+
+
+#Changes the Mutate Button into a progress indicator
 def change_to_progress_bar(currentgen,totalgens):
         if currentgen == totalgens:
                 mutate_button.config(state = NORMAL)
@@ -31,6 +34,7 @@ def change_to_progress_bar(currentgen,totalgens):
         else:
                 mutate_button.config(text = "Current/Total Generations\n" + str(currentgen) + "/" + str(totalgens))
 
+#Grock mutate parameters from settings file and call predpreyalgo to start mutation
 def receive_mutate_parameters():
         if validate() == 0:
                 pass
@@ -41,27 +45,21 @@ def receive_mutate_parameters():
                 except IOError:
                         print 'Cannot Open Settings'
                 else:
-                        for line in settingsFile:
-                                tempStr.append(line)
-                        settingsStr = ''.join(tempStr)
-                        settings = eval(settingsStr)
+                        settings = pickle.load(settingsFile)
                         pass
                 
-                #total number of gens, settings, hooker(function u want to run after every mutation)
                 mutate_button.config(state = DISABLED)
                 import thread
                 thread.start_new_thread(predpreyalgorithm.mutate,(int(gen_num.get()),{}, change_to_progress_bar))
 
 
-#Erases playing_field and then loops through critter dictionary and plant
-#array and calls fill+map to place appropriate letter in appropriate
-#hexagon
+#Scales the canvas from 50% to 150% of its original state
 def scale_canvas():
         scale_factor = float(scale_slider.get())
         for i in canvas_items:
                 playing_field.scale(i,0,0,scale_factor,scale_factor)
 
-
+#Function that receives current state of the map from Critter.py and calls fill_map to draw appropriate playing_field
 def updatePlayingField(world, round_score):
         global canvas_items
         canvas_items = []
@@ -77,21 +75,25 @@ def updatePlayingField(world, round_score):
         time.sleep(speed)
 
 
-#Command intiated by clicking the Animate button. Calls score in PredPreyAlgo
+#Command intiated by clicking the Animate button. Calls score in PredPreyAlgo to
 #update the playing_field.
 def animate():
         if validate() == 0:
                 pass
         else:
                 scorealgorithm.calcscore(hooker = updatePlayingField)
-                #draw_map()
+		time.sleep(5)
+		playing_field.delete(ALL)
+                draw_map()
+		scale_canvas()	
+		root.update()
 
-
+#Instatiates the Predator version of Critter View
 def pred_view():
         import pred_view
         pred_view.button_run()
 
-
+#Instatiates the Prey version of Critter View 
 def prey_view():
         import prey_view
         prey_view.button_run()
@@ -107,40 +109,43 @@ def About_display():
 #Open pre-saved set of Predators
 def open_pred():
         open_pred_file = askopenfilename(initialdir="critters/")        
-        return open_pred_file
+	predpreyalgorithm.best_pred = pickle.load(file(open_pred_file, 'r'))
 
 #Save a set of Predators
 def save_pred():
         save_pred_file = asksaveasfilename(defaultextension=".pred",initialdir="critters/")
-        return save_pred_file
+	pickle.dump(predpreyalgorithm.best_pred, file(save_pred_file, 'w'))
 
 #Open a re-saved set of prey
 def open_prey():
-        open_prey_file = askopenfilename(initialdir="critters/")
-        return open_prey_file
+        open_prey_file = askopenfilename(initialdir="critters/")	
+	predpreyalgorithm.best_prey = pickle.load(file(open_prey_file, 'r')) 
 
 #Save a set of Prey
 def save_prey():
         save_prey_file = asksaveasfilename(defaultextension=".prey",initialdir="critters/")
-        return save_prey_file
+	pickle.dump(predpreyalgorithm.best_prey, file(save_prey_file, 'w'))
 
 #Reset all values to default and clear the Playing Field
-def reset():
+def reset_settings():
         playing_field.delete(ALL)
         gen_num.set("10")
         speed_slider.set(50)
         pred_num.set("1")
         prey_num.set("20")
         map_size.set("20")
-        pct_pred_slider.set("1")
-        pct_prey_slider.set("2")
         prey_num.set("20")
-        pct_veg_slider.set("5")
-        pct_pdf_slider.set("40")
-        tree_life_slider.set("3")
-        max_hunger_slider.set("20")
-        sight_range_slider.set("10")
+	scale_slider.set("1.0")
         draw_map()
+
+#Resets the best_pred dictionary in predpreyalgo
+def reset_best_pred():
+	predpreyalgorithm.best_pred = {}
+
+#Resets the best_prey dictionary in predpreyalgo
+def reset_best_prey():
+	predpreyalgorithm.best_prey = {}
+
 
 #Draw the map of hexagons on the playing_field
 def draw_map():
@@ -164,7 +169,7 @@ def draw_map():
                 y = y + 29
 
 
-#Given an x and y coordixnate and text, this can draw the text on the map
+#Given an x and y coordixnate and text, this places the pictures on the map
 def fill_map(thing, location):
         x=location[0]
         y=location[1]
@@ -191,14 +196,66 @@ def fill_map(thing, location):
                 photo = playing_field.create_image(1+12+x*24,20+y*29, image=picture)
                 canvas_items.append(photo)
 
-def display_conf():
-        if(os.name == "posix"):
-                os.system("gedit settings.txt")
-        elif(os.name == "nt"):
-                call(["notepad", "settings.txt"])
-        else:
-                print("No Good")
+class MyDialog(tkSimpleDialog.Dialog):
+    def body(self, master):
+        Label(master, text="sight").grid(row=0)
+        Label(master, text="mapsize:").grid(row=1)
+	Label(master, text="plantpercent:").grid(row=2)
+	Label(master, text="preypercent:").grid(row=3)
+	Label(master, text="predpercent:").grid(row=4)
+	Label(master, text="plantbites:").grid(row=5)
+	Label(master, text="maxhunger:").grid(row=6)
+	Label(master, text="pdfpercent:").grid(row=7)
+	Label(master, text="mutationincrement:").grid(row=8)
+	Label(master, text="distancechunks:").grid(row=9)
+	Label(master, text="hungerchunks:").grid(row=10)
 
+        self.e1 = Entry(master)
+        self.e2 = Entry(master)
+	self.e3 = Entry(master)
+	self.e4 = Entry(master)
+	self.e5 = Entry(master)
+	self.e6 = Entry(master)
+	self.e7 = Entry(master)
+	self.e8 = Entry(master)
+	self.e9 = Entry(master)
+	self.e10 = Entry(master)
+	self.e11 = Entry(master)
+	
+        self.e1.grid(row=0, column=1)
+        self.e2.grid(row=1, column=1)
+	self.e3.grid(row=2, column=1)
+	self.e4.grid(row=3, column=1)
+	self.e5.grid(row=4, column=1)
+	self.e6.grid(row=5, column=1)
+	self.e7.grid(row=6, column=1)
+	self.e8.grid(row=7, column=1)
+	self.e9.grid(row=8, column=1)
+	self.e10.grid(row=9, column=1)
+	self.e11.grid(row=10, column=1)
+
+        return self.e1 # initial focus
+
+    def apply(self):
+        settings["sight"] = self.e1.get()
+        settings["mapsize"] = self.e2.get()
+	settings["plantpercent"] = self.e3.get()
+	settings["preypercent"] = self.e4.get()
+	settings["predpercent"] = self.e5.get()
+	settings["plantbites"] = self.e6.get()
+	settings["maxhunger"] = self.e7.get()
+	settings["pdfpercent"] = self.e8.get()
+	settings["mutationincrement"] = self.e9.get()
+
+	rawdistancechunks = self.e10.get()
+	rawhungerchunks = self.e11.get()
+	settings["distancechunks"] = map(lambda x : int(x), rawdistancechunks.split(','))
+	settings["hungerchunks"] = map(lambda x : int(x), rawhungerchunks.split(','))
+
+	pickle.dump(settings, file("settings.txt", 'w'))
+
+def display_conf():
+	d = MyDialog(root)
 
 def validate():
         wrongstuff = "\n"
@@ -239,7 +296,9 @@ if __name__ == "__main__":
         root.config(menu=menu)
         file_menu = Menu(menu)
         menu.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="Reset", command=reset)
+        file_menu.add_command(label="Reset Settings", command=reset_settings)
+	file_menu.add_command(label="Reset Best Predators", command=reset_best_pred)
+	file_menu.add_command(label="Reset Best Prey", command=reset_best_prey)
         file_menu.add_separator()
         file_menu.add_command(label="Open Predators", command=open_pred)
         file_menu.add_command(label="Open Prey", command=open_prey)

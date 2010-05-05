@@ -3,6 +3,8 @@ import critter
 from critter import Critter
 import predpreyalgorithm as ppa
 
+#HardCoded Move Values
+#Done For Coder Easyness
 dontmove = 0
 topleft = 1
 topright = 2
@@ -14,43 +16,42 @@ left = 6
 class Map:
 
     def __init__(self):
+        
         self.directions = []
         self.gooddirections = []
         self.critters = {}
         self.plants = []
+
+        #Gets Mapsize, PlantBites and PlantPercent Setting From Algorithm
         self.size = ppa.getSetting("mapsize")
-        #print(self.size)
         self.plantbites = ppa.getSetting("plantbites")
         self.plantpercent = ppa.getSetting("plantpercent")
-        #Fill the map with plants
+        
+        #Fill The Map With Plants Using Percentage
         for _ in range(int(self.plantpercent*self.size*self.size)):
+                #Puts Plant In Random Location
                 loc = (random.randint(0, self.size-1), random.randint(0, self.size-1),self.plantbites)
                 while loc in self.plants:
                         loc = (random.randint(0, self.size-1), random.randint(0, self.size-1),self.plantbites)
                 self.plants.append(loc)
 
-        #TEST REMOVE WHEN DONE
-        ufa = (50,40,1)
-        self.plants.append(ufa)
-
     def isPlant(self, location):
 
         x,y = location
-
         # Goes Through Plants To See If Plant There
         # If So Plant Eaten And Returned True
-
         for i in range (len(self.plants)):
             j,k,l = self.plants[i]
             if x == j and y == k:
                 #If True Then Plant Is Eaten
-                #If One Left None Else Decrease 1
+                #If Plant Life Is 1 Then 1-1=0 And Plant Is BushedBombed
                 if l == 1:
                     self.bushbombplants(i)
                 else:
+                    #Plant Life > 1 and Its Life Decreased By One
                     self.plants[i] = j,k,l-1
                 return True
-
+        #No Plant At Location
         return False
 
     def getCritterXY(self, critter):
@@ -141,31 +142,37 @@ class Map:
         self.removeCritter(critter)
         self.setCritterAt(newloc, critter)
 
+    #Gets Rid Of Plant On That Spot
     def bushbombplants(self, spot):
         del self.plants[spot]
 
+    #Gets Rid Of Critter At That Spot
     def removeCritter(self, critter):
         del self.critters[critter]
 
     def getCritters(self):
         return self.critters.keys()
 
+    #Goes Through Critters And Returns Only The Preys
     def getPreys(self):
         return [p for p in filter(lambda c : c.type == "prey", self.critters)]
 
+    #Goes Through Critters And Returns Only The Preds
     def getPredators(self):
         return [p for p in filter(lambda c : c.type == "predator", self.critters)]
 
+    #Uses New X,Y And Compares It To Old X,Y To Get The Direction From The Old To The New
     def getDirection(self,x,y,disx,disy,radius):
 
         test1 = -1
         test2 = -1
 
         # Predator Or Prey On A Plant
+        #No Direction Needed
         if disx == x and disy == y:
                 return 0
 
-        # Tests To See If Organy Is Much Different Than
+        # Tests To See If Organism Is Much Different Than
         # Self Y, If Not That Much, Basically Only
         # Left And Right
         # Test1 Is Y Difference
@@ -180,6 +187,9 @@ class Map:
         elif disy < y:
             test1 = 2
 
+        # Tests Old And NewX
+        #If Old Left Of New, Then New Right Of Left Else
+        #Vis Vera
         if disx > x:
             test2 = 1
 
@@ -241,7 +251,8 @@ class Map:
         ysq = ysq * ysq
         sq = xsq + ysq
         distance = pow(sq,.5)
-        
+
+        #Round Answer, And Int-ify
         return int(round(distance))
 
     def getClosestPlant(self, x, y, radius):
@@ -254,16 +265,20 @@ class Map:
         for critter in self.plants:
             checkx = critter[0]
             checky = critter[1]
+            
+            #Gets Distance To Plant
             checkdistance = self.getDistance(x,y,checkx,checky)
 
-            # That It Is Closer Than The Previous Closest
-            # That It is Closer Than Scan Radius
+            # If It Is Closer Than The Previous Closest
+            # If It is Closer Than Scan Radius
             if checkdistance < closest:
                     if checkdistance < radius:
                             # Changes To New Closest And Direction
                             closest = checkdistance
                             direction = self.getDirection(x,y,checkx,checky,radius)
 
+        #If No New Direction Nothing There Return 0
+        #Else Return The Closest And Direction
         if direction != -1:    
                 return closest, direction
         else:
@@ -278,6 +293,7 @@ class Map:
         # Goes Through All Preds
         for critter in self.getPredators():
             checkx,checky = (self.getCritterXY(critter))
+            #Gets Distance To Critter
             checkdistance = self.getDistance(x,y,checkx,checky)
 
             # Sees If Pred Distance Is Not 0
@@ -289,7 +305,9 @@ class Map:
                                     # Changes To New Closest And Direction
                                     closest = checkdistance
                                     direction = self.getDirection(x,y,checkx,checky,radius)
-            
+
+        #If No New Direction Nothing There Return 0
+        #Else Return The Closest And Direction 
         if direction != -1:    
                 return closest, direction
         else:
@@ -304,6 +322,7 @@ class Map:
         # Goes Through All Preys
         for critter in self.getPreys():
             checkx,checky = (self.getCritterXY(critter))
+            #Gets Distance To Critter
             checkdistance = self.getDistance(x,y,checkx,checky)
             
             # Sees If Prey Distance Is Not 0
@@ -316,6 +335,8 @@ class Map:
                                     closest = checkdistance
                                     direction = self.getDirection(x,y,checkx,checky,radius)
 
+        #If No New Direction Nothing There Return 0
+        #Else Return The Closest And Direction 
         if direction != -1:
                 return closest, direction
         else:
