@@ -21,7 +21,7 @@ DEFAULT_SETTINGS = {"predmutations":4, "preymutations":4, "mutations":10,"choice
 #Basically input is (preddistance, preddireciton, preydistance, preydirection, vegdistance, vegdirection, hunger)
 #Input ranges is the number of different values possible for each entry
 
-DEFAULT_SETTINGS["inputranges"] =( [ len(DEFAULT_SETTINGS["distancechunks"]), 7] * 3 ) + [ len(DEFAULT_SETTINGS["hungerchunks"]) ]
+DEFAULT_SETTINGS["inputranges"] =( [ len(DEFAULT_SETTINGS["distancechunks"]) + 1, 7] * 3 ) + [ len(DEFAULT_SETTINGS["hungerchunks"]) + 1 ]
 
 settings = {}
 

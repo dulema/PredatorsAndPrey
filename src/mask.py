@@ -3,8 +3,8 @@ import predpreyalgorithm
 
 def createmask():
     ranges = predpreyalgorithm.getSetting("inputranges")
-    inputranges = numpy.array(ranges) + 1 #Ensures that the highest number will occur
-    pdfsize = inputranges.prod() * predpreyalgorithm.getSetting("pdfpercent")
+    inputranges = numpy.array(ranges) #Ensures that the highest number will occur
+    pdfsize = int(inputranges.prod() * predpreyalgorithm.getSetting("pdfpercent"))
     rangecount = len(inputranges)
     choices = predpreyalgorithm.getSetting("choices")
     increment = predpreyalgorithm.getSetting("mutationincrement")
@@ -12,7 +12,10 @@ def createmask():
     #Generate the random input
     random_inputs = (numpy.random.random((pdfsize, rangecount))*inputranges).astype(numpy.uint8)
     #Generate the historgrams to go with them
-    histograms = numpy.random.random_integers(low=1,high=255,size=(7,pdfsize)).astype(numpy.uint8)
+    histograms = numpy.random.random_integers(low=1,high=255,size=(pdfsize,7)).astype(numpy.uint8)
+
+    #print("Number of histograms: %d "% len(histograms) )
+    #print("Entry count: %d" % len(histograms[0]))
 
     mask = {}
     for ri,histogram in zip(random_inputs, histograms):
@@ -29,10 +32,10 @@ if __name__ == "__main__":
     except ImportError:
         pass
 
+    print("Settings are: %s\n" % predpreyalgorithm.DEFAULT_SETTINGS)
+
     rounds = 10
-    settings = {"mutationincrement":0.3, "pdfpercent":0.01, "inputranges":[5, 70, 2], "choices":7 }
     for i in range(rounds):
         print(" ==== ROUND %d ====" % i)
-        for i, mask in enumerate(createMasks(5, settings)):
-            print("\t === Mask %d ===" % i)
-            for k,v in mask.iteritems(): print("\t\t%s -> %s" % (k,v))
+        mask = createmask()
+        for k,v in mask.iteritems(): print("\t\t%s -> %s" % (k,v))
