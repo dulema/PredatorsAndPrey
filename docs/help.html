@@ -94,20 +94,26 @@ Required Features:
 Optional feature(s):
 	psyco (only availiable on 32-bit OS's, but will greatly increase program performance)
 
-Installation Instructions
+
+<u>Installation Instructions</u>
 On Windows:
 	Please visit <a target="_blank" href="http://www.python.org/download/">http://www.python.org/download/</a>
 	Click the first link, "Python 2.6.5 Windows installer"
 	Download it, follow the instructions
-	Double click the animatepredatorprey.py file to start the program
 
 On Linux:
-	Open a terminal
+        Open a terminal
 	Type "sudo-apt get install python" without the "'s
-	Type "python animatepredatorprey.py"
 
-On Mac:
-	Something something dark side, something something complete
+
+<u>How to run the program</u>
+On Windows:
+        Locate src/animatepredatorprey.py
+        Double click the animatepredatorprey.py file
+
+On Linux:
+        Open a terminal in the proper directory
+	Type "python src/animatepredatorprey.py"
 
 <a href="#top">Back to table of contents</a>
 ----
@@ -116,7 +122,8 @@ Here are some common questions answered...
 <ol>
   <li>What does this program do?</li>
 	This program simulates the relationship between predators and prey and the process
-	of evolution.
+        of evolution.
+
   <li>What are some important concepts?</li>
 	Organism/Critter = a predator or a prey
 	Vegetation/Plant/Shrub = food that prey eat
@@ -125,35 +132,44 @@ Here are some common questions answered...
 		Whole Program
 			Generation - made up of rounds
 				Round - made up of turns, the simulation is turn-based after all
-					Turn
+                                        Turn
+
   <li>What "things" are on the map?</li>
 	"Things" can be divided into types of organisms and vegetation. There are two types of
-	organisms: predators and prey. Vegetation represent non-critter food.
+        organisms: predators and prey. Vegetation represent non-critter food.
+
   <li>What do predators eat?</li>
-	Prey.
+        Prey.
+
   <li>What do prey eat?</li>
-	Vegetation.
+        Vegetation.
+
   <li>What is vegetation?</li>
 	Vegetation is meant to represent food that prey eat, such as plants and shrubs.
-	Vegetation does not move or evolve, but it depletes as it is eaten by prey.
+        Vegetation does not move or evolve, but it depletes as it is eaten by prey.
+
   <li>What eats predators?</li>
-	Nothing.
+        Nothing.
+
   <li>Can one type of organism eat the other type of organism's food as well?</li>
-	No.
+        No.
+
   <li>Does cannibalism exist in this program?</li>
-	No.
+        No.
+
   <li>How do predators and prey decide how to behave?</li>
 	Predators and prey each look at the world around them and get sensory data
 	(i.e. direction of nearest predator, distance of nearest predator, direction
 	of nearest prey, distance of nearest prey, etc.). Based on the sensory data
 	they currently have, they look at a pdf, a probability density function. Based
-	on the percentages in that pdf, they execute the chosen action.
+        on the percentages in that pdf, they execute the chosen action.
+
   <li>Err....What?</li>
 	Organisms basically take in sensory data, and based on that data they make a decision
 	on what to do.
 
 	Ok first take a deep breath. Good? Now then, let's take a very simplified example. 
-	Pretend that you have an organism, a prey, that has only two kinds of sensory data:
+	Pretend that you have a simple organism, a prey, that has only two kinds of sensory data:
 
 	Direction of nearest vegetation: 0-1
 	Distance of nearest vegetation: 0-1
@@ -189,10 +205,29 @@ Here are some common questions answered...
 	
 	The program then takes a weighted choice of which action to execute. While there is a chance that
 	ANY of the actions may get executed, the MOST LIKELY one the get executed is the action with the
-	largest bar, in this case "don't move anywhere" will most likely get chosen.
+        largest bar, in this case "don't move anywhere" will most likely get chosen.
 
-  <li>Was that ASCII art?</li>
-	Oh yeah.
+        Note that in the actual program, the number of sensory data values is largers, thus the pdf's will
+        be larger, and the shape will not be a square, but a multidimensional figure that is quite difficult
+        to picture that we like to call a hypercube.
+
+    <li>Was that ASCII art?</li>
+        Oh yeah.
+
+    <li>What are "mutations" in terms of this program?</li>
+        A mutation is defined as a different reaction to the same sensory data. In the program, a mutation
+        will be a different reaction to a certain set of sensory data. The following is an example of a
+        mutation of the previous simple pdf.
+
+	0.7			     ||
+	                             ||
+	0.2		||           ||
+			||	     ||
+	0.1_||__________||___________||____
+           top left    left      no moving
+
+        Probabilities for performing each individual action have been adjusted. In the program, a certain
+        amount of the pdf's in the hypercube for each critter will be "mutated".
 
 </ol>
 
