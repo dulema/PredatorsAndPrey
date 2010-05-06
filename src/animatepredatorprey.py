@@ -101,10 +101,15 @@ def prey_view():
 
 
 def README_display():
-        webbrowser.open(location[:-3] + "docs/help.html")
+        ufa1 = location[:-4] + "/docs/help.html"
+        osblindufa1 = os.path.abspath(ufa1)
+        print(ufa1)
+        webbrowser.open(osblindufa1)
 
 def About_display():
-        webbrowser.open(location[:-3] + "docs/about.html")
+        ufa2 = location[:-4] + "/docs/about.html"
+        osblindufa2 = os.path.abspath(ufa2)
+        webbrowser.open(osblindufa2)
 
 #Open pre-saved set of Predators
 def open_pred():
