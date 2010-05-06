@@ -74,6 +74,8 @@ class Map:
                     raise "This critter was never added to the map"
         return self.getTile( self.critters[critter], move)
 
+    #Uses Hexagonal World Logic To Get Next Title Using A Direction
+    #And Current Title, Uses Cyclinder World Logic
     def getTile(self, location, wheretogo):
         (x, y) = location
         if wheretogo == -1:
