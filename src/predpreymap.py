@@ -5,6 +5,7 @@ import predpreyalgorithm as ppa
 
 #HardCoded Move Values
 #Done For Coder Easyness
+#In A Circle
 dontmove = 0
 topleft = 1
 topright = 2
