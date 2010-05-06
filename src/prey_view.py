@@ -10,7 +10,10 @@ import tkMessageBox
 import os
 import sys
 from functools import partial
+import pickle
 
+
+main = False
 
 def best_prey_loop(x):
         critter_attr = []
@@ -78,3 +81,10 @@ def button_run():
         exit_button = Button(prey_view_window, text="Quit", command=prey_view_window.destroy)
         exit_button.grid(row=1, column=15)
         print(ppa.best_prey)
+	if main == True:
+		prey_view_window.mainloop()
+
+if __name__ == "__main__":
+	ppa.best_prey = pickle.load(file(sys.argv[1], mode='r'))
+	main = True
+	button_run()

@@ -10,7 +10,10 @@ import tkMessageBox
 import os
 import sys
 from functools import partial
+import pickle
 
+
+main = False
 
 def best_pred_loop(x):
         critter_attr = []
@@ -78,3 +81,10 @@ def button_run():
         exit_button = Button(pred_view_window, text="Quit", command=pred_view_window.destroy)
         exit_button.grid(row=1, column=15)
 	print(ppa.best_pred)
+	if main == True:
+		pred_view_window.mainloop()
+
+if __name__ == "__main__":
+	ppa.best_pred = pickle.load(file(sys.argv[1], mode='r'))
+	main = True
+	button_run()
