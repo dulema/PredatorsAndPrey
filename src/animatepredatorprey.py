@@ -101,10 +101,10 @@ def prey_view():
 
 
 def README_display():
-        webbrowser.open("../docs/help.html")
+        webbrowser.open(location[:-3] + "docs/help.html")
 
 def About_display():
-        webbrowser.open("../docs/about.html")
+        webbrowser.open(location[:-3] + "docs/about.html")
 
 #Open pre-saved set of Predators
 def open_pred():
@@ -389,7 +389,7 @@ if __name__ == "__main__":
         location = []
         #This Gets Current Directory (Windows)
         location = sys.path[0]
-
+        
         for i in range(11):
                 j = i*10 + 50
 
