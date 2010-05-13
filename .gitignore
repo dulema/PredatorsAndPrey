@@ -1,5 +1,3 @@
-**.pred
-**.prey
 **.class
 **~
 **.swp
@@ -7,4 +5,5 @@
 **log
 **log-psyco
 **.pyc
-src/critters/
+src/*.pred
+src/*.prey
