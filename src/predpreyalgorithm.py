@@ -32,16 +32,13 @@ def setSetting(setting, value):
 def resetSetting(setting):
     del settings[setting]
 
-def __printProgress(num, total):
+def __printProgress(num, total, pred_score, prey_score):
     width = 40
-    s = "%d/%d [" % (num, total)
-    completecount = (float(num)/total)*40
-    for i in range(40):
-        if i < completecount:
-            s = s + "="
-        else:
-            s = s + "-"
-    s = s + "]\r"
+    s = "pred score: %d, prey score %d | %d/%d [" % (pred_score, prey_score, num, total)
+    completecount = int((float(num)/total)*40)
+    s += completecount * "="
+    s +=  (40 - completecount) * "-"
+    s += "]\r"
     print s,
     import sys
     sys.stdout.flush()
@@ -120,32 +117,34 @@ def mutate(gens, settings=DEFAULT_SETTINGS, progress=__printProgress):
     except ImportError:
         pass
 
+    best_pred_score = 0
+    best_prey_score = 0
     for i in range(gens):
-        progress(i, gens) #Update the progress
+        progress(i, gens, best_pred_score, best_prey_score) #Update the progress
 
-        preds, preys = MutateAndScore()
-        #preds, preys = MultiThreadedMutateAndScore()
+        #preds, preys = MutateAndScore()
+        preds, preys = MultiThreadedMutateAndScore()
 
         #Find the best Pred Mask
-        best = 0
+        best_pred_score = 0
         best_pred_mask = {}
-        for s, mask in preds:
-            if s > best:
-                best = s
+        for score, mask in preds:
+            if score > best_pred_score:
+                best_pred_score = score
                 best_pred_mask = mask
 
         #Find the best Prey Mask
-        best = 0
+        best_prey_score = 0
         best_prey_mask = {}
-        for s, mask in preys:
-            if s > best:
-                best = s
+        for score, mask in preys:
+            if score > best_prey_score:
+                best_prey_score = score
                 best_prey_mask = mask
 
         #Smash the mask into the best pdf
         for k,v in best_pred_mask.iteritems(): best_pred[k] = v
         for k,v in best_prey_mask.iteritems(): best_prey[k] = v
-    progress(gens,gens)#deniz was here
+    progress(gens,gens, best_pred_score, best_prey_score)#deniz was here
 
 if __name__ == "__main__":
     gens = input("How many generations would you like calculated?")
