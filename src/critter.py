@@ -37,6 +37,7 @@ class Critter:
                     moves.append(i)
                     pdf[i] = 0
                     break
+        #if self.type == PREDATOR: print("moves: %s" % moves)
         return moves
 
     def generatePDF(self):

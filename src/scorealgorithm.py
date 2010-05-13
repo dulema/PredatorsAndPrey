@@ -1,47 +1,51 @@
 import random
 from predpreymap import Map
+import predpreymap
 from critter import Critter
 import critter
 import predpreyalgorithm as ppa
 
 def preyMakeMove(prey, world):
         for directionMove in prey.getMoves(world.getSensoryData(prey, ppa.getSetting("sight"))):
+                if directionMove == predpreymap.dontmove:
+                    return
+
                 destinationTile = world.getCritterDest(prey, directionMove)
                 if destinationTile == None: continue
                 critterOnTile = world.getCritterAt(destinationTile)
                 if critterOnTile == None:
                         world.moveCritter(prey, directionMove)
                         if world.isPlant(destinationTile): 
-                                #isPlant bites for me
-                                prey.setStatus("hunger", 0)
+                                prey.setStatus("hunger", 0) #isPlant bites for me
                         return
                 elif critterOnTile.type == critter.PREY:
                         continue
                 elif critterOnTile.type == critter.PREDATOR:
                         world.removeCritter(prey)
                         critterOnTile.setStatus("hunger", 0)
-                        #print("Prey Dumb Jumped Inside")
                         return
                 else:
                      raise Exception("There is a prey case that is not accounted for: " + critterOnTile)
 
 def predMakeMove(pred, world):
         for directionMove in pred.getMoves(world.getSensoryData(pred, ppa.getSetting("sight"))):
-                destinationTile = world.getCritterDest(pred, directionMove)
-                if destinationTile == None: continue
-                critterOnTile = world.getCritterAt(destinationTile)
-                if critterOnTile == None:
-                        world.moveCritter(pred, directionMove)
-                        return
-                elif critterOnTile.type == critter.PREY:
-                        world.removeCritter(critterOnTile)
-                        pred.setStatus("hunger", 0)
-                        #print("Pred Did Work")
-                        return
-                elif critterOnTile.type == critter.PREDATOR:
-                        continue
-                else:
-                     raise Exception("There is a predator case that is not accounted for: " + critterOnTile)
+            if directionMove == predpreymap.dontmove:
+                return
+
+            destinationTile = world.getCritterDest(pred, directionMove)
+            if destinationTile == None: continue
+            critterOnTile = world.getCritterAt(destinationTile)
+            if critterOnTile == None:
+                    world.moveCritter(pred, directionMove)
+                    return
+            elif critterOnTile.type == critter.PREY:
+                    world.removeCritter(critterOnTile)
+                    pred.setStatus("hunger", 0)
+                    return
+            elif critterOnTile.type == critter.PREDATOR:
+                    continue
+            else:
+                 raise Exception("There is a predator case that is not accounted for: " + critterOnTile)
 
 def calcscore(pred_mask={}, prey_mask={}, hooker=None):
     mapsize = ppa.getSetting("mapsize")

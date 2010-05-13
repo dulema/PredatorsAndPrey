@@ -20,9 +20,7 @@ DEFAULT_SETTINGS = {"predmutations":4, "preymutations":4, "mutations":10,"choice
 
 #Basically input is (preddistance, preddireciton, preydistance, preydirection, vegdistance, vegdirection, hunger)
 #Input ranges is the number of different values possible for each entry
-
 DEFAULT_SETTINGS["inputranges"] =( [ len(DEFAULT_SETTINGS["distancechunks"]) + 1, 7] * 3 ) + [ len(DEFAULT_SETTINGS["hungerchunks"]) + 1 ]
-
 settings = {}
 
 def getSetting(setting):
@@ -125,8 +123,8 @@ def mutate(gens, settings=DEFAULT_SETTINGS, progress=__printProgress):
     for i in range(gens):
         progress(i, gens) #Update the progress
 
-        #preds, preys = MutateAndScore()
-        preds, preys = MultiThreadedMutateAndScore()
+        preds, preys = MutateAndScore()
+        #preds, preys = MultiThreadedMutateAndScore()
 
         #Find the best Pred Mask
         best = 0
