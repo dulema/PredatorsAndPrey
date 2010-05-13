@@ -107,6 +107,9 @@ def MutateAndScore():
     preys.append(dryrun)
     return preds, preys
 
+def getTupleMax(tuplelist):
+    scores = zip(*tuplelist)[0]
+    return tuplelist[scores.index(max(scores))]
 
 def mutate(gens, settings=DEFAULT_SETTINGS, progress=__printProgress):
     global best_pred, best_prey
@@ -125,21 +128,9 @@ def mutate(gens, settings=DEFAULT_SETTINGS, progress=__printProgress):
         #preds, preys = MutateAndScore()
         preds, preys = MultiThreadedMutateAndScore()
 
-        #Find the best Pred Mask
-        best_pred_score = 0
-        best_pred_mask = {}
-        for score, mask in preds:
-            if score > best_pred_score:
-                best_pred_score = score
-                best_pred_mask = mask
-
-        #Find the best Prey Mask
-        best_prey_score = 0
-        best_prey_mask = {}
-        for score, mask in preys:
-            if score > best_prey_score:
-                best_prey_score = score
-                best_prey_mask = mask
+        #Find the best masks
+        best_pred_score, best_pred_mask = getTupleMax(preds)
+        best_prey_score, best_prey_mask = getTupleMax(preys)
 
         #Smash the mask into the best pdf
         for k,v in best_pred_mask.iteritems(): best_pred[k] = v
