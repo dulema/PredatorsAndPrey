@@ -27,7 +27,7 @@ settings = predpreyalgorithm.DEFAULT_SETTINGS
 
 
 #Changes the Mutate Button into a progress indicator
-def change_to_progress_bar(currentgen,totalgens):
+def change_to_progress_bar(currentgen,totalgens, pred_score, prey_score):
         if currentgen == totalgens:
                 mutate_button.config(state = NORMAL)
                 mutate_button.config(text = "Mutate")
