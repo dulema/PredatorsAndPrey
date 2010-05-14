@@ -2,6 +2,8 @@
 import mask
 import scorealgorithm
 import critter
+import multiprocessing
+
 
 best_pred = {}
 best_prey = {}
@@ -17,6 +19,7 @@ DEFAULT_SETTINGS = {"predmutations":4, "preymutations":4, "mutations":10,"choice
                     "pdfpercent":0.01,"mutationincrement":0.3,
                     "distancechunks":[3,9,18],
                     "hungerchunks":[3,9,18] }
+
 
 #Basically input is (preddistance, preddireciton, preydistance, preydirection, vegdistance, vegdirection, hunger)
 #Input ranges is the number of different values possible for each entry
@@ -111,6 +114,13 @@ def getTupleMax(tuplelist):
     scores = zip(*tuplelist)[0]
     return tuplelist[scores.index(max(scores))]
 
+
+if multiprocessing.cpu_count() == 1:
+    mutate_and_score = MutateAndScore
+else:
+    mutate_and_score = MultiThreadedMutateAndScore
+
+
 def mutate(gens, settings=DEFAULT_SETTINGS, progress=__printProgress):
     global best_pred, best_prey
 
@@ -125,8 +135,7 @@ def mutate(gens, settings=DEFAULT_SETTINGS, progress=__printProgress):
     for i in range(gens):
         progress(i, gens, best_pred_score, best_prey_score) #Update the progress
 
-        #preds, preys = MutateAndScore()
-        preds, preys = MultiThreadedMutateAndScore()
+        preds, preys = mutate_and_score()
 
         #Find the best masks
         best_pred_score, best_pred_mask = getTupleMax(preds)
