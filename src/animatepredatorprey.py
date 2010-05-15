@@ -400,7 +400,10 @@ if __name__ == "__main__":
 
                 veglocation = location + "/PredPreyImages/PeterM_Tree" + str(j) + ".png"
                 wolflocation = location + "/PredPreyImages/Gerald_G_Wolf_Head_(Stylized)" + str(j) + ".png"
-                sheeplocation = location + "/PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png"
+
+                #Chill Out Sandor Obama Here Just Comment Out Top One UnComment Bottom To Get Sheep
+                sheeplocation = location + "/PredPreyImages/Socialist" + str(j) + ".png" 
+                #sheeplocation = location + "/PredPreyImages/creohn_Sheep_in_gray" + str(j) + ".png"
 
                 #Makes Path OS Blind
                 osblindveglocation = os.path.abspath(veglocation)
