@@ -75,8 +75,8 @@ If you do not wish to adjust anything and simply run the program, there are defa
 values set, so you may simply click mutate and/or animate.
 
 Note: If you are typing into one of the input fields (number of predators per generation,
-number of prey per generation, number of generations, size of map) in the main windows
-be sure to enter valid data. The program automatically checks if you are properly 
+number of prey per generation, number of generations, size of map) in the main window
+be sure to enter valid data. The program automatically checks if you are properly
 entering valid data though, just in case.
 
 <a href="#top">Back to table of contents</a>
@@ -132,11 +132,11 @@ Here are some common questions answered...
 		Whole Program
 			Generation - made up of rounds
 				Round - made up of turns, the simulation is turn-based after all
-                                        Turn
+                                        Turn - a step forward in time
 
   <li>What "things" are on the map?</li>
 	"Things" can be divided into types of organisms and vegetation. There are two types of
-        organisms: predators and prey. Vegetation represent non-critter food.
+        organisms: predators and prey. Vegetation represents non-critter food.
 
   <li>What do predators eat?</li>
         Prey.
@@ -168,7 +168,7 @@ Here are some common questions answered...
 	Organisms basically take in sensory data, and based on that data they make a decision
 	on what to do.
 
-	Ok first take a deep breath. Good? Now then, let's take a very simplified example. 
+	Ok first take a deep breath. Good? Now then, let's take a very simplified example.
 	Pretend that you have a simple organism, a prey, that has only two kinds of sensory data:
 
 	Direction of nearest vegetation: 0-1
@@ -180,9 +180,9 @@ Here are some common questions answered...
 	corners of the square there is a pdf, represented by a histogram (basically a vertical bar
 	graph). The histogram at the top left has let's say 3 bars, the left bar representing "move
 	top left" and has a height of 0.2, the middle bar representing "move left" and has a height
-	of 0.3, and the right bar representing "don't move anywhere" and has a 	height of 0.5. In a
+	of 0.3, and the right bar representing "don't move anywhere" and has a height of 0.5. In a
 	pdf, the sum of the heights of the bars in its histogram must add up to 1. The histograms
-	at each of the corners of the square have three bars as well that add up to 1, but the 
+	at each of the corners of the square have three bars as well that add up to 1, but the
 	height of each bar is different. Therefore the square represents all the possible
 	combinations of sensory input. Remember that our hexagonal shaped tiles have only 7 possible
 	valid moves: top left, top right, right, bottom right, bottom left, left, and don't move.
@@ -204,10 +204,10 @@ Here are some common questions answered...
 	   top left    left      no moving
 	
 	The program then takes a weighted choice of which action to execute. While there is a chance that
-	ANY of the actions may get executed, the MOST LIKELY one the get executed is the action with the
+	ANY of the actions may get executed, the MOST LIKELY one to get executed is the action with the
         largest bar, in this case "don't move anywhere" will most likely get chosen.
 
-        Note that in the actual program, the number of sensory data values is largers, thus the pdf's will
+        Note that in the actual program, the number of sensory data values is larger, thus the pdf's will
         be larger, and the shape will not be a square, but a multidimensional figure that is quite difficult
         to picture that we like to call a hypercube.
 
