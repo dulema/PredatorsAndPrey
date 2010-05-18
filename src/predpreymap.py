@@ -1,6 +1,6 @@
 import random
 import critter
-from critter import Critter
+#from critter import Critter
 import predpreyalgorithm as ppa
 
 #HardCoded Move Values
@@ -381,14 +381,14 @@ class Map:
 
 #Only run this code if this one file is being run a python program
 if __name__ == "__main__":
-        map1 = Map(100, 0.005,10)
+        map1 = Map()
 
-        pred1 = Critter(critter.PREDATOR)
-        pred2 = Critter(critter.PREDATOR)
-        pred3 = Critter(critter.PREDATOR)
-        prey1 = Critter(critter.PREY)
-        prey2 = Critter(critter.PREY)
-        prey3 = Critter(critter.PREY) 
+        pred1 = critter.Critter(critter.PREDATOR)
+        pred2 = critter.Critter(critter.PREDATOR)
+        pred3 = critter.Critter(critter.PREDATOR)
+        prey1 = critter.Critter(critter.PREY)
+        prey2 = critter.Critter(critter.PREY)
+        prey3 = critter.Critter(critter.PREY) 
 
         map1.setCritterAt((0,2), pred1)
         map1.setCritterAt((6,8), pred2)
@@ -399,32 +399,31 @@ if __name__ == "__main__":
 
         #print(map1)
 
-        print(map1.plants)
+        #print(map1.plants)
         location = (50,40)
-        print(map1.isPlant((location)))
-        print(map1.plants)
+        #print(map1.isPlant((location)))
+        #print(map1.plants)
 
-        print(map1.getSensoryData(pred1, 2)[0] == None)
-        print(map1.getSensoryData(pred1, 2)[1] == None)
-        print(map1.getSensoryData(pred1, 2)[2] == None)
-        print(map1.getSensoryData(pred1, 2)[3] == None)
+        print(map1.getSensoryData(pred1, 2)[0])
+        print(map1.getSensoryData(pred1, 2)[1])
+        print(map1.getSensoryData(pred1, 2)[2])
+        print(map1.getSensoryData(pred1, 2)[3])
 
-        print(map1.getSensoryData(pred1, 20)[0] == 8)
-        print(map1.getSensoryData(pred1, 20)[1] == 4)
-        print(map1.getSensoryData(pred1, 20)[2] == 4)
-        print(map1.getSensoryData(pred1, 20)[3] == 3)
-                                
-        print(map1.getSensoryData(prey2, 20)[0] == 3)
-        print(map1.getSensoryData(prey2, 20)[1] == 3)
-        print(map1.getSensoryData(prey2, 20)[2] == 8)
-        print(map1.getSensoryData(prey2, 20)[3] == 1)
-        
-        print(map1.getSensoryData(pred3, 20)[0] == 7)
-        print(map1.getSensoryData(pred3, 20)[1] == 1)
-        print(map1.getSensoryData(pred3, 20)[2] == 3)
-        print(map1.getSensoryData(pred3, 20)[3] == 6)
-        
-        print(map1.getSensoryData(prey3, 20)[0] == 4)
-        print(map1.getSensoryData(prey3, 20)[1] == 3)
-        print(map1.getSensoryData(prey3, 20)[2] == 1)
-        print(map1.getSensoryData(prey3, 20)[3] == 6)
+        print(map1.getSensoryData(pred1, 20)[0])
+        print(map1.getSensoryData(pred1, 20)[1])
+        print(map1.getSensoryData(pred1, 20)[2])
+        print(map1.getSensoryData(pred1, 20)[3])
+
+        print(map1.getSensoryData(prey2, 20)[0])
+        print(map1.getSensoryData(prey2, 20)[1])
+        print(map1.getSensoryData(prey2, 20)[2])
+        print(map1.getSensoryData(prey2, 20)[3])
+
+        print(map1.getSensoryData(pred3, 20)[0])
+        print(map1.getSensoryData(pred3, 20)[1])
+        print(map1.getSensoryData(pred3, 20)[2])
+        print(map1.getSensoryData(pred3, 20)[3])
+        print(map1.getSensoryData(prey3, 20)[0])
+        print(map1.getSensoryData(prey3, 20)[1])
+        print(map1.getSensoryData(prey3, 20)[2])
+        print(map1.getSensoryData(prey3, 20)[3])

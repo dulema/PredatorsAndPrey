@@ -1,7 +1,6 @@
 import random
 from predpreymap import Map
 import predpreymap
-from critter import Critter
 import critter
 import predpreyalgorithm as ppa
 
@@ -58,10 +57,10 @@ def calcscore(pred_mask={}, prey_mask={}, hooker=None):
 
     world = Map()
     for _ in range(int((mapsize**2)*predpercent)):
-        world.setCritterAt(world.getRandomUntakenTile(), Critter(pred_mask, critter.PREDATOR))
+        world.setCritterAt(world.getRandomUntakenTile(), critter.Critter(pred_mask, critter.PREDATOR))
 
     for _ in range(int((mapsize**2)*preypercent)):
-        world.setCritterAt(world.getRandomUntakenTile(), Critter(prey_mask, critter.PREY))
+        world.setCritterAt(world.getRandomUntakenTile(), critter.Critter(prey_mask, critter.PREY))
 
     score = 0
     while len(world.getPredators()) > 0 and len(world.getPreys()) > 0:
